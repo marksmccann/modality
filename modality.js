@@ -29,14 +29,12 @@ var Modality = (function () {
      * @return {object}
      */
     extend = function () {
-        for( var i = 1; i < arguments.length; i++ ) {
-            for( var key in arguments[i] ) {
-                if(arguments[i].hasOwnProperty(key)) {
-                    arguments[0][key] = arguments[i][key];
-                }
-            }
-        }
-        return arguments[0];
+        var a = arguments;
+        for( var i = 1; i < a.length; i++ )
+            for( var key in a[i] )
+                if(a[i].hasOwnProperty(key))
+                    a[0][key] = a[i][key];
+        return a[0];
     },
 
     /**
@@ -87,9 +85,8 @@ var Modality = (function () {
 
         // toggle modal on all triggers
         if( $.settings.autoBind ) {
-            for( var i = 0; i < $.triggers.length; i++ ) {
+            for( var i = 0; i < $.triggers.length; i++ )
                 $.setTrigger( $.triggers[i] );
-            }
         }
 
         // close modal if users clicks anywhere off of it
@@ -102,7 +99,7 @@ var Modality = (function () {
         // close modal with 'esc' key
         if( $.settings.closeOnEscape ) {
             $._body.addEventListener( "keyup", function (e) {
-                if(e.keyCode == 27){ $.close(); }
+                if(e.keyCode == 27) $.close();
             }, false);
         }
 
@@ -122,7 +119,7 @@ var Modality = (function () {
     /**
      * class methods for the modality object
      */
-    extend(Modality.prototype, {
+    extend( Modality.prototype, {
 
         /**
          * opens the modal
@@ -186,12 +183,11 @@ var Modality = (function () {
          */
         setTrigger: function ( trigger ) {
 
-            // set local var for instance
-            var base = this;
+            var $ = this; // set local var for instance
 
             // set click event for new trigger
             trigger.addEventListener( "click", function (e) {
-                e.preventDefault(); base.toggle(); 
+                e.preventDefault(); $.toggle(); 
             }, false );
 
             return this;
@@ -204,11 +200,11 @@ var Modality = (function () {
     /**
      * initalizes modal(s)
      * @param  {string} query
-     * @param  {object} options
+     * @param  {object} settings
      * @param  {function} fn
      * @return {object,array}
      */
-    Modality.init = function ( query, options, fn ) {
+    Modality.init = function ( query, settings, fn ) {
 
         // collect the modals from the DOM
         var modals = document.querySelectorAll(query);
@@ -217,7 +213,7 @@ var Modality = (function () {
         for( var i = 0; i < modals.length; i++ ) {
 
             // Initialize the modal
-            var modal = new Modality(modals[i], options, fn);
+            var modal = new Modality(modals[i], settings, fn);
 
             // return only this modal if only one
             if(modals.length == 1) { return modal; }
