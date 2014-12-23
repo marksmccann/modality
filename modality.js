@@ -6,20 +6,38 @@
 var Modality = (function () {
 
     /**
+     * list of Modality defaults
+     */
+    var defaults = {
+        modalClass: "modality-modal", // outer-most container
+        innerClass: "mm-wrap", // inner wrapper
+        openClass: "mm-show", // when modal is visible
+        clickOffClose: true, // click anywhere off of modal to close it
+        closeOnEscape: true, // close modal with 'esc' key
+        autoOpen: false, // open on page load
+        autoBind: true, // automatically bind triggers to modal
+        effect: "effect-1", // animation style
+        onOpen: function(){}, // function to run when modal opens
+        onClose: function(){} // function to run when modal closes
+    },
+
+    // grab the document's body only once
+    body = document.getElementsByTagName('body')[0],
+
+    /**
      * combines javascript objects
      * @return {object}
      */
-    var extend = function () {
-        var a = arguments;
-        for( var i in a ) {
-            for( var key in a[i] ) {
-                if( a[i].hasOwnProperty(key) ) {
-                    a[0][key] = a[i][key];
+    extend = function () {
+        for( var i = 1; i < arguments.length; i++ ) {
+            for( var key in arguments[i] ) {
+                if(arguments[i].hasOwnProperty(key)) {
+                    arguments[0][key] = arguments[i][key];
                 }
             }
         }
-        return a[0];
-    };
+        return arguments[0];
+    },
 
     // -----------------------------------------------------------------
 
@@ -29,56 +47,58 @@ var Modality = (function () {
      * @param {object} options
      * @param {function} callback
      */
-    var Modality = function ( modal, options, callback ) {
-
-        // create local var to avoid scope issues
-        var base = this;
+    Modality = function ( modal, options, callback ) {
 
         // set initial attributes
-        base.id       = modal.getAttribute( 'id' );
-        base.options  = extend( {}, Modality.defaults, options );
-        base.body     = document.getElementsByTagName( 'body' )[0];
-        base.triggers = document.querySelectorAll( 'a[href="#'+base.id+'"], [data-modality="#'+base.id+'"]' );
+        this._defaults = defaults;
+        this._body     = body;
+        this.id        = modal.getAttribute( 'id' );
+        this.settings  = extend( {}, defaults, options );
 
         // build and set modal wrapper 
-        base.wrapper = document.createElement('div');
-        base.wrapper.setAttribute( 'class', base.options.modalClass + ' ' + base.options.effect );
-        base.wrapper.innerHTML = '<div class="'+base.options.innerClass+'">' + modal.outerHTML + '</div>';
-        modal.parentNode.replaceChild( base.wrapper, modal );
+        this.wrapper = document.createElement('div');
+        this.wrapper.setAttribute( 'class', this.settings.modalClass + ' ' + this.settings.effect );
+        this.wrapper.innerHTML = '<div class="'+this.settings.innerClass+'">' + modal.outerHTML + '</div>';
+        modal.parentNode.replaceChild( this.wrapper, modal );
 
-        // set the original modal
-        base.modal = document.getElementById( base.id );
+        // collect the triggers and set the original modal
+        this.triggers  = document.querySelectorAll( 'a[href="#'+this.id+'"], [data-modality="#'+this.id+'"]' );
+        this.element = document.getElementById( this.id );
 
-        // --------------------------------------------
+        // ------------------------------------------------------------
+
+        // set local var to avoid scope issues
+        var base = this;
 
         // toggle modal on all triggers
-        if( base.options.autoBind ) {
-            for( var i = 0; i < base.triggers.length; i++ ) {
-                base.setTrigger(base.triggers[i]);
+        if( this.settings.autoBind ) {
+            for( var i = 0; i < this.triggers.length; i++ ) {
+                this.setTrigger( this.triggers[i] );
             }
         }
 
         // close modal if users clicks anywhere off of it
-        if( base.options.clickOffClose ) {
-            base.wrapper.addEventListener( "click", function(e) {
+        if( this.settings.clickOffClose ) {
+            this.wrapper.addEventListener( "click", function(e) {
                 e.preventDefault(); if(e.target == base.wrapper) base.close();
             }, false );
         }
 
         // close modal with 'esc' key
-        if( this.options.closeOnEscape ) {
-            base.body.addEventListener( "keyup", function (e) {
+        if( this.settings.closeOnEscape ) {
+            this._body.addEventListener( "keyup", function (e) {
                 if(e.keyCode == 27){ base.close(); }
             }, false);
         }
 
-        if( base.options.autoOpen ) base.open(); 
+        // open modal if set to true
+        if( this.settings.autoOpen ) this.open(); 
 
-        // --------------------------------------------
-
+        // run the user's callback function
         if( typeof callback == 'function' ) callback();
 
-        return Modality.modals[base.id] = base;
+        // save modal and return it
+        return Modality.modals[this.id] = this;
 
     };
 
@@ -87,26 +107,7 @@ var Modality = (function () {
     /**
      * class methods for the modality object
      */
-    Modality.prototype = {
-
-        /**
-         * closes the modal
-         * @param  {function} callback
-         * @return {instance} 
-         */
-        close: function ( callback ) {
-
-            // remove classes to close the modal
-            this.wrapper.classList.remove( this.options.openClass );
-            this.body.classList.remove( this.options.openClass );
-
-            // run the callback(s)
-            if ( typeof this.options.onClose == 'function' ) this.options.onClose();
-            if ( typeof callback == 'function' ) callback();
-
-            return this;
-
-        },
+    extend(Modality.prototype, {
 
         /**
          * opens the modal
@@ -116,11 +117,30 @@ var Modality = (function () {
         open: function ( callback ) {
 
             // add classes to open the modal
-            this.wrapper.classList.add( this.options.openClass );
-            this.body.classList.add( this.options.openClass );
+            this.wrapper.classList.add( this.settings.openClass );
+            this._body.classList.add( this.settings.openClass );
 
             // run the callback(s)
-            if ( typeof this.options.onOpen == 'function' ) this.options.onOpen();
+            if ( typeof this.settings.onOpen == 'function' ) this.settings.onOpen();
+            if ( typeof callback == 'function' ) callback();
+
+            return this;
+
+        },
+
+        /**
+         * closes the modal
+         * @param  {function} callback
+         * @return {instance} 
+         */
+        close: function ( callback ) {
+
+            // remove classes to close the modal
+            this.wrapper.classList.remove( this.settings.openClass );
+            this._body.classList.remove( this.settings.openClass );
+
+            // run the callback(s)
+            if ( typeof this.settings.onClose == 'function' ) this.settings.onClose();
             if ( typeof callback == 'function' ) callback();
 
             return this;
@@ -141,7 +161,7 @@ var Modality = (function () {
          * @return {Boolean}
          */
         isOpen: function () {
-            return ( this.wrapper.classList.contains(this.options.openClass) ) ? true : false;
+            return ( this.wrapper.classList.contains(this.settings.openClass) ) ? true : false;
         },
 
         /**
@@ -156,13 +176,13 @@ var Modality = (function () {
 
             // set click event for new trigger
             trigger.addEventListener( "click", function (e) {
-                e.preventDefault(); base.toggle();
+                e.preventDefault(); base.toggle(); 
             }, false );
 
             return this;
         }
 
-    };
+    });
 
     // -----------------------------------------------------------------
     
@@ -190,24 +210,6 @@ var Modality = (function () {
 
         // return array of modals
         return Modality.modals;
-    }
-
-    // -----------------------------------------------------------------
-
-    /**
-     * list of Modality defaults
-     */
-    Modality.defaults = {
-        modalClass: "modality-modal", // outer-most container
-        innerClass: "mm-wrap", // inner wrapper
-        openClass: "mm-show", // when modal is visible
-        clickOffClose: true, // click anywhere off of modal to close it
-        closeOnEscape: true, // close modal with 'esc' key
-        autoOpen: false, // open on page load
-        autoBind: true, // automatically bind triggers to modal
-        effect: "effect-1", // animation style
-        onOpen: function(){}, // function to run when modal opens
-        onClose: function(){} // function to run when modal closes
     }
 
     /**
