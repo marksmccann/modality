@@ -39,6 +39,30 @@ var Modality = (function () {
         return arguments[0];
     },
 
+    /**
+     * wraps the users modal element in modality's frame:
+     * 
+     * <div class="modality-modal effect-1">
+     *    <div class="mm-wrap">
+     *        // user's modal goes here
+     *    </div>
+     * </div>
+     *
+     * @return {object}
+     */
+     wrap = function ( element, settings ) {
+
+        // create the container and insert markup
+        var container = document.createElement('div');
+        container.setAttribute( 'class', settings.modalClass + ' ' + settings.effect );
+        container.innerHTML = '<div class="'+settings.innerClass+'">' + element.outerHTML + '</div>';
+
+        // replace the old modal with the new
+        element.parentNode.replaceChild( container, element );
+
+        return container;
+     },
+
     // -----------------------------------------------------------------
 
     /**
@@ -49,56 +73,47 @@ var Modality = (function () {
      */
     Modality = function ( modal, options, callback ) {
 
-        // set initial attributes
-        this._defaults = defaults;
-        this._body     = body;
-        this.id        = modal.getAttribute( 'id' );
-        this.settings  = extend( {}, defaults, options );
+        var $ = this; // set local var to avoid scope issues
 
-        // build and set modal wrapper 
-        this.wrapper = document.createElement('div');
-        this.wrapper.setAttribute( 'class', this.settings.modalClass + ' ' + this.settings.effect );
-        this.wrapper.innerHTML = '<div class="'+this.settings.innerClass+'">' + modal.outerHTML + '</div>';
-        modal.parentNode.replaceChild( this.wrapper, modal );
-
-        // collect the triggers and set the original modal
-        this.triggers  = document.querySelectorAll( 'a[href="#'+this.id+'"], [data-modality="#'+this.id+'"]' );
-        this.element = document.getElementById( this.id );
+        $._body     = body;
+        $._defaults = defaults;
+        $.id        = modal.getAttribute( 'id' );
+        $.settings  = extend( {}, defaults, options );
+        $.wrapper   = wrap( modal, $.settings );
+        $.triggers  = document.querySelectorAll( 'a[href="#'+$.id+'"], [data-modality="#'+$.id+'"]' );
+        $.element   = document.getElementById( $.id );
 
         // ------------------------------------------------------------
 
-        // set local var to avoid scope issues
-        var base = this;
-
         // toggle modal on all triggers
-        if( this.settings.autoBind ) {
-            for( var i = 0; i < this.triggers.length; i++ ) {
-                this.setTrigger( this.triggers[i] );
+        if( $.settings.autoBind ) {
+            for( var i = 0; i < $.triggers.length; i++ ) {
+                $.setTrigger( $.triggers[i] );
             }
         }
 
         // close modal if users clicks anywhere off of it
-        if( this.settings.clickOffClose ) {
-            this.wrapper.addEventListener( "click", function(e) {
-                e.preventDefault(); if(e.target == base.wrapper) base.close();
+        if( $.settings.clickOffClose ) {
+            $.wrapper.addEventListener( "click", function(e) {
+                e.preventDefault(); if(e.target == $.wrapper) $.close();
             }, false );
         }
 
         // close modal with 'esc' key
-        if( this.settings.closeOnEscape ) {
-            this._body.addEventListener( "keyup", function (e) {
-                if(e.keyCode == 27){ base.close(); }
+        if( $.settings.closeOnEscape ) {
+            $._body.addEventListener( "keyup", function (e) {
+                if(e.keyCode == 27){ $.close(); }
             }, false);
         }
 
         // open modal if set to true
-        if( this.settings.autoOpen ) this.open(); 
+        if( $.settings.autoOpen ) $.open(); 
 
         // run the user's callback function
         if( typeof callback == 'function' ) callback();
 
         // save modal and return it
-        return Modality.modals[this.id] = this;
+        return Modality.modals[$.id] = $;
 
     };
 
