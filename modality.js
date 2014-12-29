@@ -8,21 +8,19 @@ var Modality = (function () {
     /**
      * list of Modality defaults
      */
-    var defaults = {
-        modalClass: "modality-modal", // outer-most container
-        innerClass: "mm-wrap", // inner wrapper
-        openClass: "mm-show", // when modal is visible
-        clickOffClose: true, // click anywhere off of modal to close it
-        closeOnEscape: true, // close modal with 'esc' key
-        autoOpen: false, // open on page load
-        autoBind: true, // automatically bind triggers to modal
-        effect: "effect-1", // animation style
-        onOpen: function(){}, // function to run when modal opens
-        onClose: function(){} // function to run when modal closes
-    },
-
-    // grab the document's body only once
-    body = document.getElementsByTagName('body')[0],
+    var body = document.getElementsByTagName('body')[0], 
+        defaults = {
+            modalClass: "modality-modal", // outer-most container
+            innerClass: "mm-wrap", // inner wrapper
+            openClass: "mm-show", // when modal is visible
+            clickOffClose: true, // click anywhere off of modal to close it
+            closeOnEscape: true, // close modal with 'esc' key
+            autoOpen: false, // open on page load
+            autoBind: true, // automatically bind triggers to modal
+            effect: "effect-1", // animation style
+            onOpen: function(){}, // function to run when modal opens
+            onClose: function(){} // function to run when modal closes
+        },
 
     /**
      * combines javascript objects
@@ -48,7 +46,7 @@ var Modality = (function () {
      *
      * @return {object}
      */
-     wrap = function ( element, settings ) {
+    wrap = function ( element, settings ) {
 
         // create the container and insert markup
         var container = document.createElement('div');
@@ -59,7 +57,39 @@ var Modality = (function () {
         element.parentNode.replaceChild( container, element );
 
         return container;
-     },
+    },
+
+    /**
+     * class manipulation
+     * @param {object} target - the node with the class
+     * @param {string} className - the class you are checking for
+     */
+    hasClass = function( target, className ) {
+        return target.className.match(new RegExp('(\\s|^)'+className+'(\\s|$)'));
+    },
+    addClass = function( target, className ) {
+        if(Array.isArray(target)) {
+            for( var i = 0; i < target.length; i++ ) {
+                addClass( target[i], className );
+            }
+        } else {
+            if( ! hasClass(target, className) ) {
+                target.className += " " + className;
+            }
+        }
+    },
+    removeClass = function( target, className ) {
+        if(Array.isArray(target)) {
+            for( var i = 0; i < target.length; i++ ) {
+                removeClass( target[i], className );
+            }
+        } else {
+            if( hasClass(target, className) ) {
+                var re = new RegExp("(\\s|^)" + className + "(\\s|$)", "g");
+                target.className = target.className.replace(re , '');
+            }
+        }
+    },
 
     // -----------------------------------------------------------------
 
@@ -103,6 +133,11 @@ var Modality = (function () {
             }, false);
         }
 
+        // ------------------------------------------------------------
+
+        // make sure modal is not hidden
+        if($.element.style.display == 'none') $.element.style.display = '';
+
         // open modal if set to true
         if( $.settings.autoOpen ) $.open(); 
 
@@ -129,8 +164,7 @@ var Modality = (function () {
         open: function ( callback ) {
 
             // add classes to open the modal
-            this.wrapper.classList.add( this.settings.openClass );
-            this._body.classList.add( this.settings.openClass );
+            addClass( [this.wrapper,this._body], this.settings.openClass );
 
             // run the callback(s)
             if ( typeof this.settings.onOpen == 'function' ) this.settings.onOpen();
@@ -148,8 +182,7 @@ var Modality = (function () {
         close: function ( callback ) {
 
             // remove classes to close the modal
-            this.wrapper.classList.remove( this.settings.openClass );
-            this._body.classList.remove( this.settings.openClass );
+            removeClass( [this.wrapper,this._body], this.settings.openClass );
 
             // run the callback(s)
             if ( typeof this.settings.onClose == 'function' ) this.settings.onClose();
@@ -173,7 +206,7 @@ var Modality = (function () {
          * @return {Boolean}
          */
         isOpen: function () {
-            return ( this.wrapper.classList.contains(this.settings.openClass) ) ? true : false;
+            return hasClass(this.wrapper, this.settings.openClass);
         },
 
         /**
