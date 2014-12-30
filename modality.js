@@ -13,6 +13,7 @@ var Modality = (function () {
             modalClass: "modality-modal", // outer-most container
             innerClass: "mm-wrap", // inner wrapper
             openClass: "mm-show", // when modal is visible
+            userClass: '', // user can add a class to container 
             clickOffClose: true, // click anywhere off of modal to close it
             closeOnEscape: true, // close modal with 'esc' key
             autoOpen: false, // open on page load
@@ -36,6 +37,22 @@ var Modality = (function () {
     },
 
     /**
+     * add an event to a given node
+     * @param {object} target - the node you are adding the event to
+     * @param {string} event - the event kind
+     * @param {function} fn - the callback function
+     */
+    addEvent = function( target, event, fn ) {
+        if ( target.attachEvent ) {
+            target['e'+event+fn] = fn;
+            target[event+fn] = function(){ target['e'+event+fn]( window.event ); }
+            target.attachEvent( 'on'+event, target[event+fn] );
+        } else {
+           target.addEventListener( event, fn, false );
+        }
+    },
+
+    /**
      * wraps the users modal element in modality's frame:
      * 
      * <div class="modality-modal effect-1">
@@ -50,7 +67,7 @@ var Modality = (function () {
 
         // create the container and insert markup
         var container = document.createElement('div');
-        container.setAttribute( 'class', settings.modalClass + ' ' + settings.effect );
+        container.setAttribute( 'class', settings.modalClass + ' ' + settings.effect + ' ' + settings.userClass );
         container.innerHTML = '<div class="'+settings.innerClass+'">' + element.outerHTML + '</div>';
 
         // replace the old modal with the new
@@ -101,51 +118,51 @@ var Modality = (function () {
      */
     Modality = function ( modal, options, callback ) {
 
-        var $ = this; // set local var to avoid scope issues
+        var t = this; // set local var to avoid scope issues
 
-        $._body     = body;
-        $._defaults = defaults;
-        $.id        = modal.getAttribute( 'id' );
-        $.settings  = extend( {}, defaults, options );
-        $.wrapper   = wrap( modal, $.settings );
-        $.triggers  = document.querySelectorAll( 'a[href="#'+$.id+'"], [data-modality="#'+$.id+'"]' );
-        $.element   = document.getElementById( $.id );
+        t._body     = body;
+        t._defaults = defaults;
+        t.id        = modal.getAttribute( 'id' );
+        t.settings  = extend( {}, defaults, options );
+        t.wrapper   = wrap( modal, t.settings );
+        t.triggers  = document.querySelectorAll( 'a[href="#'+t.id+'"], [data-modality="#'+t.id+'"]' );
+        t.element   = document.getElementById( t.id );
 
         // ------------------------------------------------------------
 
         // toggle modal on all triggers
-        if( $.settings.autoBind ) {
-            for( var i = 0; i < $.triggers.length; i++ )
-                $.setTrigger( $.triggers[i] );
+        if( t.settings.autoBind ) {
+            for( var i = 0; i < t.triggers.length; i++ )
+                t.setTrigger( t.triggers[i] );
         }
 
         // close modal if users clicks anywhere off of it
-        if( $.settings.clickOffClose ) {
-            $.wrapper.addEventListener( "click", function(e) {
-                e.preventDefault(); if(e.target == $.wrapper) $.close();
+        if( t.settings.clickOffClose ) {
+            addEvent( t.wrapper, "click", function(e) {
+                e.preventDefault(); if(e.target == t.wrapper) t.close();
             }, false );
         }
 
         // close modal with 'esc' key
-        if( $.settings.closeOnEscape ) {
-            $._body.addEventListener( "keyup", function (e) {
-                if(e.keyCode == 27) $.close();
+        if( t.settings.closeOnEscape ) {
+            addEvent( t._body, "keyup", function (e) {
+                if(e.keyCode == 27) t.close();
             }, false);
         }
 
         // ------------------------------------------------------------
 
         // make sure modal is not hidden
-        if($.element.style.display == 'none') $.element.style.display = '';
+        if( t.element.style.display == 'none' ) t.element.style.display = '';
 
         // open modal if set to true
-        if( $.settings.autoOpen ) $.open(); 
+        if( t.settings.autoOpen ) t.open(); 
 
         // run the user's callback function
         if( typeof callback == 'function' ) callback();
 
         // save modal and return it
-        return Modality.modals[$.id] = $;
+        return Modality.modals[t.id] = t;
 
     };
 
@@ -206,7 +223,7 @@ var Modality = (function () {
          * @return {Boolean}
          */
         isOpen: function () {
-            return hasClass(this.wrapper, this.settings.openClass);
+            return hasClass( this.wrapper, this.settings.openClass );
         },
 
         /**
@@ -216,11 +233,11 @@ var Modality = (function () {
          */
         setTrigger: function ( trigger ) {
 
-            var $ = this; // set local var for instance
+            var t = this; // set local var for instance
 
             // set click event for new trigger
-            trigger.addEventListener( "click", function (e) {
-                e.preventDefault(); $.toggle(); 
+            addEvent( trigger, "click", function (e) {
+                e.preventDefault(); t.toggle(); 
             }, false );
 
             return this;

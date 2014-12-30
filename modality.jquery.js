@@ -9,6 +9,7 @@
                 modalClass: "modality-modal", // outer-most container
                 innerClass: "mm-wrap", // inner wrapper
                 openClass: "mm-show", // when modal is visible
+                userClass: '', // user can add a class to container 
                 clickOffClose: true, // click anywhere off of modal to close it
                 closeOnEscape: true, // close modal with 'esc' key
                 autoOpen: false, // open on page load
@@ -37,14 +38,21 @@
             t.id        = $(element).attr( 'id' );
             t.settings  = $.extend( {}, defaults, options );
             t.$element  = $(element).wrap(
-                '<div class="'+ t.settings.modalClass + ' ' + t.settings.effect +'">'+
+                '<div class="'+ t.settings.modalClass + ' ' + t.settings.effect + ' ' + t.settings.userClass +'">'+
                     '<div class="'+ t.settings.innerClass + '">'+
-                        // user's modal goes here
+                        // user's #modal goes here
                     '</div>'+
                 '</div>'
             ).show();
             t.$wrapper   = t.$element.parents('.' + t.settings.modalClass);
             t.$triggers  = $('a[href="#'+t.id+'"], [data-modality="#'+t.id+'"]');
+
+            // ------------------------------------------------------------
+
+            // add node for IE 7 compatibility
+            if (navigator.appVersion.indexOf("MSIE 7.") != -1) {
+                t.$wrapper.prepend('<div class="mm-ghost"></div>');
+            }
 
             // ------------------------------------------------------------
 

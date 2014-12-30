@@ -19,10 +19,11 @@
     <div id="modal2" class="modal" style="display:none;">Modal Content 2<br /><a href="#modal2">Close Modal</a></div>
     <button data-modality="#modal2">Open Modal</button>
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="modality.js"></script>
     <script src="modality.jquery.js"></script>
     <script>
-        var modals = $('.modal').modality();
-        /*var modals = Modality.init('.modal');*/
+        /*var modals = $('.modal').modality();*/
+        var modals = Modality.init('.modal');
     </script>
 </body>
 </html>
