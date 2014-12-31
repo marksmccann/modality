@@ -138,17 +138,6 @@ modal.close(); // closes the modal
 ## Extending Modality
 If you need modality to do more than it already does, you can extend the object and add more functionality. Here is a basic template for how to do that.
 ```javascript
-// jQuery version:
-(function($) {
-
- var extensionMethods = {
-    yourNewMethod: function(){
-      // do something ...
-    }
- };
- $.extend(true, $.modality.prototype, extensionMethods);
- 
-})(jQuery);
 
 // JS-Only version:
 Modality = (function (Modality) {
