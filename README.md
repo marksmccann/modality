@@ -104,6 +104,7 @@ $('.modal').modality({
     console.log("Hello World");
   }
 });
+
 // JS-Only --
 Modality.init('.modal', {
   effect: "effect-3",
