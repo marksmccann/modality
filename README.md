@@ -9,7 +9,7 @@ Beyond what is needed to center your content, Modality has no styling. You are i
 Built with Javascript's Module pattern, Modality can be extended to meet your requirements. You can even get the instance of a modal and invoke it's methods on demand. 
 
 ## Features
-* Both jQuery and JavaScript-Only versions
+* Both jQuery and javascript-only versions
 * Works in all modern browsers 
   * jQuery: IE 6+
   * JS-Only: IE 8+
@@ -22,7 +22,7 @@ Built with Javascript's Module pattern, Modality can be extended to meet your re
 ## Getting Started
 1\. Add this to the head.
 ```html
-<link rel="stylesheet" href="path/to/your/modality.css">
+<link rel="stylesheet" href="path/to/your/modality.min.css">
 ```
 2\. Add this before the closing body tag or in the head.
 ```html
@@ -58,7 +58,7 @@ Modality.init('#yourModalId');
 <html>
   <head>
     <title>Modality Example</title>
-    <link rel="stylesheet" href="path/to/your/modality.css">
+    <link rel="stylesheet" href="path/to/your/modality.min.css">
     <style>
       .yourModalClass {
         background-color: #ffffff;
