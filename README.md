@@ -1,15 +1,23 @@
 # Modality
-Stupid simple, lightweight, customizable modal window plugin. 
+Robust, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need. 
 
-Modality was designed to be the only modal window you would ever need. Too many modals have built in styles that you have to change are fight against to get it how you want. Modality, by default, has no styling. 
+## Overview
+With both a jQuery and javascript-only version of the modal, Modality will work for anyone.
 
+Beyond what is needed to center your content, Modality has no styling. You are in complete control of how your modal window will look. 
 
-## Notes
-* Both jQuery and JavaScript-only versions of plugin
-* Works in all modern browsers (IE8+)
-* Adapts to the content and styles that you define
-* No styling out-of-the-box
+Built with Javascript's Module pattern, Modality can be extended to meet your requirements. You can even get the instance of a modal and invoke it's methods on demand. 
 
+## Features
+* Both jQuery and JavaScript-Only versions
+* Works in all modern browsers 
+  * jQuery: IE 6+
+  * JS-Only: IE 8+
+* Lightweight, under 2KB when compressed
+* All styling defined by user
+* Awesome CSS3 animations 
+* Multiple instances on each page
+* Infinitely flexible width and height
 
 ## Getting Started
 1\. Add this to the head.
@@ -81,7 +89,7 @@ Name | Default | Description
 --- | --- | ---
 openOnLoad | `false` | set true to open modal on page load
 autoBind | `true` | set false if you want to bind triggers manually
-effect | `"effect-1"` | CSS animation, options are listed below
+effect | `"effect-1"` | CSS animation, options are listed below &ndash; leave blank for none
 clickOffToClose | `true` | set false to prevent closing the modal when clicking off of it
 closeOnEsc | `true` | set false to prevent closing modal when 'Esc' is pressed
 onOpen | `function(){}` | add function to call when modal is opened
