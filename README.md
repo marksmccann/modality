@@ -129,11 +129,11 @@ Name | Parameters | Returns | Description
 #### Implementation
 ```javascript
 // jQuery --
-var modal = $.modality.lookup('yourModalId');
+var modal = $.modality.lookup['yourModalId'];
 modal.open(); // opens the modal
 
 // JS-Only --
-var modal = Modality.lookup('yourModalId');
+var modal = Modality.lookup['yourModalId'];
 modal.close(); // closes the modal
 ```
 ## Extending Modality
