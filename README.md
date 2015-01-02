@@ -1,5 +1,5 @@
 # Modality
-Robust, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need. 
+Simple, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need. 
 
 ## Overview
 With both a jQuery and javascript-only version of the modal, Modality will work for anyone.
