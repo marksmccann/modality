@@ -143,7 +143,7 @@ If you need modality to do more than it already does, you can extend the object 
 // jQuery --
 (function($) {
 
-  $.extend($.modality.root.prototype, {
+  $.extend($.modality.prototype, {
     yourNewMethod: function() {
       // do something ...
     }
@@ -154,9 +154,9 @@ If you need modality to do more than it already does, you can extend the object 
 // JS-Only --
 (function (Modality) {
 
- Modality.prototype.yourNewMethod = function () {
-   // do something ...
- }
+  Modality.prototype.yourNewMethod = function () {
+    // do something ...
+  }
  
 })(Modality);
 ```
