@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Modality Example</title>
+    <link rel="stylesheet" href="css/modality.min.css">
+
+    <!-- The styles for your modal -->
+    <style>
+      .yourModalClass {
+        background-color: #ffffff;
+        border: 1px solid #cccccc;
+        padding: 0 1.5em 1em;
+        border-radius: 5px;
+        max-width: 500px;
+      }
+    </style>
+
+  </head>
+  <body>
+
+    <!-- The trigger to open the modal -->
+    <a href="#yourModalId">Open Modal</a>
+
+    <!-- Your Modal, style it however you will! -->
+    <div id="yourModalId" class="yourModalClass">
+      <h2>Modality</h2>
+      <p>Simple, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need.</p>
+      <a href="#yourModalId">Close Modal</a>
+    </div>
+
+    <script src="js/modality.min.js"></script>
+
+    <!-- Initialize your modal -->
+    <script>
+      Modality.init('#yourModalId');
+    </script>
+
+  </body>
+</html>

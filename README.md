@@ -13,7 +13,7 @@ Built with Javascript's Module pattern, Modality can be extended to meet your re
 * Works in all modern browsers 
   * jQuery: IE 6+
   * JS-Only: IE 8+
-* Lightweight, under 2KB when compressed
+* Lightweight; Under 3KB
 * All styling defined by user
 * Awesome CSS3 animations 
 * Multiple instances on each page
