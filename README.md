@@ -94,7 +94,7 @@ clickOffToClose | `true` | set false to prevent closing the modal when clicking 
 closeOnEsc | `true` | set false to prevent closing modal when 'Esc' is pressed
 onOpen | `function(){}` | add function to call when modal is opened
 onClose | `function(){}` | add function to call when modal is closed
-userClass | '' | a class name that you want added to the modal's container
+userClass | `""` | a class name that you want added to the modal's container
 
 #### Implementation
 ```javascript
