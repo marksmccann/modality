@@ -10,9 +10,9 @@
                 innerClass: "mm-wrap", // inner wrapper
                 openClass: "mm-show", // when modal is visible
                 userClass: '', // user can add a class to container 
-                clickOffClose: true, // click anywhere off of modal to close it
+                clickOffToClose: true, // click anywhere off of modal to close it
                 closeOnEscape: true, // close modal with 'esc' key
-                autoOpen: false, // open on page load
+                openOnLoad: false, // open on page load
                 autoBind: true, // automatically bind triggers to modal
                 effect: "effect-1", // animation style
                 onOpen: function(){}, // function to run when modal opens
@@ -64,7 +64,7 @@
             }
 
             // close modal if users clicks anywhere off of it
-            if( inst.settings.clickOffClose ) {
+            if( inst.settings.clickOffToClose ) {
                 inst.$wrapper.click( function(e) {
                     e.preventDefault(); if(e.target == inst.$wrapper[0]) inst.close();
                 });
@@ -80,7 +80,7 @@
             // ------------------------------------------------------------
 
             // open modal if set to true
-            if( inst.settings.autoOpen ) inst.open(); 
+            if( inst.settings.openOnLoad ) inst.open(); 
 
             // run the user's callback function
             if( typeof fn == 'function' ) fn();
