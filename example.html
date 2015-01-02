@@ -23,14 +23,23 @@
     <script src="modality.jquery.js"></script>
     <script>
         
-        /*var modals = Modality.init('.modal',{
-            effect: 'effect-3'
-        });*/
+        
+        /*(function (Modality) {
+
+         Modality.prototype.yourNewMethod = function () {
+           this.open();
+         }
+
+        })(Modality);
+
+        var modals = Modality.init('.modal');
+*/
+
         (function($) {
 
-            $.extend($.modality.root.prototype, {
+            $.extend($.modality.prototype, {
                 yourNewMethod: function() {
-                  console.log("here");
+                  this.close();
                 }
             });
          

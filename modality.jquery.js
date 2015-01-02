@@ -166,14 +166,12 @@
         // -----------------------------------------------
         
         /**
-         * Special plugin object for instances.
+         * Special plugin objects for plugin and instances.
          * @type {Object}
          * @public
          */
-        $[pluginName] = {
-            root: Modality,
-            lookup: []
-        };
+        $[pluginName] = Modality;
+        $[pluginName].lookup = [];
 
         // -----------------------------------------------
 
