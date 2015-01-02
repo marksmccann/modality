@@ -22,8 +22,24 @@
     <script src="modality.js"></script>
     <script src="modality.jquery.js"></script>
     <script>
-        /*var modals = $('.modal').modality();*/
-        var modals = Modality.init('.modal');
+        
+        /*var modals = Modality.init('.modal',{
+            effect: 'effect-3'
+        });*/
+        (function($) {
+
+            $.extend($.modality.root.prototype, {
+                yourNewMethod: function() {
+                  console.log("here");
+                }
+            });
+         
+        })(jQuery);
+
+        $('.modal').modality();
+
+        var modal1 = $.modality.lookup['modal'];
+
     </script>
 </body>
 </html>

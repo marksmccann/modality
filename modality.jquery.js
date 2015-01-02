@@ -29,64 +29,64 @@
          */
         function Modality ( element, options, fn ) {
 
-            var t = this; // local var for instance
+            var inst = this; // local var for instance
 
-            t._defaults = defaults;
-            t._name     = pluginName;
-            t.element   = element;
-            t._$body    = $body;
-            t.id        = $(element).attr( 'id' );
-            t.settings  = $.extend( {}, defaults, options );
-            t.$element  = $(element).wrap(
-                '<div class="'+ t.settings.modalClass + ' ' + t.settings.effect + ' ' + t.settings.userClass +'">'+
-                    '<div class="'+ t.settings.innerClass + '">'+
+            inst._defaults = defaults;
+            inst._name     = pluginName;
+            inst.element   = element;
+            inst._$body    = $body;
+            inst.id        = $(element).attr( 'id' );
+            inst.settings  = $.extend( {}, defaults, options );
+            inst.$element  = $(element).wrap(
+                '<div class="'+ inst.settings.modalClass + ' ' + inst.settings.effect + ' ' + inst.settings.userClass +'">'+
+                    '<div class="'+ inst.settings.innerClass + '">'+
                         // user's #modal goes here
                     '</div>'+
                 '</div>'
             ).show();
-            t.$wrapper   = t.$element.parents('.' + t.settings.modalClass);
-            t.$triggers  = $('a[href="#'+t.id+'"], [data-modality="#'+t.id+'"]');
+            inst.$wrapper   = inst.$element.parents('.' + inst.settings.modalClass);
+            inst.$triggers  = $('a[href="#'+inst.id+'"], [data-modality="#'+inst.id+'"]');
 
             // ------------------------------------------------------------
 
             // add node for IE 7 compatibility
             if (navigator.appVersion.indexOf("MSIE 7.") != -1) {
-                t.$wrapper.prepend('<div class="mm-ghost"></div>');
+                inst.$wrapper.prepend('<div class="mm-ghost"></div>');
             }
 
             // ------------------------------------------------------------
 
             // toggle modal on all triggers
-            if( t.settings.autoBind ) {
-                t.$triggers.each(function() {
-                    t.setTrigger( $(this) );
+            if( inst.settings.autoBind ) {
+                inst.$triggers.each(function() {
+                    inst.setTrigger( $(this) );
                 });
             }
 
             // close modal if users clicks anywhere off of it
-            if( t.settings.clickOffClose ) {
-                t.$wrapper.click( function(e) {
-                    e.preventDefault(); if(e.target == t.$wrapper[0]) t.close();
+            if( inst.settings.clickOffClose ) {
+                inst.$wrapper.click( function(e) {
+                    e.preventDefault(); if(e.target == inst.$wrapper[0]) inst.close();
                 });
             }
 
             // close modal with 'esc' key
-            if( t.settings.closeOnEscape ) {
-                t._$body.keyup( function (e) {
-                    if(e.keyCode == 27) t.close();
+            if( inst.settings.closeOnEscape ) {
+                inst._$body.keyup( function (e) {
+                    if(e.keyCode == 27) inst.close();
                 });
             }
 
             // ------------------------------------------------------------
 
             // open modal if set to true
-            if( t.settings.autoOpen ) t.open(); 
+            if( inst.settings.autoOpen ) inst.open(); 
 
             // run the user's callback function
             if( typeof fn == 'function' ) fn();
 
             // save modal and return it
-            return t;
+            return $.modality.lookup[inst.id] = inst;
 
         }
 
@@ -151,17 +151,29 @@
             setTrigger: function ( $trigger ) {
 
                 // set local var for instance
-                var t = this; 
+                var inst = this; 
 
                 // set click event for new trigger
                 $trigger.click(function (e) {
-                    e.preventDefault(); t.toggle(); 
+                    e.preventDefault(); inst.toggle(); 
                 });
 
-                return t;
+                return inst;
             }
 
         });
+
+        // -----------------------------------------------
+        
+        /**
+         * Special plugin object for instances.
+         * @type {Object}
+         * @public
+         */
+        $[pluginName] = {
+            root: Modality,
+            lookup: []
+        };
 
         // -----------------------------------------------
 

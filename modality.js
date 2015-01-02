@@ -162,7 +162,7 @@ var Modality = (function () {
         if( typeof callback == 'function' ) callback();
 
         // save modal and return it
-        return Modality.modals[t.id] = t;
+        return Modality.lookup[t.id] = t;
 
     };
 
@@ -270,13 +270,13 @@ var Modality = (function () {
         }
 
         // return array of modals
-        return Modality.modals;
+        return Modality.lookup;
     }
 
     /**
      * an empty object to collect all modals on page
      */
-    Modality.modals = {};
+    Modality.lookup = {};
 
     // -----------------------------------------------------------------
     
