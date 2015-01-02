@@ -129,12 +129,12 @@ Name | Parameters | Returns | Description
 #### Implementation
 ```javascript
 // jQuery --
-var modal = $.modality.lookup['yourModalId'];
-modal.open(); // opens the modal
+var inst = $.modality.lookup['yourModalId'];
+inst.open(); // opens the modal
 
 // JS-Only --
-var modal = Modality.lookup['yourModalId'];
-modal.close(); // closes the modal
+var inst = Modality.lookup['yourModalId'];
+inst.close(); // closes the modal
 ```
 ## Extending Modality
 If you need modality to do more than it already does, you can extend the object and add more functionality. Here is a basic template for how to do that.
@@ -152,14 +152,13 @@ If you need modality to do more than it already does, you can extend the object 
 })(jQuery);
 
 // JS-Only --
-Modality = (function (Modality) {
+(function (Modality) {
 
  Modality.prototype.yourNewMethod = function () {
    // do something ...
  }
- return Modality;
  
-})(Modality || {});
+})(Modality);
 ```
 
 ## License
