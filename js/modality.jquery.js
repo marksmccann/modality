@@ -16,7 +16,7 @@
                 onOpen: "", // function to run when modal opens
                 openClass: "mm-show", // when modal is visible
                 openOnLoad: false, // open on page load
-                userClass: "", // user can add a class to container 
+                userClass: "" // user can add a class to container 
             };
 
         // -----------------------------------------------
