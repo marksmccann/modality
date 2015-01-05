@@ -3,7 +3,7 @@
 // @license: None, Public Domain
 // --------------------------------------------------------------- */
 
-.modality-modal { 
+.modality-modal {
     background: rgba(0, 0, 0, 0);
     bottom: 0;
     left: 0;
@@ -262,7 +262,9 @@ body.mm-show { overflow: hidden; }
     transform-origin: bottom;
 }
 .mm-show.effect-15 .mm-wrap, .mm-show.swing-down .mm-wrap,
-.mm-show.effect-16 .mm-wrap, .mm-show.swing-up .mm-wrap {
+.mm-show.effect-16 .mm-wrap, .mm-show.swing-up .mm-wrap,
+.mm-show.effect-17 .mm-wrap, .mm-show.front-flip .mm-wrap,
+.mm-show.effect-18 .mm-wrap, .mm-show.back-flip .mm-wrap {
     -webkit-transform: rotateX(0deg);
     -moz-transform: rotateX(0deg);
     -ms-transform: rotateX(0deg);
@@ -284,13 +286,7 @@ body.mm-show { overflow: hidden; }
     -ms-transform: rotateX(-360deg);
     transform: rotateX(-360deg);
 }
-.mm-show.effect-17 .mm-wrap, .mm-show.front-flip .mm-wrap,
-.mm-show.effect-18 .mm-wrap, .mm-show.back-flip .mm-wrap {
-    -webkit-transform: rotateX(0deg);
-    -moz-transform: rotateX(0deg);
-    -ms-transform: rotateX(0deg);
-    transform: rotateX(0deg);
-}
+/* active styles above with effect-15 & 16 */
 
 /* --------------------------------------------------- */
 
