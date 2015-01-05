@@ -2,23 +2,28 @@
 Simple, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need. 
 
 ## Overview
-With both a jQuery and javascript-only version of the modal, Modality will work for anyone.
+Modality was designed for the web-novice and web-master alike; Simple, lightweight and straight-forward, but at the same time versatile, extendable and infinitely customizable.
 
-Beyond what is needed to center your content, Modality has no styling. You are in complete control of how your modal window will look. 
+Modality is unique, it uses CSS to position itself horizontally AND vertically. This is esspecially helpful when designing for mobile; The modal and it's content will automatically resize to best fit any screen &ndash; all without a line of JavaScript.
 
-Built with Javascript's Module pattern, Modality can be extended to meet your requirements. You can even get the instance of a modal and invoke it's methods on demand.
+Beyond what is needed to position your modal, Modality (by default) has no styling. You are in complete control of how your modal window will look.
+
+Built with Javascript's module pattern, Modality can be extended to meet your requirements. You can also grab the instance of any modal and invoke it's methods manually.
 
 ## Features
-* Both jQuery and javascript-only versions
-* Works in all modern browsers 
+* Easy to Use
+* Adapts to Screen Size
+* CSS3 Animations
+* Easily Customizable
+* Extendable Framework
+* Multiple Instances
+* Two Versions (jQuery & JavaScript-Only)
+* Modern Browser Compatible
   * jQuery: IE 6+
   * JS-Only: IE 8+
-* Lightweight; Under 3KB
-* All styling defined by user
-* Awesome CSS3 animations 
-* Multiple instances on each page
-* Infinitely flexible width and height
-* Easily Extandable
+* Lightweight
+  * jQuery: 1KB
+  * JS-Only: 3KB
 
 ## Getting Started
 1\. Add this to the head.
@@ -32,10 +37,10 @@ Built with Javascript's Module pattern, Modality can be extended to meet your re
 3\. Now create your modal dialog.
 ```html
 <div id="yourModalId" class="yourModalClass">
-  <!-- content here -->
+  <!-- your content here -->
 </div>
 ```
-4\. Now you can call your modal with the hash (*outside modal will open it, inside will close it*).
+4\. Create a trigger to open/close the modal (*outside will open it, inside will close it*).
 ```html
 <a href="#yourModalId">Open Modal</a>
 <!-- OR -->
@@ -51,7 +56,6 @@ $('#yourModalId').modality();
 // JS-Only --
 Modality.init('#yourModalId');
 ```
-
 
 ## Template
 ```html
@@ -73,7 +77,7 @@ Modality.init('#yourModalId');
     <a href="#yourModalId">Open Modal</a>
     <div id="yourModalId" class="yourModalClass">
       <h2>Modality</h2>
-      <p>Stupid simple, lightweight, customizable modal window plugin.</p>
+      <p>Simple, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need.</p>
       <a href="#yourModalId">Close Modal</a>
     </div>
     <script src="path/to/your/modality.min.js"></script>
@@ -84,18 +88,21 @@ Modality.init('#yourModalId');
 </html>
 ```
 
-
 ## Options
 Name | Default | Description
 --- | --- | ---
 openOnLoad | `false` | set true to open modal on page load
 autoBind | `true` | set false if you want to bind triggers manually
 effect | `""` | CSS animation, effects listed below.
-clickOffToClose | `true` | set false to prevent closing the modal when clicking off of it
+clickOffToClose | `true` | set false to prevent closing when clicking off of it
 closeOnEsc | `true` | set false to prevent closing modal when 'Esc' is pressed
-onOpen | `function(){}` | add function to call when modal is opened
-onClose | `function(){}` | add function to call when modal is closed
-userClass | `""` | a class name that you want added to the modal's container
+onOpen | `""` | add callback function when modal is opened
+onClose | `""` | add callback function when modal is closed
+userClass | `""` | class you want added to modal's container
+modalClass* | `"modality-modal"` | the outer-most container for the modal
+innerClass* | `"mm-wrap"` | the inner container for the modal
+openClass* | `"mm-show"` | when modal is active/visible
+**These classes match those in modality.css, if changed here, must also be changed there.*
 
 #### Effects
 1. `"scale-up"`, `"scale-down"`
@@ -128,17 +135,16 @@ Modality.init('.modal', {
 });
 ```
 
-
 ## Methods
-Get the instance of a modal and call on it's methods manually.
+Get the instance of a modal and call it's methods manually.
 
 Name | Parameters | Returns | Description
 --- | --- | --- | ---
-`open()` | function (optional) | `instance` | opens the modal
-`close()` | function (optional) | `instance` | closes the modal
-`toggle()` | function (optional) | `instance` | opens the modal is closed and vice versa
+`open()` | callback function (optional) | `instance` | opens the modal
+`close()` | callback function (optional) | `instance` | closes the modal
+`toggle()` | callback function (optional) | `instance` | opens the modal if closed and vice versa
 `isOpen()` | none | `boolean` | tells you if the modal is open or not
-`setTrigger()` | object | `instance` | sets a DOM object to open/close modal when clicked
+`setTrigger()` | DOM Object | `instance` | sets a DOM object to open/close modal when clicked
 
 #### Implementation
 ```javascript
@@ -151,13 +157,13 @@ var inst = Modality.lookup['yourModalId'];
 inst.close(); // closes the modal
 ```
 ## Extending Modality
-If you need modality to do more than it already does, you can extend the object and add more functionality. Here is a basic template for how to do that.
+If you need modality to do more, you can extend the object and add more functionality. Here is a basic template for how to do that:
 ```javascript
 
 // jQuery --
 (function($) {
 
-  $.extend($.modality.prototype, {
+  $.extend( $.modality.prototype , {
     yourNewMethod: function() {
       // do something ...
     }
@@ -168,9 +174,11 @@ If you need modality to do more than it already does, you can extend the object 
 // JS-Only --
 (function (Modality) {
 
-  Modality.prototype.yourNewMethod = function () {
-    // do something ...
-  }
+  Modality.extend( Modality.prototype , {
+    yourNewMethod: function () {
+      // do something ...
+    }
+  });
  
 })(Modality);
 ```
