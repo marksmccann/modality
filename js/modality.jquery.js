@@ -1,8 +1,7 @@
 ;(function ( $, window, document, undefined ) {
 
-        /**
-         * list of Modality defaults
-         */
+        // Private Attributes ------------------------------------------
+        
         var pluginName = "modality",
             $body = $('body'),
             defaults = {
@@ -18,8 +17,9 @@
                 openOnLoad: false, // open on page load
                 userClass: "" // user can add a class to container 
             };
-
-        // -----------------------------------------------
+            
+            
+        // Constructor ------------------------------------------------
 
         /**
          * the modality object
@@ -30,6 +30,8 @@
         function Modality ( element, options, fn ) {
 
             var inst = this; // local var for instance
+            
+            // Attributes --------------------------------
 
             inst._defaults = defaults;
             inst._name     = pluginName;
@@ -47,14 +49,7 @@
             inst.$wrapper   = inst.$element.parents('.' + inst.settings.modalClass);
             inst.$triggers  = $('a[href="#'+inst.id+'"], [data-modality="#'+inst.id+'"]');
 
-            // ------------------------------------------------------------
-
-            // add node for IE 7 compatibility
-            if (navigator.appVersion.indexOf("MSIE 7.") != -1) {
-                inst.$wrapper.prepend('<div class="mm-ghost"></div>');
-            }
-
-            // ------------------------------------------------------------
+            // Events ------------------------------------
 
             // toggle modal on all triggers
             if( inst.settings.autoBind ) {
@@ -77,7 +72,12 @@
                 });
             }
 
-            // ------------------------------------------------------------
+            // Final Touches ------------------------------
+            
+            // add node for IE 7 compatibility
+            if (navigator.appVersion.indexOf("MSIE 7.") != -1) {
+                inst.$wrapper.prepend('<div class="mm-ghost"></div>');
+            }
 
             // open modal if set to true
             if( inst.settings.openOnLoad ) inst.open(); 
@@ -89,8 +89,20 @@
             return $.modality.lookup[inst.id] = inst;
 
         }
+        
+        
+        // Static Methods ---------------------------------------------
+        
+        /**
+         * Special plugin objects for plugin and instances.
+         * @type {Object}
+         * @public
+         */
+        $[pluginName] = Modality;
+        $[pluginName].lookup = [];
+        
 
-        // -----------------------------------------------
+        // Class Methods ----------------------------------------------
 
         $.extend(Modality.prototype, {
 
@@ -164,18 +176,9 @@
             }
 
         });
-
-        // -----------------------------------------------
         
-        /**
-         * Special plugin objects for plugin and instances.
-         * @type {Object}
-         * @public
-         */
-        $[pluginName] = Modality;
-        $[pluginName].lookup = [];
 
-        // -----------------------------------------------
+        // jQuery -----------------------------------------------
 
         /**
          * initalizes modal(s)
