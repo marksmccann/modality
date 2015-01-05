@@ -99,13 +99,14 @@
              * @param  {function} callback
              * @return {instance}
              */
-            open: function () {
+            open: function ( fn ) {
 
                 // add classes to open the modal
                 this.$wrapper.add(this._$body).addClass( this.settings.openClass );
 
                 // run the callback(s)
                 if ( typeof this.settings.onOpen == 'function' ) this.settings.onOpen();
+                if ( typeof fn == 'function' ) fn();
 
                 return this;
             },
@@ -115,13 +116,14 @@
              * @param  {function} callback
              * @return {instance} 
              */
-            close: function () {
+            close: function ( fn ) {
 
                 // add classes to open the modal
                 this.$wrapper.add(this._$body).removeClass( this.settings.openClass );
 
                 // run the callback(s)
                 if ( typeof this.settings.onClose == 'function' ) this.settings.onClose();
+                if ( typeof fn == 'function' ) fn();
 
                 return this;
             },
@@ -131,8 +133,8 @@
              * @param  {function} callback
              * @return {instance}
              */
-            toggle: function () {
-                return ( this.isOpen() ) ? this.close() : this.open();
+            toggle: function ( fn ) {
+                return ( this.isOpen() ) ? this.close( fn ) : this.open( fn );
             },
 
             /**
