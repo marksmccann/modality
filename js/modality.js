@@ -24,19 +24,6 @@ var Modality = (function () {
         },
 
     /**
-     * combines javascript objects
-     * @return {object}
-     */
-    extend = function () {
-        var a = arguments;
-        for( var i = 1; i < a.length; i++ )
-            for( var key in a[i] )
-                if(a[i].hasOwnProperty(key))
-                    a[0][key] = a[i][key];
-        return a[0];
-    },
-
-    /**
      * add an event to a given node
      * @param {object} target - the node you are adding the event to
      * @param {string} event - the event kind
@@ -123,7 +110,7 @@ var Modality = (function () {
         t._body     = body;
         t._defaults = defaults;
         t.id        = modal.getAttribute( 'id' );
-        t.settings  = extend( {}, defaults, options );
+        t.settings  = Modality.extend( {}, defaults, options );
         t.wrapper   = wrap( modal, t.settings );
         t.triggers  = document.querySelectorAll( 'a[href="#'+t.id+'"], [data-modality="#'+t.id+'"]' );
         t.element   = document.getElementById( t.id );
@@ -171,7 +158,7 @@ var Modality = (function () {
     /**
      * class methods for the modality object
      */
-    extend( Modality.prototype, {
+    Modality.extend( Modality.prototype, {
 
         /**
          * opens the modal
@@ -271,6 +258,19 @@ var Modality = (function () {
 
         // return array of modals
         return Modality.lookup;
+    }
+
+    /**
+     * combines javascript objects
+     * @return {object}
+     */
+    Modality.extend = function () {
+        var a = arguments;
+        for( var i = 1; i < a.length; i++ )
+            for( var key in a[i] )
+                if(a[i].hasOwnProperty(key))
+                    a[0][key] = a[i][key];
+        return a[0];
     }
 
     /**
