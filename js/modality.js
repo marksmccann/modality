@@ -72,7 +72,7 @@
         return target.className.match(new RegExp('(\\s|^)'+className+'(\\s|$)'));
     },
     addClass = function( target, className ) {
-        if(Array.isArray(target)) {
+        if(Object.prototype.toString.call( target ) === '[object Array]') {
             for( var i = 0; i < target.length; i++ ) {
                 addClass( target[i], className );
             }
@@ -83,7 +83,7 @@
         }
     },
     removeClass = function( target, className ) {
-        if(Array.isArray(target)) {
+        if(Object.prototype.toString.call( target ) === '[object Array]') {
             for( var i = 0; i < target.length; i++ ) {
                 removeClass( target[i], className );
             }
