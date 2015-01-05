@@ -4,10 +4,9 @@
 // -----------------------------------------------------------------
 
 ;var Modality = (function () {
+    
+    // Private Attributes ------------------------------------------
 
-    /**
-     * list of Modality defaults
-     */
     var body = document.getElementsByTagName('body')[0], 
         defaults = {
             autoBind: true, // automatically bind triggers to modal
@@ -22,6 +21,9 @@
             openOnLoad: false, // open on page load
             userClass: "" // user can add a class to container
         },
+        
+        
+    // Private Methods ---------------------------------------------
 
     /**
      * add an event to a given node
@@ -95,7 +97,8 @@
         }
     },
 
-    // -----------------------------------------------------------------
+
+    // Constructor ------------------------------------------------
 
     /**
      * the modality object
@@ -106,6 +109,8 @@
     Modality = function ( modal, options, callback ) {
 
         var t = this; // set local var to avoid scope issues
+        
+        // Attributes --------------------------------
 
         t._body     = body;
         t._defaults = defaults;
@@ -115,7 +120,7 @@
         t.triggers  = document.querySelectorAll( 'a[href="#'+t.id+'"], [data-modality="#'+t.id+'"]' );
         t.element   = document.getElementById( t.id );
 
-        // ------------------------------------------------------------
+        // Events ------------------------------------
 
         // toggle modal on all triggers
         if( t.settings.autoBind ) {
@@ -137,7 +142,7 @@
             }, false);
         }
 
-        // ------------------------------------------------------------
+        // Final Touches ------------------------------
 
         // make sure modal is not hidden
         if( t.element.style.display == 'none' ) t.element.style.display = '';
@@ -152,12 +157,57 @@
         return Modality.lookup[t.id] = t;
 
     };
+    
 
-    // -----------------------------------------------------------------
+    // Static Methods ---------------------------------------------
+    
+    /**
+     * initalizes modal(s)
+     * @param  {string} query
+     * @param  {object} settings
+     * @param  {function} fn
+     * @return {object,array}
+     */
+    Modality.init = function ( query, settings, fn ) {
+
+        // collect the modals from the DOM
+        var modals = document.querySelectorAll(query);
+
+        // loop through the modals and initialize each one
+        for( var i = 0; i < modals.length; i++ ) {
+
+            // Initialize the modal
+            var modal = new Modality(modals[i], settings, fn);
+
+            // return only this modal if only one
+            if(modals.length == 1) { return modal; }
+        }
+
+        // return array of modals
+        return Modality.lookup;
+    }
 
     /**
-     * class methods for the modality object
+     * combines javascript objects
+     * @return {object}
      */
+    Modality.extend = function () {
+        var a = arguments;
+        for( var i = 1; i < a.length; i++ )
+            for( var key in a[i] )
+                if(a[i].hasOwnProperty(key))
+                    a[0][key] = a[i][key];
+        return a[0];
+    }
+
+    /**
+     * an empty object to collect all modals on page
+     */
+    Modality.lookup = {};
+    
+    
+    // Class Methods ----------------------------------------------
+
     Modality.extend( Modality.prototype, {
 
         /**
@@ -232,53 +282,7 @@
 
     });
 
-    // -----------------------------------------------------------------
-    
-    /**
-     * initalizes modal(s)
-     * @param  {string} query
-     * @param  {object} settings
-     * @param  {function} fn
-     * @return {object,array}
-     */
-    Modality.init = function ( query, settings, fn ) {
-
-        // collect the modals from the DOM
-        var modals = document.querySelectorAll(query);
-
-        // loop through the modals and initialize each one
-        for( var i = 0; i < modals.length; i++ ) {
-
-            // Initialize the modal
-            var modal = new Modality(modals[i], settings, fn);
-
-            // return only this modal if only one
-            if(modals.length == 1) { return modal; }
-        }
-
-        // return array of modals
-        return Modality.lookup;
-    }
-
-    /**
-     * combines javascript objects
-     * @return {object}
-     */
-    Modality.extend = function () {
-        var a = arguments;
-        for( var i = 1; i < a.length; i++ )
-            for( var key in a[i] )
-                if(a[i].hasOwnProperty(key))
-                    a[0][key] = a[i][key];
-        return a[0];
-    }
-
-    /**
-     * an empty object to collect all modals on page
-     */
-    Modality.lookup = {};
-
-    // -----------------------------------------------------------------
+    // ------------------------------------------------------------
     
     return Modality;
 
