@@ -22,7 +22,7 @@ Built with Javascript's module pattern, Modality can be extended to meet your re
   * jQuery: IE 6+
   * JS-Only: IE 8+
 * Lightweight
-  * jQuery: 1KB
+  * jQuery: 2KB
   * JS-Only: 3KB
 
 ## Getting Started
