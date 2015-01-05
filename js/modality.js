@@ -3,7 +3,7 @@
 // @license: None, Public Domain
 // -----------------------------------------------------------------
 
-var Modality = (function () {
+;var Modality = (function () {
 
     /**
      * list of Modality defaults
