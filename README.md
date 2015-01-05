@@ -90,18 +90,30 @@ Name | Default | Description
 --- | --- | ---
 openOnLoad | `false` | set true to open modal on page load
 autoBind | `true` | set false if you want to bind triggers manually
-effect | `"effect-1"` | CSS animation, options are listed below &ndash; leave blank for none
+effect | `""` | CSS animation, effects listed below.
 clickOffToClose | `true` | set false to prevent closing the modal when clicking off of it
 closeOnEsc | `true` | set false to prevent closing modal when 'Esc' is pressed
 onOpen | `function(){}` | add function to call when modal is opened
 onClose | `function(){}` | add function to call when modal is closed
 userClass | `""` | a class name that you want added to the modal's container
 
+#### Effects
+1. `"scale-up"`, `"scale-down"`
+2. `"slide-left"`, `"slide-right"`
+3. `"slide-up"`, `"slide-down"`
+4. `"sticky-top"`, `"sticky-bottom"`
+5. `"horizontal-flip"`, `"vertical-flip"`
+6. `"spin-up"`, `"spin-down"`
+7. `"fall-left"`, `"fall-right"`
+8. `"swing-down"`, `"swing-up"`
+9. `"swing-left"`, `"swing-right"`
+10. `"front-flip"`, `"back-flip"`
+
 #### Implementation
 ```javascript
 // jQuery --
 $('.modal').modality({
-  effect: "effect-2",
+  effect: "scale-up",
   onOpen: function () {
     console.log("Hello World");
   }
@@ -109,7 +121,7 @@ $('.modal').modality({
 
 // JS-Only --
 Modality.init('.modal', {
-  effect: "effect-3",
+  effect: "slide-left",
   onClose: function () {
     console.log("Goodbye World");
   }
@@ -118,7 +130,7 @@ Modality.init('.modal', {
 
 
 ## Methods
-Get the instance of a modal and call on it's methods manually
+Get the instance of a modal and call on it's methods manually.
 
 Name | Parameters | Returns | Description
 --- | --- | --- | ---
