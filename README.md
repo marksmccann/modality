@@ -162,24 +162,20 @@ If you need modality to do more, you can extend the object and add more function
 
 // jQuery --
 (function($) {
-
   $.extend( $.modality.prototype , {
     yourNewMethod: function() {
       // do something ...
     }
   });
-
 })(jQuery);
 
 // JS-Only --
 (function (Modality) {
-
   Modality.extend( Modality.prototype , {
     yourNewMethod: function () {
       // do something ...
     }
   });
- 
 })(Modality);
 ```
 ## AJAX
@@ -189,6 +185,7 @@ Modality does not have a built-in AJAX function. However, you can extend Modalit
 // jQuery --
 (function($) {
   $.extend( $.modality.prototype , {
+  
     insert: function() {
       var inst = this;
       $.ajax({
@@ -198,6 +195,7 @@ Modality does not have a built-in AJAX function. However, you can extend Modalit
         }
       });
     }
+    
   });
 })(jQuery);
 
@@ -207,12 +205,12 @@ $.modality.lookup['yourModalId'].insert();
 // JS-Only --
 (function (Modality) {
   Modality.extend( Modality.prototype, {
+  
     insert: function () {
       var inst = this;
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-          // replaces content with the response text
+        if ( xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
           inst.element.innerHTML = xmlhttp.responseText;
         }
       }
