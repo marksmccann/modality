@@ -65,49 +65,49 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effect 1 & 2: scale up and down */
-.effect-1 .mm-wrap, .scale-up .mm-wrap {
-	-webkit-transform: scale(0.7);
-	-moz-transform: scale(0.7);
-	-ms-transform: scale(0.7);
-	transform: scale(0.7);
+.scale-up .mm-wrap {
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
 }
-.effect-2 .mm-wrap, .scale-down .mm-wrap {
+.scale-down .mm-wrap {
     -webkit-transform: scale(2);
     -moz-transform: scale(2);
     -ms-transform: scale(2);
     transform: scale(2);
 }
-.mm-show.effect-1 .mm-wrap, .mm-show.scale-up .mm-wrap,
-.mm-show.effect-2 .mm-wrap, .mm-show.scale-down .mm-wrap {
-	-webkit-transform: scale(1);
-	-moz-transform: scale(1);
-	-ms-transform: scale(1);
-	transform: scale(1);
+.mm-show.scale-up .mm-wrap,
+.mm-show.scale-down .mm-wrap {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
 }
 
 /* --------------------------------------------------- */
 
 /* Effects 3 & 4: slide left and right */
-.effect-3 .mm-wrap, .slide-left .mm-wrap {
+.slide-left .mm-wrap {
     -webkit-transform: translateX(20%);
     -moz-transform: translateX(20%);
     -ms-transform: translateX(20%);
     transform: translateX(20%);
 }
-.effect-4 .mm-wrap, .slide-right .mm-wrap {
+.slide-right .mm-wrap {
     -webkit-transform: translateX(-20%);
     -moz-transform: translateX(-20%);
     -ms-transform: translateX(-20%);
     transform: translateX(-20%);
 }
-.effect-3 .mm-wrap, .slide-left .mm-wrap,
-.effect-4 .mm-wrap, .slide-right .mm-wrap {
+.slide-left .mm-wrap,
+.slide-right .mm-wrap {
     -webkit-transition: all 0.3s cubic-bezier(0.25, 0.5, 0.5, 0.9);
     -moz-transition: all 0.3s cubic-bezier(0.25, 0.5, 0.5, 0.9);
     transition: all 0.3s cubic-bezier(0.25, 0.5, 0.5, 0.9);
 }
-.mm-show.effect-3 .mm-wrap, .mm-show.slide-left .mm-wrap,
-.mm-show.effect-4 .mm-wrap, .mm-show.slide-right .mm-wrap {
+.mm-show.slide-left .mm-wrap,
+.mm-show.slide-right .mm-wrap {
     -webkit-transform: translateX(0);
     -moz-transform: translateX(0);
     -ms-transform: translateX(0);
@@ -118,38 +118,38 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 5 & 6: slide up and down */
-.effect-5 .mm-wrap, .slide-up .mm-wrap {
-	-webkit-transform: translateY(20%);
-	-moz-transform: translateY(20%);
-	-ms-transform: translateY(20%);
-	transform: translateY(20%);
+.slide-up .mm-wrap {
+    -webkit-transform: translateY(20%);
+    -moz-transform: translateY(20%);
+    -ms-transform: translateY(20%);
+    transform: translateY(20%);
 }
-.effect-6 .mm-wrap, .slide-down .mm-wrap {
+.slide-down .mm-wrap {
     -webkit-transform: translateY(-20%);
     -moz-transform: translateY(-20%);
     -ms-transform: translateY(-20%);
     transform: translateY(-20%);
 }
-.mm-show.effect-5 .mm-wrap, .mm-show.slide-up .mm-wrap,
-.mm-show.effect-6 .mm-wrap, .mm-show.slide-down .mm-wrap {
-	-webkit-transform: translateY(0);
-	-moz-transform: translateY(0);
-	-ms-transform: translateY(0);
-	transform: translateY(0);
+.mm-show.slide-up .mm-wrap,
+.mm-show.slide-down .mm-wrap {
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
 }
 
 /* --------------------------------------------------- */
 
 /* Effects 7 & 8: slide and stick to top or bottom */
-.effect-7 .mm-wrap, .sticky-top .mm-wrap {
-	margin-top: 0px;
-	-webkit-transform: translateY(-200%);
-	-moz-transform: translateY(-200%);
-	-ms-transform: translateY(-200%);
-	transform: translateY(-200%);
-	vertical-align: top;
+.sticky-top .mm-wrap {
+    margin-top: 0px;
+    -webkit-transform: translateY(-200%);
+    -moz-transform: translateY(-200%);
+    -ms-transform: translateY(-200%);
+    transform: translateY(-200%);
+    vertical-align: top;
 }
-.effect-8 .mm-wrap, .sticky-bottom .mm-wrap {
+.sticky-bottom .mm-wrap {
     margin-bottom: 0px;
     -webkit-transform: translateY(200%);
     -moz-transform: translateY(200%);
@@ -157,37 +157,37 @@ body.mm-show { overflow: hidden; }
     transform: translateY(200%);
     vertical-align: bottom;
 }
-.mm-show.effect-7 .mm-wrap, .mm-show.sticky-top .mm-wrap,
-.mm-show.effect-8 .mm-wrap, .mm-show.sticky-bottom .mm-wrap {
-	-webkit-transform: translateY(0%);
-	-moz-transform: translateY(0%);
-	-ms-transform: translateY(0%);
-	transform: translateY(0%);
+.mm-show.sticky-top .mm-wrap,
+.mm-show.sticky-bottom .mm-wrap {
+    -webkit-transform: translateY(0%);
+    -moz-transform: translateY(0%);
+    -ms-transform: translateY(0%);
+    transform: translateY(0%);
 }
 
 /* --------------------------------------------------- */
 
 /* Effects 9 & 10: horizontal and vertical flip */
-.effect-9 .mm-wrap, .horizontal-flip .mm-wrap,
-.effect-10 .mm-wrap, .vertical-flip .mm-wrap {
+.horizontal-flip .mm-wrap,
+.vertical-flip .mm-wrap {
     -webkit-transform-style: preserve-3d;
     -moz-transform-style: preserve-3d;
     transform-style: preserve-3d;
 }
-.effect-9 .mm-wrap, .vertical-flip .mm-wrap {
+.vertical-flip .mm-wrap {
     -webkit-transform: rotateY(-75deg);
     -moz-transform: rotateY(-75deg);
     -ms-transform: rotateY(-75deg);
     transform: rotateY(-75deg);
 }
-.effect-10 .mm-wrap, .horizontal-flip .mm-wrap {
+.horizontal-flip .mm-wrap {
     -webkit-transform: rotateX(-75deg);
     -moz-transform: rotateX(-75deg);
     -ms-transform: rotateX(-75deg);
     transform: rotateX(-75deg);
 }
-.mm-show.effect-9 .mm-wrap, .mm-show.vertical-flip .mm-wrap,
-.mm-show.effect-10 .mm-wrap, .mm-show.horizontal-flip .mm-wrap {
+.mm-show.vertical-flip .mm-wrap,
+.mm-show.horizontal-flip .mm-wrap {
     -webkit-transform: rotateY(0deg);
     -moz-transform: rotateY(0deg);
     -ms-transform: rotateY(0deg);
@@ -197,20 +197,20 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 11 & 12: spin up and down */
-.effect-11 .mm-wrap, .spin-up .mm-wrap {
+.spin-up .mm-wrap {
     -webkit-transform: scale(0) rotate(540deg);
     -moz-transform: scale(0) rotate(540deg);
     -ms-transform: scale(0) rotate(540deg);
     transform: scale(0) rotate(540deg);
 }
-.effect-12 .mm-wrap, .spin-down .mm-wrap {
+.spin-down .mm-wrap {
     -webkit-transform: scale(2) rotate(-540deg);
     -moz-transform: scale(2) rotate(-540deg);
     -ms-transform: scale(2) rotate(-540deg);
     transform: scale(2) rotate(-540deg);
 }
-.mm-show.effect-11 .mm-wrap, .mm-show.spin-up .mm-wrap,
-.mm-show.effect-12 .mm-wrap, .mm-show.spin-down .mm-wrap {
+.mm-show.spin-up .mm-wrap,
+.mm-show.spin-down .mm-wrap {
     -webkit-transform: scale(1) rotate(0deg);
     -moz-transform: scale(1) rotate(0deg);
     -ms-transform: scale(1) rotate(0deg);
@@ -220,20 +220,20 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 13 & 14: fall left and fall right */
-.effect-13 .mm-wrap, .fall-left .mm-wrap {
+.fall-left .mm-wrap {
     -webkit-transform: translate(30%) translateZ(600px) rotate(10deg);
     -moz-transform: translate(30%) translateZ(600px) rotate(10deg);
     -ms-transform: translate(30%) translateZ(600px) rotate(10deg);
     transform: translate(30%) translateZ(600px) rotate(10deg);
 }
-.effect-14 .mm-wrap, .fall-right .mm-wrap {
+.fall-right .mm-wrap {
     -webkit-transform: translate(-30%) translateZ(600px) rotate(-10deg);
     -moz-transform: translate(-30%) translateZ(600px) rotate(-10deg);
     -ms-transform: translate(-30%) translateZ(600px) rotate(-10deg);
     transform: translate(-30%) translateZ(600px) rotate(-10deg);
 }
-.mm-show.effect-13 .mm-wrap, .mm-show.fall-left .mm-wrap,
-.mm-show.effect-14 .mm-wrap, .mm-show.fall-right .mm-wrap {
+.mm-show.fall-left .mm-wrap,
+.mm-show.fall-right .mm-wrap {
     -webkit-transform: translate(0%) translateZ(0) rotate(0deg);
     -moz-transform: translate(0%) translateZ(0) rotate(0deg);
     -ms-transform: translate(0%) translateZ(0) rotate(0deg);
@@ -243,7 +243,7 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 15 & 16: spin up and down */
-.effect-15 .mm-wrap, .swing-down .mm-wrap {
+.swing-down .mm-wrap {
     -webkit-transform: rotateX(-60deg);
     -moz-transform: rotateX(-60deg);
     -ms-transform: rotateX(-60deg);
@@ -252,7 +252,7 @@ body.mm-show { overflow: hidden; }
     -moz-transform-origin: top;
     transform-origin: top;
 }
-.effect-16 .mm-wrap, .swing-up .mm-wrap {
+.swing-up .mm-wrap {
     -webkit-transform: rotateX(60deg);
     -moz-transform: rotateX(60deg);
     -ms-transform: rotateX(60deg);
@@ -261,10 +261,10 @@ body.mm-show { overflow: hidden; }
     -moz-transform-origin: bottom;
     transform-origin: bottom;
 }
-.mm-show.effect-15 .mm-wrap, .mm-show.swing-down .mm-wrap,
-.mm-show.effect-16 .mm-wrap, .mm-show.swing-up .mm-wrap,
-.mm-show.effect-17 .mm-wrap, .mm-show.front-flip .mm-wrap,
-.mm-show.effect-18 .mm-wrap, .mm-show.back-flip .mm-wrap {
+.mm-show.swing-down .mm-wrap,
+.mm-show.swing-up .mm-wrap,
+.mm-show.front-flip .mm-wrap,
+.mm-show.back-flip .mm-wrap {
     -webkit-transform: rotateX(0deg);
     -moz-transform: rotateX(0deg);
     -ms-transform: rotateX(0deg);
@@ -274,13 +274,13 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 17 & 18: front flip and back */
-.effect-17 .mm-wrap, .front-flip .mm-wrap {
+.front-flip .mm-wrap {
     -webkit-transform: rotateX(360deg);
     -moz-transform: rotateX(360deg);
     -ms-transform: rotateX(360deg);
     transform: rotateX(360deg);
 }
-.effect-18 .mm-wrap, .back-flip .mm-wrap {
+.back-flip .mm-wrap {
     -webkit-transform: rotateX(-360deg);
     -moz-transform: rotateX(-360deg);
     -ms-transform: rotateX(-360deg);
@@ -291,7 +291,7 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 19 & 20: swing left and right */
-.effect-19 .mm-wrap, .swing-left .mm-wrap {
+.swing-left .mm-wrap {
     -webkit-transform: translateZ(100px) translateX(30%) rotateY(-90deg);
     -moz-transform: translateZ(100px) translateX(30%) rotateY(-90deg);
     -ms-transform: translateZ(100px) translateX(30%) rotateY(-90deg);
@@ -300,7 +300,7 @@ body.mm-show { overflow: hidden; }
     -moz-transform-origin: right;
     transform-origin: right;
 }
-.effect-20 .mm-wrap, .swing-right .mm-wrap {
+.swing-right .mm-wrap {
    -webkit-transform: translateZ(100px) translateX(-30%) rotateY(90deg);
     -moz-transform: translateZ(100px) translateX(-30%) rotateY(90deg);
     -ms-transform: translateZ(100px) translateX(-30%) rotateY(90deg);
@@ -309,8 +309,8 @@ body.mm-show { overflow: hidden; }
     -moz-transform-origin: left;
     transform-origin: left;
 }
-.mm-show.effect-19 .mm-wrap, .mm-show.swing-left .mm-wrap,
-.mm-show.effect-20 .mm-wrap, .mm-show.swing-right .mm-wrap {
+.mm-show.swing-left .mm-wrap,
+.mm-show.swing-right .mm-wrap {
     -webkit-transform: translateZ(0px) translateX(0%) rotateY(0deg);
     -moz-transform: translateZ(0px) translateX(0%) rotateY(0deg);
     -ms-transform: translateZ(0px) translateX(0%) rotateY(0deg);
