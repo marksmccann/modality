@@ -182,6 +182,51 @@ If you need modality to do more, you can extend the object and add more function
  
 })(Modality);
 ```
+## AJAX
+Modality does not have a built-in AJAX function. However, you can extend Modality with your own. Here are some example to help you get started.
+```Javascript
+
+// jQuery --
+(function($) {
+  $.extend( $.modality.prototype , {
+    insert: function() {
+      var inst = this;
+      $.ajax({
+        url:"http://path/to/your/data.txt",
+        success: function ( result ) {
+          inst.$element.html( result );
+        }
+      });
+    }
+  });
+})(jQuery);
+
+$.modality.lookup['yourModalId'].insert();
+
+
+// JS-Only --
+(function (Modality) {
+  Modality.extend( Modality.prototype, {
+    insert: function () {
+      var inst = this;
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+          // replaces content with the response text
+          inst.element.innerHTML = xmlhttp.responseText;
+        }
+      }
+      xmlhttp.open( 'get', 'http://path/to/your/data.txt', true );
+      xmlhttp.send();
+    }
+    
+  });
+})(Modality);
+
+Modality.lookup["yourModalId"].insert();
+
+```
+
 
 ## License
 ```
