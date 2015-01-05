@@ -18,7 +18,7 @@ var Modality = (function () {
             closeOnEscape: true, // close modal with 'esc' key
             openOnLoad: false, // open on page load
             autoBind: true, // automatically bind triggers to modal
-            effect: "effect-1", // animation style
+            effect: "", // animation style
             onOpen: function(){}, // function to run when modal opens
             onClose: function(){} // function to run when modal closes
         },
