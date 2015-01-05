@@ -6,7 +6,7 @@ With both a jQuery and javascript-only version of the modal, Modality will work 
 
 Beyond what is needed to center your content, Modality has no styling. You are in complete control of how your modal window will look. 
 
-Built with Javascript's Module pattern, Modality can be extended to meet your requirements. You can even get the instance of a modal and invoke it's methods on demand. 
+Built with Javascript's Module pattern, Modality can be extended to meet your requirements. You can even get the instance of a modal and invoke it's methods on demand.
 
 ## Features
 * Both jQuery and javascript-only versions
@@ -18,6 +18,7 @@ Built with Javascript's Module pattern, Modality can be extended to meet your re
 * Awesome CSS3 animations 
 * Multiple instances on each page
 * Infinitely flexible width and height
+* Easily Extandable
 
 ## Getting Started
 1\. Add this to the head.
