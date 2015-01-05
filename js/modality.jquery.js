@@ -6,17 +6,17 @@
         var pluginName = "modality",
             $body = $('body'),
             defaults = {
-                modalClass: "modality-modal", // outer-most container
-                innerClass: "mm-wrap", // inner wrapper
-                openClass: "mm-show", // when modal is visible
-                userClass: '', // user can add a class to container 
+                autoBind: true, // automatically bind triggers to modal
                 clickOffToClose: true, // click anywhere off of modal to close it
                 closeOnEscape: true, // close modal with 'esc' key
-                openOnLoad: false, // open on page load
-                autoBind: true, // automatically bind triggers to modal
                 effect: "", // animation style
-                onOpen: function(){}, // function to run when modal opens
-                onClose: function(){} // function to run when modal closes
+                innerClass: "mm-wrap", // inner wrapper
+                modalClass: "modality-modal", // outer-most container
+                onClose: "", // function to run when modal closes
+                onOpen: "", // function to run when modal opens
+                openClass: "mm-show", // when modal is visible
+                openOnLoad: false, // open on page load
+                userClass: "", // user can add a class to container 
             };
 
         // -----------------------------------------------
