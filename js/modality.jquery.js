@@ -1,3 +1,8 @@
+// -----------------------------------------------------------------
+// @author:  Mark McCann (www.markmccann.me)
+// @license: None, Public Domain
+// -----------------------------------------------------------------
+
 ;(function ( $, window, document, undefined ) {
 
         // Private Attributes ------------------------------------------
