@@ -101,7 +101,7 @@ clickOffToClose | `true` | set false to prevent closing when clicking off of it
 closeOnEsc | `true` | set false to prevent closing modal when 'Esc' is pressed
 onOpen | `""` | add callback function when modal is opened
 onClose | `""` | add callback function when modal is closed
-userClass | `""` | class you want added to modal's container for custom styling
+userClass | `""` | you can add your own class to the container
 modalClass* | `"modality-modal"` | the outer-most container for the modal
 innerClass* | `"mm-wrap"` | the inner container for the modal
 openClass* | `"mm-show"` | when modal is active/visible
