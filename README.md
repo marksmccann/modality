@@ -77,7 +77,10 @@ Modality.init('#yourModalId');
     <a href="#yourModalId">Open Modal</a>
     <div id="yourModalId" class="yourModalClass">
       <h2>Modality</h2>
-      <p>Simple, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need.</p>
+      <p>
+         Simple, lightweight and versatile &ndash; Modality was designed 
+         to be the only modal window you would ever need.
+      </p>
       <a href="#yourModalId">Close Modal</a>
     </div>
     <script src="path/to/your/modality.min.js"></script>
@@ -98,7 +101,7 @@ clickOffToClose | `true` | set false to prevent closing when clicking off of it
 closeOnEsc | `true` | set false to prevent closing modal when 'Esc' is pressed
 onOpen | `""` | add callback function when modal is opened
 onClose | `""` | add callback function when modal is closed
-userClass | `""` | class you want added to modal's container
+userClass | `""` | class you want added to modal's container for custom styling
 modalClass* | `"modality-modal"` | the outer-most container for the modal
 innerClass* | `"mm-wrap"` | the inner container for the modal
 openClass* | `"mm-show"` | when modal is active/visible
