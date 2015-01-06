@@ -179,48 +179,51 @@ If you need modality to do more, you can extend the object and add more function
 })(Modality);
 ```
 ## AJAX
-Modality does not have a built-in AJAX function. However, you can extend Modality with your own. Here are some example to help you get started.
+Modality does not have a built-in AJAX function. However, you can extend Modality with your own. Here's an example to help get you started.
 ```Javascript
 
 // jQuery --
 (function($) {
+  // Add a new class method to Modality 
   $.extend( $.modality.prototype , {
-  
     insert: function() {
-      var inst = this;
+      // local var for modal instance
+      var inst = this; 
       $.ajax({
         url:"http://path/to/your/data.txt",
         success: function ( result ) {
+          // insert AJAX response into the modal
           inst.$element.html( result );
         }
       });
     }
-    
   });
 })(jQuery);
 
+// get modal instance and invoke insert method
 $.modality.lookup['yourModalId'].insert();
-
 
 // JS-Only --
 (function (Modality) {
+  // Add a new class method to Modality
   Modality.extend( Modality.prototype, {
-  
     insert: function () {
+      // local var for modal instance
       var inst = this;
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.onreadystatechange = function() {
         if ( xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
+          // insert AJAX response into the modal
           inst.element.innerHTML = xmlhttp.responseText;
         }
       }
       xmlhttp.open( 'get', 'http://path/to/your/data.txt', true );
       xmlhttp.send();
     }
-    
   });
 })(Modality);
 
+// get modal instance and invoke insert method
 Modality.lookup["yourModalId"].insert();
 
 ```
