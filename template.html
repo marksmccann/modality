@@ -22,7 +22,7 @@
     <a href="#yourModalId">Open Modal</a>
 
     <!-- Your Modal, style it however you will! -->
-    <div id="yourModalId" class="yourModalClass">
+    <div id="yourModalId" class="yourModalClass" style="display:none;">
       <h2>Modality</h2>
       <p>Simple, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need.</p>
       <a href="#yourModalId">Close Modal</a>
@@ -33,7 +33,12 @@
     <!-- Initialize your modal -->
     <script>
       Modality.init('#yourModalId', {
+<<<<<<< Updated upstream
         effect: 'slide-up'
+=======
+        openOnLoad: true,
+        effect: 'effect-6'
+>>>>>>> Stashed changes
       });
     </script>
 
