@@ -3,12 +3,20 @@
 // @license: None, Public Domain
 // -----------------------------------------------------------------
 
-;var Modality = (function () {
-    
-    // Private Attributes ------------------------------------------
+/**
+ * JavaScript Plugin Template
+ */
+;(function () {
 
-    var body = document.getElementsByTagName('body')[0], 
-        defaults = {
+    // Private ---------------------------------------
+
+    var _name = "Modality", // the plugin name
+
+        // get the body only once
+        _body = document.getElementsByTagName('body')[0],
+
+        // default settings for plugin
+        _defaults = {
             autoBind: true, // automatically bind triggers to modal
             clickOffToClose: true, // click anywhere off of modal to close it
             closeOnEscape: true, // close modal with 'esc' key
@@ -20,10 +28,24 @@
             openClass: "mm-show", // when modal is visible
             openOnLoad: false, // open on page load
             userClass: "" // user can add a class to container
-        },
-        
-        
-    // Private Methods ---------------------------------------------
+        }, 
+
+
+    /**
+     * combines objects into one
+     * @param {object} - collects values
+     * @param {object} - objects to add values from
+     * @return {object}
+     */
+    _extend = function () {
+        var a = arguments;
+        for( var i = 1; i < a.length; i++ )
+            for( var key in a[i] )
+                if(a[i].hasOwnProperty(key))
+                    a[0][key] = a[i][key];
+        return a[0];
+    },
+
 
     /**
      * add an event to a given node
@@ -31,7 +53,7 @@
      * @param {string} event - the event kind
      * @param {function} fn - the callback function
      */
-    addEvent = function( target, event, fn ) {
+    _addEvent = function( target, event, fn ) {
         if ( target.attachEvent ) {
             target['e'+event+fn] = fn;
             target[event+fn] = function(){ target['e'+event+fn]( window.event ); }
@@ -41,29 +63,6 @@
         }
     },
 
-    /**
-     * wraps the users modal element in modality's frame:
-     * 
-     * <div class="modality-modal effect-1">
-     *    <div class="mm-wrap">
-     *        // user's modal goes here
-     *    </div>
-     * </div>
-     *
-     * @return {object}
-     */
-    wrap = function ( element, settings ) {
-
-        // create the container and insert markup
-        var container = document.createElement('div');
-        container.setAttribute( 'class', settings.modalClass + ' ' + settings.effect + ' ' + settings.userClass );
-        container.innerHTML = '<div class="'+settings.innerClass+'">' + element.outerHTML + '</div>';
-
-        // replace the old modal with the new
-        element.parentNode.replaceChild( container, element );
-
-        return container;
-    },
 
     /**
      * class manipulation
@@ -79,7 +78,7 @@
                 addClass( target[i], className );
             }
         } else {
-            if( ! hasClass(target, className) ) {
+            if( ! hasClass( target, className ) ) {
                 target.className += " " + className;
             }
         }
@@ -90,125 +89,102 @@
                 removeClass( target[i], className );
             }
         } else {
-            if( hasClass(target, className) ) {
+            if( hasClass( target, className ) ) {
                 var re = new RegExp("(\\s|^)" + className + "(\\s|$)", "g");
                 target.className = target.className.replace(re , '');
             }
         }
     },
 
+    /**
+     * wraps the users modal element in modality's frame:
+     * 
+     * <div class="modality-modal effect-1">
+     *    <div class="mm-wrap">
+     *        // user's modal goes here
+     *    </div>
+     * </div>
+     *
+     * @return {object}
+     */
+    _wrap = function ( element, settings ) {
 
-    // Constructor ------------------------------------------------
+        // create the container and insert markup
+        var container = document.createElement('div');
+        container.setAttribute( 'class', settings.modalClass + ' ' + settings.effect + ' ' + settings.userClass );
+        container.innerHTML = '<div class="'+settings.innerClass+'">' + element.outerHTML + '</div>';
+
+        // replace the old modal with the new
+        element.parentNode.replaceChild( container, element );
+
+        return container;
+    },
+
+
+    // Constructor -----------------------------------
 
     /**
-     * the modality object
-     * @param {object} modal
-     * @param {object} options
-     * @param {function} callback
+     * defines object on init
+     * @param {object} element - dom element
+     * @param {object} options - user settings
+     * @return {object}
      */
-    Modality = function ( modal, options, callback ) {
+    Plugin = function ( element, options ) {
+                
+        var inst = this; // to avoid scope issues
 
-        var t = this; // set local var to avoid scope issues
-        
-        // Attributes --------------------------------
+        // Class Attributes ---------------
 
-        t._body     = body;
-        t._defaults = defaults;
-        t.id        = modal.getAttribute( 'id' );
-        t.settings  = Modality.extend( {}, defaults, options );
-        t.wrapper   = wrap( modal, t.settings );
-        t.triggers  = document.querySelectorAll( 'a[href="#'+t.id+'"], [data-modality="#'+t.id+'"]' );
-        t.element   = document.getElementById( t.id );
+
+
+        inst.body     = _body;
+        inst.defaults = _defaults;
+        inst.id       = element.getAttribute( 'id' );
+        inst.settings = _extend( {}, _defaults, options );
+        inst.wrapper  = _wrap( element, inst.settings );
+        inst.triggers = document.querySelectorAll( 'a[href="#'+inst.id+'"], [data-modality="#'+inst.id+'"]' );
+        inst.element  = document.getElementById( inst.id );
 
         // Events ------------------------------------
 
         // toggle modal on all triggers
-        if( t.settings.autoBind ) {
-            for( var i = 0; i < t.triggers.length; i++ )
-                t.setTrigger( t.triggers[i] );
+        if( inst.settings.autoBind ) {
+            for( var i = 0; i < inst.triggers.length; i++ )
+                inst.setTrigger( inst.triggers[i] );
         }
 
         // close modal if users clicks anywhere off of it
-        if( t.settings.clickOffToClose ) {
-            addEvent( t.wrapper, "click", function(e) {
-                e.preventDefault(); if(e.target == t.wrapper) t.close();
+        if( inst.settings.clickOffToClose ) {
+            _addEvent( inst.wrapper, "click", function(e) {
+                e.preventDefault(); if(e.target == inst.wrapper) inst.close();
             }, false );
         }
 
         // close modal with 'esc' key
-        if( t.settings.closeOnEscape ) {
-            addEvent( t._body, "keyup", function (e) {
-                if(e.keyCode == 27) t.close();
+        if( inst.settings.closeOnEscape ) {
+            _addEvent( inst.body, "keyup", function (e) {
+                if(e.keyCode == 27) inst.close();
             }, false);
         }
 
         // Final Touches ------------------------------
 
         // make sure modal is not hidden
-        if( t.element.style.display == 'none' ) t.element.style.display = '';
+        if( inst.element.style.display == 'none' ) inst.element.style.display = '';
 
         // open modal if set to true
-        if( t.settings.openOnLoad ) t.open(); 
-
-        // run the user's callback function
-        if( typeof callback == 'function' ) callback();
-
-        // save modal and return it
-        return Modality.lookup[t.id] = t;
-
+        if( inst.settings.openOnLoad ) inst.open();
+            
+        // --------------------------------
+            
+        return inst;
+            
     };
-    
 
-    // Static Methods ---------------------------------------------
-    
-    /**
-     * initalizes modal(s)
-     * @param  {string} query
-     * @param  {object} settings
-     * @param  {function} fn
-     * @return {object,array}
-     */
-    Modality.init = function ( query, settings, fn ) {
 
-        // collect the modals from the DOM
-        var modals = document.querySelectorAll(query);
+    // Class Methods ---------------------------------
 
-        // loop through the modals and initialize each one
-        for( var i = 0; i < modals.length; i++ ) {
-
-            // Initialize the modal
-            var modal = new Modality(modals[i], settings, fn);
-
-            // return only this modal if only one
-            if(modals.length == 1) { return modal; }
-        }
-
-        // return array of modals
-        return Modality.lookup;
-    }
-
-    /**
-     * combines javascript objects
-     * @return {object}
-     */
-    Modality.extend = function () {
-        var a = arguments;
-        for( var i = 1; i < a.length; i++ )
-            for( var key in a[i] )
-                if(a[i].hasOwnProperty(key))
-                    a[0][key] = a[i][key];
-        return a[0];
-    }
-
-    /**
-     * an empty object to collect all modals on page
-     */
-    Modality.lookup = {};
-    
-    
-    // Class Methods ----------------------------------------------
-
-    Modality.extend( Modality.prototype, {
+    _extend( Plugin.prototype, {
 
         /**
          * opens the modal
@@ -218,7 +194,7 @@
         open: function ( callback ) {
 
             // add classes to open the modal
-            addClass( [this.wrapper,this._body], this.settings.openClass );
+            addClass( [this.wrapper,this.body], this.settings.openClass );
 
             // run the callback(s)
             if ( typeof this.settings.onOpen == 'function' ) this.settings.onOpen();
@@ -236,7 +212,7 @@
         close: function ( callback ) {
 
             // remove classes to close the modal
-            removeClass( [this.wrapper,this._body], this.settings.openClass );
+            removeClass( [this.wrapper,this.body], this.settings.openClass );
 
             // run the callback(s)
             if ( typeof this.settings.onClose == 'function' ) this.settings.onClose();
@@ -270,20 +246,49 @@
          */
         setTrigger: function ( trigger ) {
 
-            var t = this; // set local var for instance
+            var inst = this; // set local var for instance
 
             // set click event for new trigger
-            addEvent( trigger, "click", function (e) {
-                e.preventDefault(); t.toggle(); 
+            _addEvent( trigger, "click", function (e) {
+                e.preventDefault(); inst.toggle(); 
             }, false );
 
-            return this;
+            return inst;
         }
 
     });
+        
+        
+    // Static Methods --------------------------------
+        
+    _extend( Plugin, { 
 
-    // ------------------------------------------------------------
+        instances: [], // for storing instances
+        extend: _extend, // externalize method
+
+        /**
+         * creates new instance for element(s), stores/returns it(them)
+         * @param  {string} query - css query selector
+    	 * @param  {object} options - user settings
+    	 * @return {array}
+         */
+        init: function ( query, options ) {
+            var a = {}, e = document.querySelectorAll(query);
+    	    for( var i = 0; i < e.length; i++ ) {
+    	    	var inst = new this( e[i], options );
+    	        this.instances[ inst.id ] = a[i] = inst;
+    	    }
+    	    return ( a[1] === undefined ) ? a[0] : a;
+        }
+
+    });
     
-    return Modality;
+
+    // Globalize ------------------------------------
+
+    window[ _name ] = Plugin;
+
 
 })();
+
+// -----------------------------------------------------------------
