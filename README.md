@@ -152,13 +152,35 @@ Name | Parameters | Returns | Description
 #### Implementation
 ```javascript
 // jQuery --
-var inst = $.modality.lookup['yourModalId'];
-inst.open(); // opens the modal
+var inst = $.modality.instances['yourModalId'];
+inst.open(); 
 
 // JS-Only --
-var inst = Modality.lookup['yourModalId'];
+var inst = Modality.instances['yourModalId'];
 inst.close(); // closes the modal
 ```
+You can also grab an instance when you instantiate a new modal. Modality will return one instance if only one element is found from the query, and an array of instances for each result if more than one element is found in the query:
+
+```javascript
+// jQuery --
+var inst = $('#yourModalId').modality(); // one instance
+inst.open(); 
+
+var insts = $('.yourModalId').modality(); // multiple instances
+for( key in insts ){
+    if( insts[key].isOpen() ) // do something ...
+}
+
+// JS-Only --
+var inst = Modality.init('#yourModalId'); // one instance
+inst.close();
+
+var insts = Modality.init('.yourModalId'); // multiple instances
+for( key in insts ){
+    if( insts[key].isOpen() ) // do something ...
+}
+```
+
 ## Extending Modality
 If you need modality to do more, you can extend the object and add more functionality. Here is a basic template for how to do that:
 ```javascript
