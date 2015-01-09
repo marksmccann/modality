@@ -56,62 +56,8 @@ $('#yourModalId').modality();
 // JS-Only --
 Modality.init('#yourModalId');
 ```
+[View Template](#modality)
 
-## Template
-```html
-<!doctype html>
-<html>
-<head>
-    <title>Modality Example</title>
-    <link rel="stylesheet" href="css/modality.css">
-
-    <!-- The styles for your modal -->
-    <style>
-    .yourModalClass {
-        background-color: #ffffff;
-        border: 1px solid #cccccc;
-        padding: 0 1.5em 1em;
-        border-radius: 5px;
-        max-width: 500px;
-    }
-    </style>
-
-</head>
-<body>
-
-    <!-- The trigger to open the modal -->
-    <a href="#yourModalId">Open Modal</a>
-
-    <!-- Your Modal, style it however you will! -->
-    <div id="yourModalId" class="yourModalClass" style="display:none;">
-        <h2>Modality</h2>
-        <p>
-            Simple, lightweight and versatile &ndash; Modality was 
-            designed to be the only modal window you would ever need.
-        </p>
-        <a href="#yourModalId">Close Modal</a>
-    </div>
-
-    <!-- jQuery -->
-    <!-- <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
-    <script src="js/modality.jquery.min.js"></script>
-    <script>
-    var modal1 = $('#yourModalId').modality({
-        effect: 'slide-up'
-    });
-    </script> -->
-    
-    <!-- JS-Only -->
-    <script src="js/modality.min.js"></script>
-    <script>
-    var modal1 = Modality.init('#yourModalId', {
-        effect: 'slide-up'
-    });
-    </script>
-
-</body>
-</html>
-```
 
 ## Options
 Name | Default | Description
@@ -185,7 +131,7 @@ var inst = Modality.instances['yourModalId'];
 inst.close(); // closes the modal
 
 ```
-You can also get the instance when you first instantiate a modal. Modality will return one instance if one element is found, and an array if more than one is found:
+Get the instance when you first instantiate a modal. Modality will return an instance if one element is found, and an array if more than one is found:
 
 ```javascript
 
@@ -208,9 +154,7 @@ for( key in insts ){
 }
 
 ```
-
-
-## Chaining
+You can also combine methods on a single line (chaining):
 
 ```javascript
 // jQuery --
@@ -303,6 +247,63 @@ Modality.lookup["yourModalId"].insert();
 
 ```
 *In the examples above, a class method is added to Modality called 'insert'. When called on an instance, 'insert' will send a request to a url and will insert the response into the modal.*
+
+## Template
+Here is a basic template to help you get started:
+```html
+<!doctype html>
+<html>
+<head>
+    <title>Modality Example</title>
+    <link rel="stylesheet" href="css/modality.css">
+
+    <!-- The styles for your modal -->
+    <style>
+    .yourModalClass {
+        background-color: #ffffff;
+        border: 1px solid #cccccc;
+        padding: 0 1.5em 1em;
+        border-radius: 5px;
+        max-width: 500px;
+    }
+    </style>
+
+</head>
+<body>
+
+    <!-- The trigger to open the modal -->
+    <a href="#yourModalId">Open Modal</a>
+
+    <!-- Your Modal, style it however you will! -->
+    <div id="yourModalId" class="yourModalClass" style="display:none;">
+        <h2>Modality</h2>
+        <p>
+            Simple, lightweight and versatile &ndash; Modality was 
+            designed to be the only modal window you would ever need.
+        </p>
+        <a href="#yourModalId">Close Modal</a>
+    </div>
+
+    <!-- jQuery -->
+    <!-- <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="js/modality.jquery.min.js"></script>
+    <script>
+    var modal1 = $('#yourModalId').modality({
+        effect: 'slide-up'
+    });
+    </script> -->
+    
+    <!-- JS-Only -->
+    <script src="js/modality.min.js"></script>
+    <script>
+    var modal1 = Modality.init('#yourModalId', {
+        effect: 'slide-up'
+    });
+    </script>
+
+</body>
+</html>
+```
 
 
 ## License
