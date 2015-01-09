@@ -173,7 +173,7 @@ You can also get the instance when you first instantiate a modal. Modality will 
 var inst = $('#yourModalId').modality(); // one instance
 inst.open(); 
 
-var insts = $('.yourModalId').modality(); // multiple instances
+var insts = $('.yourModalClass').modality(); // multiple instances
 for( key in insts ){
     if( insts[key].isOpen() ) // do something ...
 }
@@ -182,7 +182,7 @@ for( key in insts ){
 var inst = Modality.init('#yourModalId'); // one instance
 inst.close();
 
-var insts = Modality.init('.yourModalId'); // multiple instances
+var insts = Modality.init('.yourModalClass'); // multiple instances
 for( key in insts ){
     if( insts[key].isOpen() ) // do something ...
 }
