@@ -118,7 +118,41 @@ Name | Parameters | Returns | Description
 `isOpen()` | none | `boolean` | tells you if the modal is open or not
 `setTrigger()` | DOM Object | `instance` | sets a DOM object to open/close modal when clicked
 
-Get the instance of a modal and call it's methods manually:
+There are multiple ways to retrieve an instance. The first and easiest way is when initializing the modal:
+
+```javascript
+
+// jQuery --
+var inst = $('#yourModalId').modality();
+inst.open(); 
+
+// JS-Only --
+var inst = Modality.init('#yourModalId');
+inst.close();
+
+```
+
+If you are initializing more than one modal at a time, Modality will return an array of the modals initialized:
+
+```javascript
+
+// jQuery --
+var insts = $('.yourModalClass').modality();
+for( key in insts ){
+    if( insts[key].isOpen() ) 
+        // do something ...
+}
+
+// JS-Only --
+var insts = Modality.init('.yourModalClass');
+for( key in insts ){
+    if( insts[key].isOpen() ) 
+        // do something ...
+}
+
+```
+
+You can get any instance at any time with it's id:
 
 ```javascript
 
@@ -131,31 +165,7 @@ var inst = Modality.instances['yourModalId'];
 inst.close();
 
 ```
-Get the instance when you first instantiate a modal. Modality will return an instance if one element is found, and an array if more than one is found:
 
-```javascript
-
-// jQuery --
-var inst = $('#yourModalId').modality(); // one instance
-inst.open(); 
-
-var insts = $('.yourModalClass').modality(); // multiple instances
-for( key in insts ){
-    if( insts[key].isOpen() ) 
-        // do something ...
-}
-
-// JS-Only --
-var inst = Modality.init('#yourModalId'); // one instance
-inst.close();
-
-var insts = Modality.init('.yourModalClass'); // multiple instances
-for( key in insts ){
-    if( insts[key].isOpen() ) 
-        // do something ...
-}
-
-```
 You can also combine methods on a single line (chaining):
 
 ```javascript
