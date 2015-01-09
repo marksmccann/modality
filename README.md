@@ -128,7 +128,7 @@ inst.open();
 
 // JS-Only --
 var inst = Modality.instances['yourModalId'];
-inst.close(); // closes the modal
+inst.close();
 
 ```
 Get the instance when you first instantiate a modal. Modality will return an instance if one element is found, and an array if more than one is found:
@@ -141,7 +141,8 @@ inst.open();
 
 var insts = $('.yourModalClass').modality(); // multiple instances
 for( key in insts ){
-    if( insts[key].isOpen() ) // do something ...
+    if( insts[key].isOpen() ) 
+        // do something ...
 }
 
 // JS-Only --
@@ -150,7 +151,8 @@ inst.close();
 
 var insts = Modality.init('.yourModalClass'); // multiple instances
 for( key in insts ){
-    if( insts[key].isOpen() ) // do something ...
+    if( insts[key].isOpen() ) 
+        // do something ...
 }
 
 ```
@@ -224,7 +226,7 @@ Modality does not have a built-in AJAX function. However, you can extend Modalit
     });
 })(jQuery);
 
-$.modality.lookup['yourModalId'].insert();
+$.modality.instances['yourModalId'].insert();
 
 // JS-Only --
 (function (Modality) {
@@ -243,7 +245,7 @@ $.modality.lookup['yourModalId'].insert();
     });
 })(Modality);
 
-Modality.lookup["yourModalId"].insert();
+Modality.instances["yourModalId"].insert();
 
 ```
 *In the examples above, a class method is added to Modality called 'insert'. When called on an instance, 'insert' will send a request to a url and will insert the response into the modal.*
