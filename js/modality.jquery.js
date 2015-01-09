@@ -46,7 +46,6 @@
         // Class Attributes ---------------
             
         inst.defaults  = _defaults;
-        inst.element   = element;
         inst.body      = _body;
         inst.id        = $(element).attr( 'id' );
         inst.settings  = $.extend( {}, _defaults, options );
