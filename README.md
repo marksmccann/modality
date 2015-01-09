@@ -139,7 +139,6 @@ Modality.init('.modal', {
 ```
 
 ## Methods
-Get the instance of a modal and call it's methods manually.
 
 Name | Parameters | Returns | Description
 --- | --- | --- | ---
@@ -149,7 +148,8 @@ Name | Parameters | Returns | Description
 `isOpen()` | none | `boolean` | tells you if the modal is open or not
 `setTrigger()` | DOM Object | `instance` | sets a DOM object to open/close modal when clicked
 
-#### Implementation
+Get the instance of a modal and call it's methods manually.
+
 ```javascript
 // jQuery --
 var inst = $.modality.instances['yourModalId'];
