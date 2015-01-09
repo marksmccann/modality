@@ -59,6 +59,7 @@ Modality.init('#yourModalId');
 
 ## Template
 ```html
+
 <!doctype html>
 <html>
   <head>
@@ -89,6 +90,7 @@ Modality.init('#yourModalId');
     </script>
   </body>
 </html>
+
 ```
 
 ## Options
@@ -107,20 +109,8 @@ innerClass* | `"mm-wrap"` | the inner container for the modal
 openClass* | `"mm-show"` | when modal is active/visible
 **These classes match those in modality.css, if changed here, must also be changed there.*
 
-#### Effects
-1. `"scale-up"`, `"scale-down"`
-2. `"slide-left"`, `"slide-right"`
-3. `"slide-up"`, `"slide-down"`
-4. `"sticky-top"`, `"sticky-bottom"`
-5. `"horizontal-flip"`, `"vertical-flip"`
-6. `"spin-up"`, `"spin-down"`
-7. `"fall-left"`, `"fall-right"`
-8. `"swing-down"`, `"swing-up"`
-9. `"swing-left"`, `"swing-right"`
-10. `"front-flip"`, `"back-flip"`
-
-#### Implementation
 ```javascript
+
 // jQuery --
 $('.modal').modality({
   effect: "scale-up",
@@ -136,7 +126,21 @@ Modality.init('.modal', {
     console.log("Goodbye World");
   }
 });
+
 ```
+
+#### Effects
+1. `"scale-up"`, `"scale-down"`
+2. `"slide-left"`, `"slide-right"`
+3. `"slide-up"`, `"slide-down"`
+4. `"sticky-top"`, `"sticky-bottom"`
+5. `"horizontal-flip"`, `"vertical-flip"`
+6. `"spin-up"`, `"spin-down"`
+7. `"fall-left"`, `"fall-right"`
+8. `"swing-down"`, `"swing-up"`
+9. `"swing-left"`, `"swing-right"`
+10. `"front-flip"`, `"back-flip"`
+
 
 ## Methods
 
@@ -148,9 +152,10 @@ Name | Parameters | Returns | Description
 `isOpen()` | none | `boolean` | tells you if the modal is open or not
 `setTrigger()` | DOM Object | `instance` | sets a DOM object to open/close modal when clicked
 
-Get the instance of a modal and call it's methods manually.
+Get the instance of a modal and call it's methods manually:
 
 ```javascript
+
 // jQuery --
 var inst = $.modality.instances['yourModalId'];
 inst.open(); 
@@ -158,10 +163,12 @@ inst.open();
 // JS-Only --
 var inst = Modality.instances['yourModalId'];
 inst.close(); // closes the modal
+
 ```
-You can also grab an instance when you instantiate a new modal. Modality will return one instance if only one element is found from the query, and an array of instances for each result if more than one element is found in the query:
+You can also get the instance when you first instantiate a modal. Modality will return one instance if one element is found, and an array if more than one is found:
 
 ```javascript
+
 // jQuery --
 var inst = $('#yourModalId').modality(); // one instance
 inst.open(); 
@@ -179,79 +186,103 @@ var insts = Modality.init('.yourModalId'); // multiple instances
 for( key in insts ){
     if( insts[key].isOpen() ) // do something ...
 }
+
 ```
 
+
+## Chaining
+
+```javascript
+// jQuery --
+$('#yourModalId').modality().open(); 
+
+// JS-Only --
+Modality.init('#yourModalId').toggle(); 
+```
+**Make sure to return 'this' (the current instance) in your custom class methods if you want to maintain this chaining capability. See example under "Extending Modality".*
+
+
 ## Extending Modality
-If you need modality to do more, you can extend the object and add more functionality. Here is a basic template for how to do that:
+You can easily extend Modality and add more functionality. Here is a basic template for how to do that:
+
 ```javascript
 
 // jQuery --
-(function($) {
-  $.extend( $.modality.prototype , {
-    yourNewMethod: function() {
-      // do something ...
-    }
-  });
+;(function($) {
+
+    $.extend( $[ "modality" ].prototype, {
+        newClassMethod: function () {
+            // do something ...
+            return this; // for chaining
+        }
+    });
+ 
+    $.extend( $[ "modality" ], {
+        newStaticMethod: function () { ... }
+    });
+
 })(jQuery);
 
 // JS-Only --
-(function (Modality) {
-  Modality.extend( Modality.prototype , {
-    yourNewMethod: function () {
-      // do something ...
-    }
-  });
-})(Modality);
+;(function ( Modality ) {
+
+    Modality.extend( Modality.prototype, {
+        newClassMethod: function () {
+            // do something ...
+            return this; // for chaining
+        }
+    });
+    
+    Modality.extend( Modality, {
+        newStaticMethod: function () { ... }
+    });
+
+})( Modality );
 ```
+
 ## AJAX
 Modality does not have a built-in AJAX function. However, you can extend Modality with your own. Here's an example to help get you started.
+
 ```Javascript
 
 // jQuery --
 (function($) {
-  // Add a new class method to Modality 
-  $.extend( $.modality.prototype , {
-    insert: function() {
-      // local var for modal instance
-      var inst = this; 
-      $.ajax({
-        url:"http://path/to/your/data.txt",
-        success: function ( result ) {
-          // insert AJAX response into the modal
-          inst.$element.html( result );
+    $.extend( $.modality.prototype , {
+        insert: function() {
+            var inst = this; 
+            $.ajax({
+                url:"http://path/to/your/data.txt",
+                success: function ( result ) {
+                    inst.$element.html( result );
+                }
+            });
         }
-      });
-    }
-  });
+    });
 })(jQuery);
 
-// get modal instance and invoke insert method
 $.modality.lookup['yourModalId'].insert();
 
 // JS-Only --
 (function (Modality) {
-  // Add a new class method to Modality
-  Modality.extend( Modality.prototype, {
-    insert: function () {
-      // local var for modal instance
-      var inst = this;
-      var xmlhttp = new XMLHttpRequest();
-      xmlhttp.onreadystatechange = function() {
-        if ( xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
-          // insert AJAX response into the modal
-          inst.element.innerHTML = xmlhttp.responseText;
+    Modality.extend( Modality.prototype, {
+        insert: function () {
+            var inst = this;
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if ( xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
+                    inst.element.innerHTML = xmlhttp.responseText;
+                }
+            }
+            xmlhttp.open( 'get', 'http://path/to/your/data.txt', true );
+            xmlhttp.send();
         }
-      }
-      xmlhttp.open( 'get', 'http://path/to/your/data.txt', true );
-      xmlhttp.send();
-    }
-  });
+    });
 })(Modality);
 
-// get modal instance and invoke insert method
 Modality.lookup["yourModalId"].insert();
 
 ```
+*In the examples above, a class method is added to Modality called 'insert'. When called on an instance, 'insert' will send a request to a url and will insert the response into the modal.*
 
 
 ## License
