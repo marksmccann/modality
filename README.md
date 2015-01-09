@@ -59,38 +59,58 @@ Modality.init('#yourModalId');
 
 ## Template
 ```html
-
 <!doctype html>
 <html>
-  <head>
+<head>
     <title>Modality Example</title>
-    <link rel="stylesheet" href="path/to/your/modality.min.css">
+    <link rel="stylesheet" href="css/modality.css">
+
+    <!-- The styles for your modal -->
     <style>
-      .yourModalClass {
+    .yourModalClass {
         background-color: #ffffff;
         border: 1px solid #cccccc;
-        padding: 1em;
+        padding: 0 1.5em 1em;
         border-radius: 5px;
-      }
+        max-width: 500px;
+    }
     </style>
-  </head>
-  <body>
-    <a href="#yourModalId">Open Modal</a>
-    <div id="yourModalId" class="yourModalClass">
-      <h2>Modality</h2>
-      <p>
-         Simple, lightweight and versatile &ndash; Modality was designed 
-         to be the only modal window plugin you would ever need.
-      </p>
-      <a href="#yourModalId">Close Modal</a>
-    </div>
-    <script src="path/to/your/modality.min.js"></script>
-    <script>
-      Modality.init('#yourModalId');
-    </script>
-  </body>
-</html>
 
+</head>
+<body>
+
+    <!-- The trigger to open the modal -->
+    <a href="#yourModalId">Open Modal</a>
+
+    <!-- Your Modal, style it however you will! -->
+    <div id="yourModalId" class="yourModalClass" style="display:none;">
+        <h2>Modality</h2>
+        <p>
+            Simple, lightweight and versatile &ndash; Modality was 
+            designed to be the only modal window you would ever need.
+        </p>
+        <a href="#yourModalId">Close Modal</a>
+    </div>
+
+    <!-- jQuery -->
+    <!-- <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="js/modality.jquery.min.js"></script>
+    <script>
+    var modal1 = $('#yourModalId').modality({
+        effect: 'slide-up'
+    });
+    </script> -->
+    
+    <!-- JS-Only -->
+    <script src="js/modality.min.js"></script>
+    <script>
+    var modal1 = Modality.init('#yourModalId', {
+        effect: 'slide-up'
+    });
+    </script>
+
+</body>
+</html>
 ```
 
 ## Options
