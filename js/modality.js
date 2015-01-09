@@ -13,7 +13,7 @@
     var _name = "Modality", // the plugin name
 
         // get the body only once
-        _body = document.getElementsByTagName('body')[0],
+        _body = document.querySelector('body'),
 
         // default settings for plugin
         _defaults = {
@@ -73,25 +73,15 @@
         return target.className.match(new RegExp('(\\s|^)'+className+'(\\s|$)'));
     },
     addClass = function( target, className ) {
-        if(Object.prototype.toString.call( target ) === '[object Array]') {
-            for( var i = 0; i < target.length; i++ ) {
-                addClass( target[i], className );
-            }
-        } else {
-            if( ! hasClass( target, className ) ) {
-                target.className += " " + className;
-            }
-        }
+        for( var i = 0; i < target.length; i++ )
+            if( ! hasClass( target[i], className ) ) 
+                target[i].className += " " + className;
     },
     removeClass = function( target, className ) {
-        if(Object.prototype.toString.call( target ) === '[object Array]') {
-            for( var i = 0; i < target.length; i++ ) {
-                removeClass( target[i], className );
-            }
-        } else {
-            if( hasClass( target, className ) ) {
+        for( var i = 0; i < target.length; i++ ) {
+            if( hasClass( target[i], className ) ) {
                 var re = new RegExp("(\\s|^)" + className + "(\\s|$)", "g");
-                target.className = target.className.replace(re , '');
+                target[i].className = target[i].className.replace(re , '');
             }
         }
     },
