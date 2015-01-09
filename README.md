@@ -56,7 +56,7 @@ $('#yourModalId').modality();
 // JS-Only --
 Modality.init('#yourModalId');
 ```
-[View Template](#modality)
+[View Template](https://github.com/marksmccann/modality/blob/master/README.md#template)
 
 
 ## Options
