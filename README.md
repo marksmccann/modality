@@ -1,5 +1,6 @@
 # Modality
-Free, Simple, lightweight and versatile &ndash; Modality was designed to be the only modal window plugin you would ever need. 
+Free, simple, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need. Built with both JavaScript and jQuery, this plugin is sure to be a perfect fit for any project. 
+
 ## Overview
 Modality was designed for the web-novice and web-master alike; Simple, lightweight and straight-forward, but at the same time versatile, extendable and infinitely customizable.
 
@@ -106,6 +107,46 @@ Modality.init('.modal', {
 9. `"swing-left"`, `"swing-right"`
 10. `"front-flip"`, `"back-flip"`
 
+
+## Styling your Modal
+Styling your modal with Modality cannot be any simplier. In fact you do not even need to set a width or height and your modal will still always be perfectly centered. However, I do recommend you add at least a `max-width` so that the modal doesn't get too large on a desktop, but will still resize for a mobile device:
+
+```css
+.yourModalClass {
+    max-width: 600px;
+}
+```
+
+By default, your modal is not styled (so as to allow for maximum creative freedom), but if you want some help getting started, here is an example:
+
+```css
+.yourModalClass {
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 1em 1.5em 1em;
+    border-radius: 5px;
+    max-width: 500px;
+    position: relative;
+}
+.yourModalClass a[href="yourModalId"] {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    text-decoration: none;
+    padding: 3px 8px;
+    color: #333;
+    font-family: sans-serif;
+    font-size: 22px;
+}
+```
+
+*There is one exception however*: if you want your modal to be a percentage of the window, you will need to add a class to the 'userClass' option in the settings and apply the percentage property to the 'innerClass' via a decendant selector like so:
+
+```css
+.userClass .mm-wrap {
+    max-width: 75%;
+}
+```
 
 ## Methods
 
