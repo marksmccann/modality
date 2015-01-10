@@ -119,21 +119,18 @@
      * @param {object} options - user settings
      * @return {object}
      */
-    Plugin = function ( element, options ) {
+    Modality = function ( element, options ) {
                 
         var inst = this; // to avoid scope issues
 
         // Class Attributes ---------------
 
-
-
-        inst.body     = _body;
         inst.defaults = _defaults;
         inst.id       = element.getAttribute( 'id' );
         inst.settings = _extend( {}, _defaults, options );
         inst.wrapper  = _wrap( element, inst.settings );
         inst.triggers = document.querySelectorAll( 'a[href="#'+inst.id+'"], [data-modality="#'+inst.id+'"]' );
-        inst.element  = document.getElementById( inst.id );
+        inst.modal    = document.getElementById( inst.id );
 
         // Events ------------------------------------
 
@@ -152,7 +149,7 @@
 
         // close modal with 'esc' key
         if( inst.settings.closeOnEscape ) {
-            _addEvent( inst.body, "keyup", function (e) {
+            _addEvent( _body, "keyup", function (e) {
                 if(e.keyCode == 27) inst.close();
             }, false);
         }
@@ -160,7 +157,7 @@
         // Final Touches ------------------------------
 
         // make sure modal is not hidden
-        if( inst.element.style.display == 'none' ) inst.element.style.display = '';
+        if( inst.modal.style.display == 'none' ) inst.modal.style.display = '';
 
         // open modal if set to true
         if( inst.settings.openOnLoad ) inst.open();
@@ -174,7 +171,7 @@
 
     // Class Methods ---------------------------------
 
-    _extend( Plugin.prototype, {
+    _extend( Modality.prototype, {
 
         /**
          * opens the modal
@@ -184,7 +181,7 @@
         open: function ( callback ) {
 
             // add classes to open the modal
-            addClass( [this.wrapper,this.body], this.settings.openClass );
+            addClass( [this.wrapper, _body], this.settings.openClass );
 
             // run the callback(s)
             if ( typeof this.settings.onOpen == 'function' ) this.settings.onOpen();
@@ -202,7 +199,7 @@
         close: function ( callback ) {
 
             // remove classes to close the modal
-            removeClass( [this.wrapper,this.body], this.settings.openClass );
+            removeClass( [this.wrapper, _body], this.settings.openClass );
 
             // run the callback(s)
             if ( typeof this.settings.onClose == 'function' ) this.settings.onClose();
@@ -251,9 +248,9 @@
         
     // Static Methods --------------------------------
         
-    _extend( Plugin, { 
+    _extend( Modality, { 
 
-        instances: [], // for storing instances
+        instances: {}, // for storing instances
         extend: _extend, // externalize method
 
         /**
@@ -276,7 +273,7 @@
 
     // Globalize ------------------------------------
 
-    window[ _name ] = Plugin;
+    window[ _name ] = Modality;
 
 
 })();

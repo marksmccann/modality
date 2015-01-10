@@ -39,24 +39,23 @@
      * @param {object} options - user settings
      * @return {object}
      */
-    Plugin = function ( element, options ) {
+    Modality = function ( element, options ) {
                 
         var inst = this; // local var to avoid scope issues
 
         // Class Attributes ---------------
             
         inst.defaults  = _defaults;
-        inst.body      = _body;
         inst.id        = $(element).attr( 'id' );
         inst.settings  = $.extend( {}, _defaults, options );
-        inst.$element  = $(element).wrap(
+        inst.$modal    = $(element).wrap(
             '<div class="'+ inst.settings.modalClass + ' ' + inst.settings.effect + ' ' + inst.settings.userClass +'">'+
                 '<div class="'+ inst.settings.innerClass + '">'+
                     // user's #modal goes here
                 '</div>'+
             '</div>'
         ).show();
-        inst.$wrapper  = inst.$element.parents('.' + inst.settings.modalClass);
+        inst.$wrapper  = inst.$modal.parents('.' + inst.settings.modalClass);
         inst.$triggers = $('a[href="#'+inst.id+'"], [data-modality="#'+inst.id+'"]');
 
         // Events ------------------------------------
@@ -77,7 +76,7 @@
 
         // close modal with 'esc' key
         if( inst.settings.closeOnEscape ) {
-            $(inst.body).keyup( function (e) {
+            $(_body).keyup( function (e) {
                 if(e.keyCode == 27) inst.close();
             });
         }
@@ -101,7 +100,7 @@
 
     // Class Methods ---------------------------------
 
-    $.extend( Plugin.prototype, {
+    $.extend( Modality.prototype, {
 
         /**
          * opens the modal
@@ -111,7 +110,7 @@
         open: function ( fn ) {
 
             // add classes to open the modal
-            this.$wrapper.add(this.body).addClass( this.settings.openClass );
+            this.$wrapper.add(_body).addClass( this.settings.openClass );
 
             // run the callback(s)
             if ( typeof this.settings.onOpen == 'function' ) this.settings.onOpen();
@@ -128,7 +127,7 @@
         close: function ( fn ) {
 
             // add classes to open the modal
-            this.$wrapper.add(this.body).removeClass( this.settings.openClass );
+            this.$wrapper.add(_body).removeClass( this.settings.openClass );
 
             // run the callback(s)
             if ( typeof this.settings.onClose == 'function' ) this.settings.onClose();
@@ -177,9 +176,9 @@
         
     // Static Methods --------------------------------
         
-    $.extend( Plugin, { 
+    $.extend( Modality, { 
             
-        instances: [], // for storing instances
+        instances: {}, // for storing instances
         
         /**
          * creates new instance for element(s), stores/returns it(them)
@@ -188,10 +187,10 @@
          * @return {array}
          */
         init: function ( elements, options ) {
-            var a = {}, Plugin = this, i = 0;
+            var a = {}, Obj = this, i = 0;
             elements.each(function() {
-                var inst = new Plugin( this, options );
-    	        Plugin.instances[ inst.id ] = a[i] = inst;   
+                var inst = new Obj( this, options );
+    	        Obj.instances[ inst.id ] = a[i] = inst;   
             });  
             return ( a[1] === undefined ) ? a[0] : a;
         }
@@ -201,7 +200,7 @@
         
     // Globalize ------------------------------------
 
-    $[ _name ] = Plugin;
+    $[ _name ] = Modality;
     $.fn[ _name ] = function ( options ) {  
         return $[ _name ].init( this, options );
     };
