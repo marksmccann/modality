@@ -1,6 +1,5 @@
 # Modality
-Simple, lightweight and versatile &ndash; Modality was designed to be the only modal window plugin you would ever need. 
-
+Free, Simple, lightweight and versatile &ndash; Modality was designed to be the only modal window plugin you would ever need. 
 ## Overview
 Modality was designed for the web-novice and web-master alike; Simple, lightweight and straight-forward, but at the same time versatile, extendable and infinitely customizable.
 
