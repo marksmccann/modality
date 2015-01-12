@@ -108,12 +108,20 @@ Modality.init('.modal', {
 10. `"front-flip"`, `"back-flip"`
 
 
-## Styling your Modal
+## Styling
 Styling your modal with Modality cannot be any simplier. In fact you do not even need to set a width or height and your modal will still always be perfectly centered. However, I do recommend you add at least a `max-width` so that the modal doesn't get too large on a desktop, but will still resize for a mobile device:
 
 ```css
 .yourModalClass {
     max-width: 600px;
+}
+```
+
+*There is one exception however*: if you want your modal to be a percentage of the window, you will need to add a class to the 'userClass' option in the settings and apply the percentage property to the 'innerClass' via a decendant selector like so:
+
+```css
+.userClass .mm-wrap {
+    max-width: 75%;
 }
 ```
 
@@ -140,16 +148,8 @@ By default, your modal is not styled (so as to allow for maximum creative freedo
 }
 ```
 
-*There is one exception however*: if you want your modal to be a percentage of the window, you will need to add a class to the 'userClass' option in the settings and apply the percentage property to the 'innerClass' via a decendant selector like so:
-
-```css
-.userClass .mm-wrap {
-    max-width: 75%;
-}
-```
-
 #### Styling the Background
-Changing the style for the background mask is simple enough as well. You can either directly override the background styles applied to `.modality-modal` (not recommended), or you can add your own class via 'userClass' setting and add your background style to that, like this:
+Changing the styles for the background mask is simple enough as well. You can either directly override the background styles applied to `.modality-modal` (not recommended), or you can add your own class via the 'userClass' setting and add your new background styling to that, like this:
 
 ```css
 .userClass {
