@@ -149,10 +149,10 @@ By default, your modal is not styled (so as to allow for maximum creative freedo
 ```
 
 #### Styling the Background
-Changing the styles for the background mask is simple enough as well. You can either directly override the background styles applied to `.modality-modal` (not recommended), or you can add your own class via the 'userClass' setting and add your new background styling to that, like this:
+Changing the styles for the background mask is simple enough as well. You can either directly override the background styles applied to `.modality-modal.mm-show` (not recommended), or you can add your own class via the 'userClass' setting and add your new background styling to that, like this:
 
 ```css
-.userClass {
+.userClass.mm-show {
     background: rgba( 255, 0, 0, 0.5 ); 
 }
 ```
