@@ -125,7 +125,7 @@ By default, your modal is not styled. You are completely free to style the modal
 }
 ```
 
-#### Styling the Background
+#### The Background (Mask)
 Add your own class via the 'userClass' option in the settings and add your new background styling to that, like this:
 
 ```css
@@ -134,7 +134,7 @@ Add your own class via the 'userClass' option in the settings and add your new b
 }
 ```
 
-#### Modal CSS Example
+#### Example
 In case you want some help getting started, here is an example:
 
 ```css
