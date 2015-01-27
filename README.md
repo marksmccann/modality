@@ -109,15 +109,15 @@ Modality.init('.modal', {
 
 
 ## Styling
-Styling your modal with Modality cannot be any simplier. In fact you do not even need to set a width or height and your modal will still always be perfectly centered. However, I do recommend you add at least a `max-width` so that the modal doesn't get too large on a desktop, but will still resize for a mobile device:
+By default, your modal is not styled. You are completely free to style the modal however you like. In fact, you do not even need to set a width or height and your modal will still always be perfectly centered.
 
 ```css
 .yourModalClass {
-    max-width: 600px;
+    /* your styles here */
 }
 ```
 
-*There is one exception however*: if you want your modal to be a percentage of the window, you will need to add a class to the 'userClass' option in the settings and apply the percentage property to the 'innerClass' via a decendant selector like so:
+*There is one caveat*: if you want your modal to be a percentage of the window, add a class to the 'userClass' option in the settings and apply the percentage to the 'innerClass' setting via a decendant selector like so:
 
 ```css
 .userClass .mm-wrap {
@@ -125,7 +125,17 @@ Styling your modal with Modality cannot be any simplier. In fact you do not even
 }
 ```
 
-By default, your modal is not styled (so as to allow for maximum creative freedom), but if you want some help getting started, here is an example:
+#### Styling the Background
+Add your own class via the 'userClass' option in the settings and add your new background styling to that, like this:
+
+```css
+.userClass.mm-show {
+    background: rgba( 255, 0, 0, 0.5 ); 
+}
+```
+
+#### Modal CSS Example
+In case you want some help getting started, here is an example:
 
 ```css
 .yourModalClass {
@@ -145,15 +155,6 @@ By default, your modal is not styled (so as to allow for maximum creative freedo
     color: #333;
     font-family: sans-serif;
     font-size: 22px;
-}
-```
-
-#### Styling the Background
-Changing the styles for the background mask is simple enough as well. You can either directly override the background styles applied to `.modality-modal.mm-show` (not recommended), or you can add your own class via the 'userClass' setting and add your new background styling to that, like this:
-
-```css
-.userClass.mm-show {
-    background: rgba( 255, 0, 0, 0.5 ); 
 }
 ```
 
