@@ -59,6 +59,71 @@ Modality.init('#yourModalId');
 [View Template](https://github.com/marksmccann/modality#template)
 
 
+## Styling
+**By default, your modal is not styled.** You are completely free to style the modal however you like. In fact, you do not even need to set a width or height and your modal will still always be perfectly centered &mdash; Modality will seamlessly adapt to whatever content you put inside of it.
+
+```css
+.yourModalClass {
+    /* your styles here */
+}
+```
+#### A Few Notes
+
+1\. **Max-Width**: I would recommend adding at least a `max-width` value to your modal so that it will not be too large on a desktop, but will still resize for a mobile device.
+
+```css
+.yourModalClass {
+    max-width: 500px; 
+}
+```
+
+2\. **The Background Mask**: Add your own class via the 'userClass' option in the settings and add your new background styling to that, like this:
+
+```css
+.userClass.mm-show {
+    background: rgba( 255, 0, 0, 0.5 ); 
+}
+```
+
+3\. **Percentage Width**: if you want your modal to be a percentage of the window, add a class to the 'userClass' option in the settings and apply the percentage to the 'innerClass' setting via a decendant selector like so:
+
+```css
+.userClass .mm-wrap {
+    max-width: 75%;
+}
+```
+
+4\. **Hide on Load**: If your modal is visible for a second before Modality can hide it for you, manually hide it with an inline style like so: (*Don't worry, Modality will remove that style after initialization.*)
+
+```html
+<div id="yourModalId" class="yourModalClass" style="display:none;">
+```
+
+
+#### Example
+In case you want some help getting started, here is an example:
+
+```css
+.yourModalClass {
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 1em 1.5em 1em;
+    border-radius: 5px;
+    max-width: 500px;
+    position: relative;
+}
+.yourModalClass a[href="yourModalId"] {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    text-decoration: none;
+    padding: 3px 8px;
+    color: #333;
+    font-family: sans-serif;
+    font-size: 22px;
+}
+```
+
 ## Options
 Name | Default | Description
 --- | --- | ---
@@ -106,57 +171,6 @@ Modality.init('.modal', {
 8. `"swing-down"`, `"swing-up"`
 9. `"swing-left"`, `"swing-right"`
 10. `"front-flip"`, `"back-flip"`
-
-
-## Styling
-By default, your modal is not styled. You are completely free to style the modal however you like. In fact, you do not even need to set a width or height and your modal will still always be perfectly centered.
-
-```css
-.yourModalClass {
-    /* your styles here */
-}
-```
-
-*There is one caveat*: if you want your modal to be a percentage of the window, add a class to the 'userClass' option in the settings and apply the percentage to the 'innerClass' setting via a decendant selector like so:
-
-```css
-.userClass .mm-wrap {
-    max-width: 75%;
-}
-```
-
-#### The Background (Mask)
-Add your own class via the 'userClass' option in the settings and add your new background styling to that, like this:
-
-```css
-.userClass.mm-show {
-    background: rgba( 255, 0, 0, 0.5 ); 
-}
-```
-
-#### Example
-In case you want some help getting started, here is an example:
-
-```css
-.yourModalClass {
-    background-color: #ffffff;
-    border: 1px solid #cccccc;
-    padding: 1em 1.5em 1em;
-    border-radius: 5px;
-    max-width: 500px;
-    position: relative;
-}
-.yourModalClass a[href="yourModalId"] {
-    position: absolute;
-    top: 5px;
-    right: 8px;
-    text-decoration: none;
-    padding: 3px 8px;
-    color: #333;
-    font-family: sans-serif;
-    font-size: 22px;
-}
-```
 
 
 ## Methods
