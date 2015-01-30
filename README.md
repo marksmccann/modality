@@ -49,7 +49,6 @@ Built with Javascript's module pattern, Modality can be extended to meet your re
 
 5\. Instantiate the modal(s) in your javascript.
 ```javascript
-
 // jQuery --
 $('#yourModalId').modality();
 
@@ -77,7 +76,7 @@ Modality.init('#yourModalId');
 }
 ```
 
-2\. **The Background Mask**: Add your own class via the 'userClass' option in the settings and add your new background styling to that, like this:
+2\. **The Background Mask**: To style the background mask, add your own class via the 'userClass' option in the settings and add your new background styling to that, like this:
 
 ```css
 .userClass.mm-show {
@@ -85,7 +84,7 @@ Modality.init('#yourModalId');
 }
 ```
 
-3\. **Percentage Width**: if you want your modal to be a percentage of the window, add a class to the 'userClass' option in the settings and apply the percentage to the 'innerClass' setting via a decendant selector like so:
+3\. **Percentage Width**: If you want your modal to be a percentage of the window, add a class to the 'userClass' option in the settings and apply the percentage to the 'innerClass' setting via a decendant selector like so:
 
 ```css
 .userClass .mm-wrap {
@@ -129,7 +128,7 @@ Name | Default | Description
 --- | --- | ---
 openOnLoad | `false` | set true to open modal on page load
 autoBind | `true` | set false if you want to bind triggers manually
-effect | `""` | CSS animation, effects listed below.
+effect | `""` | CSS3 animation, effects listed below.
 clickOffToClose | `true` | set false to prevent closing when clicking off of it
 closeOnEsc | `true` | set false to prevent closing modal when 'Esc' is pressed
 onOpen | `""` | add callback function when modal is opened
@@ -161,6 +160,8 @@ Modality.init('.modal', {
 ```
 
 #### Effects
+*These animations use CSS3, they will not work for IE7-9.*
+
 1. `"scale-up"`, `"scale-down"`
 2. `"slide-left"`, `"slide-right"`
 3. `"slide-up"`, `"slide-down"`
@@ -173,7 +174,9 @@ Modality.init('.modal', {
 10. `"front-flip"`, `"back-flip"`
 
 
+
 ## Methods
+Modality allows you to retreive an instance and then invoke it's methods on demand.
 
 Name | Parameters | Returns | Description
 --- | --- | --- | ---
@@ -183,7 +186,9 @@ Name | Parameters | Returns | Description
 `isOpen()` | none | `boolean` | tells you if the modal is open or not
 `setTrigger()` | DOM Object | `instance` | sets a DOM object to open/close modal when clicked
 
-There are multiple ways to retrieve an instance. The first and easiest way is when initializing the modal:
+There are two ways to retrieve an instance: 
+
+1a. The first and easiest way is when initializing the modal:
 
 ```javascript
 
@@ -196,8 +201,7 @@ var inst = Modality.init('#yourModalId');
 inst.close();
 
 ```
-
-If you are initializing more than one modal at a time, Modality will return an array of the modals initialized:
+1b. If you are initializing more than one modal, Modality will return an array of the modals initialized:
 
 ```javascript
 
@@ -217,7 +221,7 @@ for( key in insts ){
 
 ```
 
-You can get any instance at any time with it's id:
+2. Second, you can retreive any instance with it's id:
 
 ```javascript
 
@@ -231,7 +235,7 @@ inst.close();
 
 ```
 
-You can also combine methods on a single line (chaining):
+#### Chaining
 
 ```javascript
 // jQuery --
@@ -239,8 +243,9 @@ $('#yourModalId').modality().open();
 
 // JS-Only --
 Modality.init('#yourModalId').toggle(); 
+
 ```
-**Make sure to return 'this' (the current instance) in your custom class methods if you want to maintain this chaining capability. See example under "Extending Modality".*
+*Make sure to return 'this' (the current instance) in your custom class methods if you want to maintain this chaining capability. See example under "Extending Modality".*
 
 
 ## Extending Modality
@@ -279,51 +284,45 @@ You can easily extend Modality and add more functionality. Here is a basic templ
     });
 
 })( Modality );
+
 ```
 
 ## AJAX
-Modality does not have a built-in AJAX function. However, you can extend Modality with your own. Here's an example to help get you started.
+Modality does not have a built-in AJAX function. However, there are multiple ways for you to add this functionality. Here is one example of something you could do:
 
+#### Example
 ```Javascript
 
 // jQuery --
-(function($) {
-    $.extend( $.modality.prototype , {
-        insert: function() {
-            var inst = this; 
-            $.ajax({
-                url:"http://path/to/your/data.txt",
-                success: function ( result ) {
-                    inst.$element.html( result );
-                }
-            });
-        }
-    });
-})(jQuery);
-
-$.modality.instances['yourModalId'].insert();
+$('.yourModalClass').modality({
+    onOpen: function() {
+        var inst = this; 
+        $.ajax({ 
+            url: "http://path/to/your/data.txt",
+            success: function ( result ) {
+                inst.$element.html( result );
+            }
+        });
+    }
+});
 
 // JS-Only --
-(function (Modality) {
-    Modality.extend( Modality.prototype, {
-        insert: function () {
-            var inst = this;
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
-                if ( xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
-                    inst.element.innerHTML = xmlhttp.responseText;
-                }
+Modality.init({
+    onOpen: function () {
+        var inst = this;
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if ( xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
+                inst.element.innerHTML = xmlhttp.responseText;
             }
-            xmlhttp.open( 'get', 'http://path/to/your/data.txt', true );
-            xmlhttp.send();
         }
-    });
-})(Modality);
-
-Modality.instances["yourModalId"].insert();
+        xmlhttp.open( 'get', "http://path/to/your/data.txt", true );
+        xmlhttp.send();
+    }
+});
 
 ```
-*In the examples above, a class method is added to Modality called 'insert'. When called on an instance, 'insert' will send a request to a url and will insert the response into the modal.*
+*In the examples above: a callback function is added to the 'onOpen' setting that will insert the response of an AJAX request into the modal as it is opened.*
 
 ## Template
 Here is a basic template to help you get started:
