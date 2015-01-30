@@ -59,32 +59,63 @@
             target[event+fn] = function(){ target['e'+event+fn]( window.event ); }
             target.attachEvent( 'on'+event, target[event+fn] );
         } else {
-           target.addEventListener( event, fn, false );
+            target.addEventListener( event, fn, false );
         }
     },
 
+
+    /**
+     * make sure callback is function and then execute
+     * @param {function/array} fn - the function you are testing
+     */
+    _callback = function ( fn ) {
+        for( var i = 0; i < fn.length; i++ )
+            if( typeof fn[i] == 'function' ) fn[i]();
+    },
+
+
+    /**
+     * prevent event default
+     * @param {event} e - the event
+     */
+    _preventDefault = function ( e ) {
+        (e.preventDefault) ? e.preventDefault() : e.returnValue = false;
+    },
+    
 
     /**
      * class manipulation
      * @param {object} target - the node with the class
      * @param {string} className - the class you are checking for
      */
-    hasClass = function( target, className ) {
+    _hasClass = function( target, className ) {
         return target.className.match(new RegExp('(\\s|^)'+className+'(\\s|$)'));
     },
-    addClass = function( target, className ) {
+    _addClass = function( target, className ) {
         for( var i = 0; i < target.length; i++ )
-            if( ! hasClass( target[i], className ) ) 
+            if( ! _hasClass( target[i], className ) ) 
                 target[i].className += " " + className;
     },
-    removeClass = function( target, className ) {
+    _removeClass = function( target, className ) {
         for( var i = 0; i < target.length; i++ ) {
-            if( hasClass( target[i], className ) ) {
+            if( _hasClass( target[i], className ) ) {
                 var re = new RegExp("(\\s|^)" + className + "(\\s|$)", "g");
                 target[i].className = target[i].className.replace(re , '');
             }
         }
     },
+
+
+    /**
+     * return space and classname if classname exists
+     * @param {object} settings - the modal's settings
+     * @param {string} setting - the setting name
+     * @return {string}
+     */
+    _concat = function ( settings, setting ) {
+        return ( settings[setting] != "" ) ? ' ' + settings[setting] : "";  
+    },
+
 
     /**
      * wraps the users modal element in modality's frame:
@@ -101,7 +132,7 @@
 
         // create the container and insert markup
         var container = document.createElement('div');
-        container.setAttribute( 'class', settings.modalClass + ' ' + settings.effect + ' ' + settings.userClass );
+        container.setAttribute( 'class', settings.modalClass + _concat(settings, "effect") + _concat(settings, "userClass") );
         container.innerHTML = '<div class="'+settings.innerClass+'">' + element.outerHTML + '</div>';
 
         // replace the old modal with the new
@@ -143,16 +174,15 @@
         // close modal if users clicks anywhere off of it
         if( inst.settings.clickOffToClose ) {
             _addEvent( inst.wrapper, "click", function(e) {
-                (e.preventDefault) ? e.preventDefault() : e.returnValue = false; 
-                if(e.target == inst.wrapper) inst.close();
-            }, false );
+                _preventDefault(e); if(e.target == inst.wrapper) inst.close();
+            });
         }
 
         // close modal with 'esc' key
         if( inst.settings.closeOnEscape ) {
             _addEvent( _body, "keyup", function (e) {
                 if(e.keyCode == 27) inst.close();
-            }, false);
+            });
         }
 
         // Final Touches ------------------------------
@@ -176,17 +206,16 @@
 
         /**
          * opens the modal
-         * @param  {function} callback
+         * @param  {function} fn
          * @return {instance}
          */
-        open: function ( callback ) {
+        open: function ( fn ) {
 
             // add classes to open the modal
-            addClass( [this.wrapper, _body], this.settings.openClass );
+            _addClass( [this.wrapper, _body], this.settings.openClass );
 
             // run the callback(s)
-            if ( typeof this.settings.onOpen == 'function' ) this.settings.onOpen();
-            if ( typeof callback == 'function' ) callback();
+            _callback( [this.settings.onOpen, fn] );
 
             return this;
 
@@ -194,17 +223,16 @@
 
         /**
          * closes the modal
-         * @param  {function} callback
+         * @param  {function} fn
          * @return {instance} 
          */
-        close: function ( callback ) {
+        close: function ( fn ) {
 
             // remove classes to close the modal
-            removeClass( [this.wrapper, _body], this.settings.openClass );
+            _removeClass( [this.wrapper, _body], this.settings.openClass );
 
             // run the callback(s)
-            if ( typeof this.settings.onClose == 'function' ) this.settings.onClose();
-            if ( typeof callback == 'function' ) callback();
+            _callback( [this.settings.onClose, fn] );
 
             return this;
 
@@ -212,11 +240,11 @@
 
         /**
          * toggles the modal
-         * @param  {function} callback
+         * @param  {function} fn
          * @return {instance}
          */
-        toggle: function ( callback ) {
-            return ( this.isOpen() ) ? this.close(callback) : this.open(callback);
+        toggle: function ( fn ) {
+            return ( this.isOpen() ) ? this.close(fn) : this.open(fn);
         },
 
         /**
@@ -224,7 +252,7 @@
          * @return {Boolean}
          */
         isOpen: function () {
-            return hasClass( this.wrapper, this.settings.openClass );
+            return _hasClass( this.wrapper, this.settings.openClass );
         },
 
         /**
@@ -238,9 +266,8 @@
 
             // set click event for new trigger
             _addEvent( trigger, "click", function (e) {
-                (e.preventDefault) ? e.preventDefault() : e.returnValue = false; 
-                inst.toggle(); 
-            }, false );
+                _preventDefault(e); inst.toggle(); 
+            });
 
             return inst;
         }
