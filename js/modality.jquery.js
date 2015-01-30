@@ -29,6 +29,27 @@
             openOnLoad: false, // open on page load
             userClass: "" // user can add a class to container 
         },
+
+
+    /**
+     * make sure callback is function and then execute
+     * @param {function/array} fn - the function you are testing
+     */
+    _callback = function ( fn ) {
+        for( var i = 0; i < fn.length; i++ )
+            if( typeof fn[i] == 'function' ) fn[i]();
+    },
+
+
+    /**
+     * return space and classname if classname exists
+     * @param {object} settings - the modal's settings
+     * @param {string} setting - the setting name
+     * @return {string}
+     */
+    _concat = function ( settings, setting ) {
+        return ( settings[setting] != "" ) ? ' ' + settings[setting] : "";  
+    },
             
 
     // Constructor -----------------------------------
@@ -49,7 +70,7 @@
         inst.id        = $(element).attr( 'id' );
         inst.settings  = $.extend( {}, _defaults, options );
         inst.$modal    = $(element).wrap(
-            '<div class="'+ inst.settings.modalClass + ' ' + inst.settings.effect + ' ' + inst.settings.userClass +'">'+
+            '<div class="'+ inst.settings.modalClass + _concat(inst.settings,'effect') + _concat(inst.settings,'userClass') +'">'+
                 '<div class="'+ inst.settings.innerClass + '">'+
                     // user's #modal goes here
                 '</div>'+
@@ -113,8 +134,7 @@
             this.$wrapper.add(_body).addClass( this.settings.openClass );
 
             // run the callback(s)
-            if ( typeof this.settings.onOpen == 'function' ) this.settings.onOpen();
-            if ( typeof fn == 'function' ) fn();
+            _callback( [this.settings.onOpen,fn] );
 
             return this;
         },
@@ -130,8 +150,7 @@
             this.$wrapper.add(_body).removeClass( this.settings.openClass );
 
             // run the callback(s)
-            if ( typeof this.settings.onClose == 'function' ) this.settings.onClose();
-            if ( typeof fn == 'function' ) fn();
+            _callback( [this.settings.onClose,fn] );
 
             return this;
         },
