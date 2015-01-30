@@ -143,7 +143,8 @@
         // close modal if users clicks anywhere off of it
         if( inst.settings.clickOffToClose ) {
             _addEvent( inst.wrapper, "click", function(e) {
-                e.preventDefault(); if(e.target == inst.wrapper) inst.close();
+                (e.preventDefault) ? e.preventDefault() : e.returnValue = false; 
+                if(e.target == inst.wrapper) inst.close();
             }, false );
         }
 
@@ -237,7 +238,8 @@
 
             // set click event for new trigger
             _addEvent( trigger, "click", function (e) {
-                e.preventDefault(); inst.toggle(); 
+                (e.preventDefault) ? e.preventDefault() : e.returnValue = false; 
+                inst.toggle(); 
             }, false );
 
             return inst;
