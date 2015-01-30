@@ -307,7 +307,7 @@ $('.yourModalClass').modality({
 });
 
 // JS-Only --
-Modality.init({
+Modality.init('.yourModalClass', {
     onOpen: function () {
         var inst = this;
         var xmlhttp = new XMLHttpRequest();
