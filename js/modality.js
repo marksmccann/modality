@@ -4,7 +4,7 @@
 // -----------------------------------------------------------------
 
 /**
- * JavaScript Plugin Template
+ * Modality JavaScript Plugin
  */
 ;(function () {
 
