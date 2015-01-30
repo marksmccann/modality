@@ -131,12 +131,12 @@ autoBind | `true` | set false if you want to bind triggers manually
 effect | `""` | CSS3 animation, effects listed below.
 clickOffToClose | `true` | set false to prevent closing when clicking off of it
 closeOnEsc | `true` | set false to prevent closing modal when 'Esc' is pressed
+innerClass* | `"mm-wrap"` | the inner container for the modal
+modalClass* | `"modality-modal"` | the outer-most container for the modal
 onOpen | `""` | add callback function when modal is opened
 onClose | `""` | add callback function when modal is closed
-userClass | `""` | you can add your own class to the container
-modalClass* | `"modality-modal"` | the outer-most container for the modal
-innerClass* | `"mm-wrap"` | the inner container for the modal
 openClass* | `"mm-show"` | when modal is active/visible
+userClass | `""` | you can add your own class to the container
 **These classes match those in modality.css, if changed here, must also be changed there.*
 
 ```javascript
@@ -221,7 +221,7 @@ for( key in insts ){
 
 ```
 
-2. Second, you can retreive any instance with it's id:
+2\. Second, you can retreive any instance with it's id:
 
 ```javascript
 
