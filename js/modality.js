@@ -11,9 +11,7 @@
     // Private ---------------------------------------
 
     var _name = "Modality", // the plugin name
-
-        // get the body only once
-        _body = document.querySelector('body'),
+        _body = document.querySelector('body'), // get the body only once
 
         // default settings for plugin
         _defaults = {
@@ -21,6 +19,7 @@
             clickOffToClose: true, // click anywhere off of modal to close it
             closeOnEscape: true, // close modal with 'esc' key
             effect: "", // animation style
+            enabled: true, // set false to disable modal
             innerClass: "mm-wrap", // inner wrapper
             modalClass: "modality-modal", // outer-most container
             onClose: "", // function to run when modal closes
@@ -63,6 +62,20 @@
         }
     },
 
+    /**
+     * remove an event from a given node
+     * @param {object} target - the node you are removing the event from
+     * @param {string} event - the event kind
+     * @param {function} fn - the callback function
+     */
+    _removeEvent = function( target, event, fn ) {
+        if ( target.detachEvent ) {
+            target.detachEvent( 'on'+event, target[event+fn] );
+            target[event+fn] = null;
+        } else {
+            target.removeEventListener( event, fn, false );
+        }
+    },
 
     /**
      * make sure callback is function and then execute
@@ -103,6 +116,31 @@
                 target[i].className = target[i].className.replace(re , '');
             }
         }
+    },
+
+
+    /**
+     * searches for a value in an array and returns key if found
+     * @param {array} haystack - the array being searched 
+     * @param {object} needle - the element being looked for
+     * @return {int}
+     */
+    _contains = function (haystack, needle) {
+        var i = haystack.length;
+        while (i--) {
+            if (haystack[i][0] === needle) return i;
+        }
+        return false;
+    },
+
+
+    /**
+     * tests if var is an integer or not
+     * @param {array} a - the array being tested
+     * @return {int}
+     */
+    _isInt = function ( a ) {
+        return a === parseInt(a, 10);
     },
 
 
@@ -152,34 +190,35 @@
      */
     Modality = function ( element, options ) {
                 
-        var inst = this; // to avoid scope issues
+        // Local Vars --------------------------------
 
-        // Class Attributes ---------------
+        var inst     = this,
+            id       = element.getAttribute( 'id' ),
+            settings = _extend( {}, _defaults, options ), 
+            wrapper  = _wrap( element, settings ), 
+            triggers = document.querySelectorAll( 'a[href="#'+id+'"], [data-modality="#'+id+'"]' ), 
+            modal    = document.getElementById( id );
 
-        inst.defaults = _defaults;
-        inst.id       = element.getAttribute( 'id' );
-        inst.settings = _extend( {}, _defaults, options );
-        inst.wrapper  = _wrap( element, inst.settings );
-        inst.triggers = document.querySelectorAll( 'a[href="#'+inst.id+'"], [data-modality="#'+inst.id+'"]' );
-        inst.modal    = document.getElementById( inst.id );
+        // Class Attributes --------------------------
+
+        _extend( inst, { defaults: _defaults, id: id, settings: settings, wrapper: wrapper, triggers: [], modal: modal });
 
         // Events ------------------------------------
 
         // toggle modal on all triggers
-        if( inst.settings.autoBind ) {
-            for( var i = 0; i < inst.triggers.length; i++ )
-                inst.setTrigger( inst.triggers[i] );
+        if( settings.autoBind ) {
+            for( var i = 0; i < triggers.length; i++ ) inst.addTrigger( triggers[i] );
         }
 
         // close modal if users clicks anywhere off of it
-        if( inst.settings.clickOffToClose ) {
-            _addEvent( inst.wrapper, "click", function(e) {
-                _preventDefault(e); if(e.target == inst.wrapper) inst.close();
+        if( settings.clickOffToClose ) {
+            _addEvent( wrapper, "click", function(e) {
+                _preventDefault(e); if(e.target == wrapper) inst.close();
             });
         }
 
         // close modal with 'esc' key
-        if( inst.settings.closeOnEscape ) {
+        if( settings.closeOnEscape ) {
             _addEvent( _body, "keyup", function (e) {
                 if(e.keyCode == 27) inst.close();
             });
@@ -188,12 +227,12 @@
         // Final Touches ------------------------------
 
         // make sure modal is not hidden
-        if( inst.modal.style.display == 'none' ) inst.modal.style.display = '';
+        if( modal.style.display == 'none' ) modal.style.display = '';
 
         // open modal if set to true
-        if( inst.settings.openOnLoad ) inst.open();
+        if( settings.openOnLoad ) inst.open();
             
-        // --------------------------------
+        // --------------------------------------------
             
         return inst;
             
@@ -256,20 +295,83 @@
         },
 
         /**
-         * manually set trigger for a modal
-         * @param  {object} - the element you want to be the trigger
+         * manually add a trigger to open the modal on click
+         * @param  {object} element - the element you want to be the trigger
          * @return {instance}
          */
-        setTrigger: function ( trigger ) {
+        addTrigger: function ( ele ) {
 
-            var inst = this; // set local var for instance
+            var inst = this, triggers = inst.triggers, key = _contains( triggers, ele ),
+                trigger = [ele, function (e) { _preventDefault(e); inst.toggle(); }];
 
-            // set click event for new trigger
-            _addEvent( trigger, "click", function (e) {
-                _preventDefault(e); inst.toggle(); 
-            });
+            // add or update the trigger and it's handler
+            ( _isInt(key)  ) ? triggers[key] = trigger : triggers.push( trigger );
+
+            if( inst.settings.enabled ) _addEvent( trigger[0], "click", trigger[1] );
 
             return inst;
+
+        },
+
+        /**
+         * manually remove trigger for a modal.
+         * @param  {int} - the trigger element you want action removed from
+         * @return {instance}
+         */
+        removeTrigger: function ( ele ) {
+
+            var inst = this, triggers = inst.triggers, key = _contains( triggers, ele );
+
+            // key has been found AND handle hasn't already been removed
+            if( _isInt(key) && triggers[key].length > 1 ) {
+
+                _removeEvent( triggers[key][0], "click", triggers[key][1] );
+                triggers[key].splice(1, 1); // remove handle
+
+            }
+
+            return inst;
+
+        },
+
+        /**
+         * enables the modal
+         * @return {instance}
+         */
+        enable: function()  {
+
+            var inst = this, triggers = inst.triggers, length = triggers.length;
+
+            if( !inst.settings.enabled ) {
+
+                inst.settings.enabled = true;
+
+                for( var i = 0; i < length; i++ ) inst.addTrigger( triggers[i][0] );
+
+            }
+
+            return inst;
+
+        },
+
+        /**
+         * disables the modal
+         * @return {instance}
+         */
+        disable: function() {
+
+            var inst = this, triggers = inst.triggers, length = triggers.length;
+
+            if( inst.settings.enabled ) {
+
+                inst.settings.enabled = false;
+
+                for( var i = 0; i < length; i++ ) inst.removeTrigger( triggers[i][0] );
+
+            }
+
+            return inst;
+
         }
 
     });
