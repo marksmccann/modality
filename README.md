@@ -1,5 +1,5 @@
 # Modality
-Free, simple, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need. Built with both JavaScript and jQuery, this plugin is sure to be a perfect fit for any project. 
+Simple, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need. Built with both JavaScript and jQuery, this plugin is sure to be a perfect fit for any project. 
 
 ## Overview
 Modality was designed for the web-novice and web-master alike; Simple, lightweight and straight-forward, but at the same time versatile, extendable and infinitely customizable.
@@ -11,6 +11,7 @@ Beyond what is needed to position your modal, Modality (by default) has no styli
 Built with Javascript's module pattern, Modality can be extended to meet your requirements. You can also grab the instance of any modal and invoke it's methods manually.
 
 ## Features
+* Free
 * Easy to Use
 * Adapts to Screen Size
 * CSS3 Animations
@@ -46,7 +47,6 @@ Built with Javascript's module pattern, Modality can be extended to meet your re
 <!-- OR -->
 <button data-modality="#yourModalId">Open Modal</button>
 ```
-
 5\. Instantiate the modal(s) in your javascript.
 ```javascript
 // jQuery --
@@ -129,6 +129,7 @@ Name | Default | Description
 openOnLoad | `false` | set true to open modal on page load
 autoBind | `true` | set false if you want to bind triggers manually
 effect | `""` | CSS3 animation, effects listed below.
+enabled | `true` | Set to false to disable modal.
 clickOffToClose | `true` | set false to prevent closing when clicking off of it
 closeOnEsc | `true` | set false to prevent closing modal when 'Esc' is pressed
 innerClass* | `"mm-wrap"` | the inner container for the modal
@@ -174,6 +175,18 @@ Modality.init('.modal', {
 10. `"front-flip"`, `"back-flip"`
 
 
+## Attributes
+A list of attributes in case you need to use them.
+
+Name | type | Description
+--- | --- | ---
+`id` | `string` | the modal's ID
+`settings` | `json` | the modals current settings
+`defaults` | `json` | the default modal settings
+`wrapper` | `DOM Object` | the outer-most container for modal
+`triggers` | `array` | all the modal's triggers and their respective event handles
+`modal` | `DOM Object` | your modal (#yourModalId)
+
 
 ## Methods
 Modality allows you to retreive an instance and then invoke it's methods on demand.
@@ -184,7 +197,10 @@ Name | Parameters | Returns | Description
 `close()` | callback function (optional) | `instance` | closes the modal
 `toggle()` | callback function (optional) | `instance` | opens the modal if closed and vice versa
 `isOpen()` | none | `boolean` | tells you if the modal is open or not
-`setTrigger()` | DOM Object | `instance` | sets a DOM object to open/close modal when clicked
+`addTrigger()` | DOM Object | `instance` | sets a DOM object to open/close modal when clicked
+`removeTrigger()` | DOM Object | `instance` | removes event handler from a DOM object
+`enable()` | DOM Object | `instance` | enables a disabled modal
+`disable()` | DOM Object | `instance` | disables the modal
 
 There are two ways to retrieve an instance: 
 
