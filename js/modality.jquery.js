@@ -21,6 +21,7 @@
             clickOffToClose: true, // click anywhere off of modal to close it
             closeOnEscape: true, // close modal with 'esc' key
             effect: "", // animation style
+            enabled: true, // set false to disable modal
             innerClass: "mm-wrap", // inner wrapper
             modalClass: "modality-modal", // outer-most container
             onClose: "", // function to run when modal closes
@@ -50,6 +51,30 @@
     _concat = function ( settings, setting ) {
         return ( settings[setting] != "" ) ? ' ' + settings[setting] : "";  
     },
+
+
+    /**
+     * searches for a value in an array and returns key if found
+     * @param {array} haystack - the array being searched 
+     * @param {object} needle - the element being looked for
+     * @return {int}
+     */
+    _contains = function ( haystack, needle ) {
+        var i = haystack.length;
+        while (i--) {
+            if (haystack[i][0] === needle) return i;
+        }
+        return false;
+    },
+
+    /**
+     * tests if var is an integer or not
+     * @param {array} a - the array being tested
+     * @return {int}
+     */
+    _isInt = function ( a ) {
+        return a === parseInt(a, 10);
+    },
             
 
     // Constructor -----------------------------------
@@ -61,42 +86,42 @@
      * @return {object}
      */
     Modality = function ( element, options ) {
-                
-        var inst = this; // local var to avoid scope issues
 
-        // Class Attributes ---------------
-            
-        inst.defaults  = _defaults;
-        inst.id        = $(element).attr( 'id' );
-        inst.settings  = $.extend( {}, _defaults, options );
-        inst.$modal    = $(element).wrap(
-            '<div class="'+ inst.settings.modalClass + _concat(inst.settings,'effect') + _concat(inst.settings,'userClass') +'">'+
-                '<div class="'+ inst.settings.innerClass + '">'+
-                    // user's #modal goes here
-                '</div>'+
-            '</div>'
-        ).show();
-        inst.$wrapper  = inst.$modal.parents('.' + inst.settings.modalClass);
-        inst.$triggers = $('a[href="#'+inst.id+'"], [data-modality="#'+inst.id+'"]');
+        var inst      = this,
+            id        = $(element).attr( 'id' ),
+            settings  = $.extend( {}, _defaults, options ), 
+            $modal    = $(element).wrap(
+                '<div class="'+ settings.modalClass + _concat(settings,'effect') + _concat(settings,'userClass') +'">'+
+                    '<div class="'+ settings.innerClass + '">'+
+                        // user's #modal goes here
+                    '</div>'+
+                '</div>'
+            ).show(),
+            $wrapper  = $modal.parents('.' + settings.modalClass);
+            $triggers = $('a[href="#'+id+'"], [data-modality="#'+id+'"]');
+
+        // Class Attributes --------------------------
+
+        $.extend( inst, { defaults: _defaults, id: id, settings: settings, $wrapper: $wrapper, $triggers: [], $modal: $modal });
 
         // Events ------------------------------------
 
         // toggle modal on all triggers
-        if( inst.settings.autoBind ) {
-            inst.$triggers.each(function() {
-                inst.setTrigger( $(this) );
+        if( settings.autoBind ) {
+            $triggers.each( function() {
+                inst.addTrigger( $(this) );
             });
         }
 
         // close modal if users clicks anywhere off of it
-        if( inst.settings.clickOffToClose ) {
-            inst.$wrapper.click( function(e) {
+        if( settings.clickOffToClose ) {
+            $wrapper.click( function(e) {
                 e.preventDefault(); if(e.target == inst.$wrapper[0]) inst.close();
             });
         }
 
         // close modal with 'esc' key
-        if( inst.settings.closeOnEscape ) {
+        if( settings.closeOnEscape ) {
             $(_body).keyup( function (e) {
                 if(e.keyCode == 27) inst.close();
             });
@@ -106,11 +131,11 @@
             
         // add node for IE 7 compatibility
         if (navigator.appVersion.indexOf("MSIE 7.") != -1) {
-            inst.$wrapper.prepend('<div class="mm-ghost"></div>');
+            $wrapper.prepend('<div class="mm-ghost"></div>');
         }
 
         // open modal if set to true
-        if( inst.settings.openOnLoad ) inst.open(); 
+        if( settings.openOnLoad ) inst.open();
             
         // --------------------------------
             
@@ -173,21 +198,85 @@
         },
 
         /**
-         * manually set trigger for a modal
-         * @param  {object} - the element you want to be the trigger
+         * manually add a trigger to open the modal on click
+         * @param  {object} element - the element you want to be the trigger
          * @return {instance}
          */
-        setTrigger: function ( $trigger ) {
+        addTrigger: function ( ele ) {
 
-            // set local var for instance
-            var inst = this; 
+            var inst = this, 
+                triggers = inst.$triggers, 
+                key = _contains( triggers, ele ),
+                trigger = [ele, function (e) { e.preventDefault(); inst.toggle(); }];
 
-            // set click event for new trigger
-            $trigger.click(function (e) {
-                e.preventDefault(); inst.toggle(); 
-            });
+            // add or update the trigger and it's handler
+            ( _isInt(key)  ) ? triggers[key] = trigger : triggers.push( trigger );
+
+            if( inst.settings.enabled ) trigger[0].bind( "click", trigger[1] ); 
 
             return inst;
+
+        },
+
+        /**
+         * manually remove trigger for a modal.
+         * @param  {int} - the trigger element you want action removed from
+         * @return {instance}
+         */
+        removeTrigger: function ( ele ) {
+
+            var inst = this, triggers = inst.$triggers, key = _contains( triggers, ele );
+
+            // key has been found AND handle hasn't already been removed
+            if( _isInt(key) && triggers[key].length > 1 ) {
+
+                triggers[key][0].unbind( "click", triggers[key][1] );
+                triggers[key].splice(1, 1); // remove handle
+
+            }
+
+            return inst;
+
+        },
+
+        /**
+         * enables the modal
+         * @return {instance}
+         */
+        enable: function()  {
+
+            var inst = this, triggers = inst.$triggers, length = triggers.length;
+
+            if( !inst.settings.enabled ) {
+
+                inst.settings.enabled = true;
+
+                for( var i = 0; i < length; i++ ) inst.addTrigger( triggers[i][0] );
+
+            }
+
+            return inst;
+
+        },
+
+        /**
+         * disables the modal
+         * @return {instance}
+         */
+        disable: function() {
+
+            var inst = this, triggers = inst.$triggers, length = triggers.length;
+
+            if( inst.settings.enabled ) {
+
+                inst.settings.enabled = false;
+
+                for( var i = 0; i < length; i++ ) inst.removeTrigger( triggers[i][0] );
+
+            }
+
+            return inst;
+
         }
 
     });
