@@ -12,6 +12,7 @@
 
     var _name = "Modality", // the plugin name
         _body = document.querySelector('body'), // get the body only once
+        _event = "click", // event type for toggling modal
 
         // default settings for plugin
         _defaults = {
@@ -177,6 +178,7 @@
         element.parentNode.replaceChild( container, element );
 
         return container;
+        
     },
 
 
@@ -304,10 +306,11 @@
             var inst = this, triggers = inst.triggers, key = _contains( triggers, ele ),
                 trigger = [ele, function (e) { _preventDefault(e); inst.toggle(); }];
 
-            // add or update the trigger and it's handler
+            // add or replace the trigger and it's handler
             ( _isInt(key)  ) ? triggers[key] = trigger : triggers.push( trigger );
 
-            if( inst.settings.enabled ) _addEvent( trigger[0], "click", trigger[1] );
+            // if the modal is enabled bind event
+            if( inst.settings.enabled ) _addEvent( trigger[0], _event, trigger[1] );
 
             return inst;
 
@@ -322,11 +325,14 @@
 
             var inst = this, triggers = inst.triggers, key = _contains( triggers, ele );
 
-            // key has been found AND handle hasn't already been removed
-            if( _isInt(key) && triggers[key].length > 1 ) {
+            // if the element exists in trigger array
+            if( _isInt(key) ) {
 
-                _removeEvent( triggers[key][0], "click", triggers[key][1] );
-                triggers[key].splice(1, 1); // remove handle
+                // unbind event from trigger
+                _removeEvent( triggers[key][0], _event, triggers[key][1] );
+
+                // remove the trigger and handler from array
+                triggers.splice(key, 1);
 
             }
 
@@ -344,9 +350,11 @@
 
             if( !inst.settings.enabled ) {
 
+                // change setting to true
                 inst.settings.enabled = true;
 
-                for( var i = 0; i < length; i++ ) inst.addTrigger( triggers[i][0] );
+                // bind event to each trigger
+                for( var i = 0; i < length; i++ ) _addEvent( triggers[i][0], _event, triggers[i][1] );
 
             }
 
@@ -364,9 +372,11 @@
 
             if( inst.settings.enabled ) {
 
+                // change setting to false
                 inst.settings.enabled = false;
 
-                for( var i = 0; i < length; i++ ) inst.removeTrigger( triggers[i][0] );
+                // unbind event to each trigger
+                for( var i = 0; i < length; i++ ) _removeEvent( triggers[i][0], _event, triggers[i][1] );
 
             }
 
