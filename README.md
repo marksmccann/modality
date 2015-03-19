@@ -1,14 +1,16 @@
 # Modality
-Simple, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need. Built with both JavaScript and jQuery, this plugin is sure to be a perfect fit for any project. 
+Modality is a simple, lightweight and extremely versatile jQuery AND JavaScript plugin for modal dialog windows.
 
-## Overview
+## Overview 
 Modality was designed for the web-novice and web-master alike; Simple, lightweight and straight-forward, but at the same time versatile, extendable and infinitely customizable.
 
-Modality is unique, it uses CSS to position itself horizontally AND vertically. This is esspecially helpful when designing for mobile; The modal and it's content will automatically resize to best fit any screen &ndash; all without a line of JavaScript.
+Modality includes TWO versions of the same app, one written with jQuery and the other with plain-old JavaScript.
+
+Modality is unique, it uses CSS to position itself horizontally AND vertically. The modal and it's content will automatically resize to best fit any screen &ndash; all without a line of JavaScript.
 
 Beyond what is needed to position your modal, Modality (by default) has no styling. You are in complete control of how your modal window will look.
 
-Built with Javascript's module pattern, Modality can be extended to meet your requirements. You can also grab the instance of any modal and invoke it's methods manually.
+Built with Javascript's module pattern, Modality can be extended to meet your requirements. You can also grab the instance of any modal and invoke it's methods manually inside of your custom functions.
 
 ## Features
 * Free
@@ -42,11 +44,15 @@ Built with Javascript's module pattern, Modality can be extended to meet your re
 </div>
 ```
 4\. Create a trigger to open/close the modal (*outside will open it, inside will close it*).
+
 ```html
+<!-- option 1: anchor with 'href' and modal's '#id' -->
 <a href="#yourModalId">Open Modal</a>
-<!-- OR -->
+
+<!-- option 2: ANY tag with 'data-modality' attribute and modal's '#id' -->
 <button data-modality="#yourModalId">Open Modal</button>
 ```
+
 5\. Instantiate the modal(s) in your javascript.
 ```javascript
 // jQuery --
@@ -60,7 +66,11 @@ Modality.init('#yourModalId');
 
 ## Styling
 **By default, your modal is not styled.** You are completely free to style the modal however you like. In fact, you do not even need to set a width or height and your modal will still always be perfectly centered &mdash; Modality will seamlessly adapt to whatever content you put inside of it.
-
+```html
+<div id="yourModalId" class="yourModalClass">
+  <!-- your content here -->
+</div>
+```
 ```css
 .yourModalClass {
     /* your styles here */
@@ -76,18 +86,34 @@ Modality.init('#yourModalId');
 }
 ```
 
-2\. **The Background Mask**: To style the background mask, add your own class via the 'userClass' option in the settings and add your new background styling to that, like this:
+2\. **The Background Mask**: To style the background mask, add your own class to the outer-most container of your modal via the 'userClass' option in the settings and add your new background styling to that and modality's 'openClass', like this:
+
+```javascript
+// jQuery --
+$('#yourModalId').modality({userClass:"yourNewClass"});
+
+// JS-Only --
+Modality.init('#yourModalId',{userClass:"yourNewClass"});
+```
 
 ```css
-.userClass.mm-show {
+.yourNewClass.mm-show {
     background: rgba( 255, 0, 0, 0.5 ); 
 }
 ```
 
-3\. **Percentage Width**: If you want your modal to be a percentage of the window, add a class to the 'userClass' option in the settings and apply the percentage to the 'innerClass' setting via a decendant selector like so:
+3\. **Percentage Width**: If you want your modal to be a percentage of the window, add a class to the outer-most container of your modal via the 'userClass' option in the settings and apply the percentage to the 'innerClass' setting via a decendant selector like so:
+
+```javascript
+// jQuery --
+$('#yourModalId').modality({userClass:"yourNewClass"});
+
+// JS-Only --
+Modality.init('#yourModalId',{userClass:"yourNewClass"});
+```
 
 ```css
-.userClass .mm-wrap {
+.yourNewClass .mm-wrap {
     max-width: 75%;
 }
 ```
@@ -185,7 +211,7 @@ Name | type | Description
 `defaults` | `json` | the default modal settings
 `wrapper` | `DOM Object` | the outer-most container for the modal
 `triggers` | `array` | all the modal's triggers and their respective event handles
-`modal` | `DOM Object` | your modal (#yourModalId)
+`modal` | `DOM Object` | your modal with #yourModalId
 
 
 ## Methods
@@ -199,9 +225,10 @@ Name | Parameters | Returns | Description
 `isOpen()` | none | `boolean` | tells you if the modal is open or not
 `addTrigger()` | DOM Object | `instance` | binds/adds click-toggle event to object
 `removeTrigger()` | DOM Object | `instance` | unbinds/removes click-toggle event from object
-`enable()` | DOM Object | `instance` | enables a disabled modal
-`disable()` | DOM Object | `instance` | disables the modal
+`enable()` | none | `instance` | enables the modal
+`disable()` | none | `instance` | disables the modal
 
+#### Retreiving an Instance
 There are two ways to retrieve an instance: 
 
 1a. The first and easiest way is when initializing the modal:
@@ -252,13 +279,14 @@ inst.close();
 ```
 
 #### Chaining
+You can chain most of Modality's methods together:
 
 ```javascript
 // jQuery --
-$('#yourModalId').modality().open(); 
+$('#yourModalId').modality().removeTrigger($('#selector')).disable(); 
 
 // JS-Only --
-Modality.init('#yourModalId').toggle(); 
+Modality.init('#yourModalId').removeTrigger(document.getElementById('selector')).disable();
 
 ```
 *Make sure to return 'this' (the current instance) in your custom class methods if you want to maintain this chaining capability. See example under "Extending Modality".*
@@ -272,6 +300,7 @@ You can easily extend Modality and add more functionality. Here is a basic templ
 // jQuery --
 ;(function($) {
 
+    // how to add class methods/attributes:
     $.extend( $[ "modality" ].prototype, {
         newClassMethod: function () {
             // do something ...
@@ -279,6 +308,7 @@ You can easily extend Modality and add more functionality. Here is a basic templ
         }
     });
  
+    // how to add static methods/attributes:
     $.extend( $[ "modality" ], {
         newStaticMethod: function () { ... }
     });
@@ -288,6 +318,7 @@ You can easily extend Modality and add more functionality. Here is a basic templ
 // JS-Only --
 ;(function ( Modality ) {
 
+    // how to add class methods/attributes:
     Modality.extend( Modality.prototype, {
         newClassMethod: function () {
             // do something ...
@@ -295,6 +326,7 @@ You can easily extend Modality and add more functionality. Here is a basic templ
         }
     });
     
+    // how to add static methods/attributes:
     Modality.extend( Modality, {
         newStaticMethod: function () { ... }
     });
