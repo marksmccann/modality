@@ -181,9 +181,9 @@ A list of attributes in case you need to use them.
 Name | type | Description
 --- | --- | ---
 `id` | `string` | the modal's ID
-`settings` | `json` | the modals current settings
+`settings` | `json` | the modal's current settings
 `defaults` | `json` | the default modal settings
-`wrapper` | `DOM Object` | the outer-most container for modal
+`wrapper` | `DOM Object` | the outer-most container for the modal
 `triggers` | `array` | all the modal's triggers and their respective event handles
 `modal` | `DOM Object` | your modal (#yourModalId)
 
@@ -197,8 +197,8 @@ Name | Parameters | Returns | Description
 `close()` | callback function (optional) | `instance` | closes the modal
 `toggle()` | callback function (optional) | `instance` | opens the modal if closed and vice versa
 `isOpen()` | none | `boolean` | tells you if the modal is open or not
-`addTrigger()` | DOM Object | `instance` | sets a DOM object to open/close modal when clicked
-`removeTrigger()` | DOM Object | `instance` | removes event handler from a DOM object
+`addTrigger()` | DOM Object | `instance` | binds/adds click-toggle event to object
+`removeTrigger()` | DOM Object | `instance` | unbinds/removes click-toggle event from object
 `enable()` | DOM Object | `instance` | enables a disabled modal
 `disable()` | DOM Object | `instance` | disables the modal
 
