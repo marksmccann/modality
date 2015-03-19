@@ -11,9 +11,8 @@
     // Private ---------------------------------------
 
     var _name = "modality", // the plugin name
-
-        // get the body only once
-        _body = $('body')[0],
+        _body = $('body')[0], // get the body only once
+        _event = "click", // event type for toggling modal
 
         // default settings for plugin
         _defaults = {
@@ -62,7 +61,7 @@
     _contains = function ( haystack, needle ) {
         var i = haystack.length;
         while (i--) {
-            if (haystack[i][0] === needle) return i;
+            if (haystack[i][0][0] === needle[0]) return i;
         }
         return false;
     },
@@ -90,33 +89,33 @@
         var inst      = this,
             id        = $(element).attr( 'id' ),
             settings  = $.extend( {}, _defaults, options ), 
-            $modal    = $(element).wrap(
+            modal     = $(element).wrap(
                 '<div class="'+ settings.modalClass + _concat(settings,'effect') + _concat(settings,'userClass') +'">'+
                     '<div class="'+ settings.innerClass + '">'+
                         // user's #modal goes here
                     '</div>'+
                 '</div>'
             ).show(),
-            $wrapper  = $modal.parents('.' + settings.modalClass);
-            $triggers = $('a[href="#'+id+'"], [data-modality="#'+id+'"]');
+            wrapper   = modal.parents('.' + settings.modalClass);
+            triggers  = $('a[href="#'+id+'"], [data-modality="#'+id+'"]');
 
         // Class Attributes --------------------------
 
-        $.extend( inst, { defaults: _defaults, id: id, settings: settings, $wrapper: $wrapper, $triggers: [], $modal: $modal });
+        $.extend( inst, { defaults: _defaults, id: id, settings: settings, wrapper: wrapper, triggers: [], modal: modal });
 
         // Events ------------------------------------
 
         // toggle modal on all triggers
         if( settings.autoBind ) {
-            $triggers.each( function() {
+            triggers.each( function() {
                 inst.addTrigger( $(this) );
             });
         }
 
         // close modal if users clicks anywhere off of it
         if( settings.clickOffToClose ) {
-            $wrapper.click( function(e) {
-                e.preventDefault(); if(e.target == inst.$wrapper[0]) inst.close();
+            wrapper.click( function(e) {
+                e.preventDefault(); if(e.target == inst.wrapper[0]) inst.close();
             });
         }
 
@@ -131,7 +130,7 @@
             
         // add node for IE 7 compatibility
         if (navigator.appVersion.indexOf("MSIE 7.") != -1) {
-            $wrapper.prepend('<div class="mm-ghost"></div>');
+            wrapper.prepend('<div class="mm-ghost"></div>');
         }
 
         // open modal if set to true
@@ -156,7 +155,7 @@
         open: function ( fn ) {
 
             // add classes to open the modal
-            this.$wrapper.add(_body).addClass( this.settings.openClass );
+            this.wrapper.add(_body).addClass( this.settings.openClass );
 
             // run the callback(s)
             _callback( [this.settings.onOpen,fn] );
@@ -172,7 +171,7 @@
         close: function ( fn ) {
 
             // add classes to open the modal
-            this.$wrapper.add(_body).removeClass( this.settings.openClass );
+            this.wrapper.add(_body).removeClass( this.settings.openClass );
 
             // run the callback(s)
             _callback( [this.settings.onClose,fn] );
@@ -194,7 +193,7 @@
          * @return {Boolean}
          */
         isOpen: function () {
-            return this.$wrapper.hasClass(this.settings.openClass);
+            return this.wrapper.hasClass(this.settings.openClass);
         },
 
         /**
@@ -204,15 +203,14 @@
          */
         addTrigger: function ( ele ) {
 
-            var inst = this, 
-                triggers = inst.$triggers, 
-                key = _contains( triggers, ele ),
+            var inst = this, triggers = inst.triggers, key = _contains( triggers, ele ),
                 trigger = [ele, function (e) { e.preventDefault(); inst.toggle(); }];
 
-            // add or update the trigger and it's handler
+            // add or replace the trigger and it's handler
             ( _isInt(key)  ) ? triggers[key] = trigger : triggers.push( trigger );
 
-            if( inst.settings.enabled ) trigger[0].bind( "click", trigger[1] ); 
+            // if the modal is enabled bind event
+            if( inst.settings.enabled ) trigger[0].bind( _event, trigger[1] ); 
 
             return inst;
 
@@ -225,13 +223,16 @@
          */
         removeTrigger: function ( ele ) {
 
-            var inst = this, triggers = inst.$triggers, key = _contains( triggers, ele );
+            var inst = this, triggers = inst.triggers, key = _contains( triggers, ele );
 
-            // key has been found AND handle hasn't already been removed
-            if( _isInt(key) && triggers[key].length > 1 ) {
+            // if the element exists in trigger array
+            if( _isInt(key) ) {
 
-                triggers[key][0].unbind( "click", triggers[key][1] );
-                triggers[key].splice(1, 1); // remove handle
+                // unbind event from trigger
+                triggers[key][0].unbind( _event, triggers[key][1] );
+
+                // remove the trigger and handler from array
+                triggers.splice(key, 1);
 
             }
 
@@ -245,13 +246,15 @@
          */
         enable: function()  {
 
-            var inst = this, triggers = inst.$triggers, length = triggers.length;
+            var inst = this, triggers = inst.triggers, length = triggers.length;
 
             if( !inst.settings.enabled ) {
 
+                // change settings to true
                 inst.settings.enabled = true;
 
-                for( var i = 0; i < length; i++ ) inst.addTrigger( triggers[i][0] );
+                // bind event to each trigger
+                for( var i = 0; i < length; i++ ) triggers[i][0].bind( _event, triggers[i][1] );
 
             }
 
@@ -265,13 +268,15 @@
          */
         disable: function() {
 
-            var inst = this, triggers = inst.$triggers, length = triggers.length;
+            var inst = this, triggers = inst.triggers, length = triggers.length;
 
             if( inst.settings.enabled ) {
 
+                // change settings to false
                 inst.settings.enabled = false;
 
-                for( var i = 0; i < length; i++ ) inst.removeTrigger( triggers[i][0] );
+                // unbind event to each trigger
+                for( var i = 0; i < length; i++ ) triggers[i][0].unbind( _event, triggers[i][1] );
 
             }
 
