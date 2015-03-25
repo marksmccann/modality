@@ -49,7 +49,7 @@ Built with Javascript's module pattern, Modality can be extended to meet your re
 <!-- option 1: anchor with 'href' and modal's '#id' -->
 <a href="#yourModalId">Open Modal</a>
 
-<!-- option 2: ANY tag with 'data-modality' attribute and modal's '#id' -->
+<!-- option 2: ANY tag with 'data-target' attribute and modal's '#id' -->
 <button data-target="#yourModalId">Open Modal</button>
 ```
 
