@@ -198,7 +198,7 @@
             id       = element.getAttribute( 'id' ),
             settings = _extend( {}, _defaults, options ), 
             wrapper  = _wrap( element, settings ), 
-            triggers = document.querySelectorAll( 'a[href="#'+id+'"], [data-modality="#'+id+'"]' ), 
+            triggers = document.querySelectorAll( 'a[href="#'+id+'"], [data-target="#'+id+'"]' ), 
             modal    = document.getElementById( id );
 
         // Class Attributes --------------------------
