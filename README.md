@@ -50,7 +50,7 @@ Built with Javascript's module pattern, Modality can be extended to meet your re
 <a href="#yourModalId">Open Modal</a>
 
 <!-- option 2: ANY tag with 'data-modality' attribute and modal's '#id' -->
-<button data-modality="#yourModalId">Open Modal</button>
+<button data-target="#yourModalId">Open Modal</button>
 ```
 
 5\. Instantiate the modal(s) in your javascript.
