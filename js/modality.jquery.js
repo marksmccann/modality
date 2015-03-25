@@ -97,7 +97,7 @@
                 '</div>'
             ).show(),
             wrapper   = modal.parents('.' + settings.modalClass);
-            triggers  = $('a[href="#'+id+'"], [data-modality="#'+id+'"]');
+            triggers  = $('a[href="#'+id+'"], [data-target="#'+id+'"]');
 
         // Class Attributes --------------------------
 
