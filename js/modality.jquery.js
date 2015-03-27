@@ -12,23 +12,35 @@
 
     var _name = "modality", // the plugin name
         _body = $('body')[0], // get the body only once
-        _event = "click", // event type for toggling modal
+
+        // local vars to shorten app
+        _event = 'click',
+        _class = 'className',
+        _triggers = 'triggers',
+        _settings = 'settings',
 
         // default settings for plugin
         _defaults = {
-            autoBind: true, // automatically bind triggers to modal
-            clickOffToClose: true, // click anywhere off of modal to close it
-            closeOnEscape: true, // close modal with 'esc' key
-            effect: "", // animation style
+
+            // settings
+            bind: true, // automatically bind triggers to modal
+            class: '', // user can add a class to container
+            clickoff: true, // click anywhere off of modal to close it
+            effect: '', // animation style
             enabled: true, // set false to disable modal
-            innerClass: "mm-wrap", // inner wrapper
-            modalClass: "modality-modal", // outer-most container
-            onClose: "", // function to run when modal closes
-            onOpen: "", // function to run when modal opens
-            openClass: "mm-show", // when modal is visible
-            openOnLoad: false, // open on page load
-            userClass: "" // user can add a class to container 
-        },
+            keyboard: true, // close modal with 'esc' key
+            open: false, // open on page load
+
+            // event callbacks
+            onClose: '', // function to run when modal closes
+            onOpen: '', // function to run when modal opens
+
+            // classes
+            inner: 'mm-wrap', // inner wrapper
+            visible: 'mm-show', // when modal is visible
+            outer: 'modality-modal', // outer-most container 
+
+        }, 
 
 
     /**
@@ -74,6 +86,34 @@
     _isInt = function ( a ) {
         return a === parseInt(a, 10);
     },
+
+    /**
+     * updates settings with values from data-attributes
+     * @param {object} dataset - data-attribute settings
+     * @param {object} settings - modal settings
+     * @return {object}
+     */
+    _data = function ( dataset, settings ) {
+
+        for( var key in dataset ) {
+            settings[key] = ( typeof settings[key] == 'boolean' ) ? _strToBool(dataset[key]) : dataset[key];
+        }
+
+        return settings;
+
+    },
+
+    /**
+     * accurately converts a string into a boolean
+     * @param {string} string - the string being converted
+     * @return {int}
+     */
+    _strToBool = function( string ) {
+        switch( string.toLowerCase() ) {
+            case 'false': case 'no': case '0': case '': return false; 
+            default: return true;
+        }
+    },
             
 
     // Constructor -----------------------------------
@@ -88,16 +128,16 @@
 
         var inst      = this,
             id        = $(element).attr( 'id' ),
-            settings  = $.extend( {}, _defaults, options ), 
+            settings  = _data( element.dataset, $.extend( {}, _defaults, options ) ),
             modal     = $(element).wrap(
-                '<div class="'+ settings.modalClass + _concat(settings,'effect') + _concat(settings,'userClass') +'">'+
-                    '<div class="'+ settings.innerClass + '">'+
+                '<div class="'+ settings.outer + _concat(settings,'effect') + _concat(settings,'class') +'">'+
+                    '<div class="'+ settings.inner + '">'+
                         // user's #modal goes here
                     '</div>'+
                 '</div>'
             ).show(),
-            wrapper   = modal.parents('.' + settings.modalClass);
-            triggers  = $('a[href="#'+id+'"], [data-target="#'+id+'"]');
+            wrapper   = modal.parents('.' + settings.outer);
+            triggers  = $('a[href="#'+id+'"], [data-modality="#'+id+'"]');
 
         // Class Attributes --------------------------
 
@@ -106,21 +146,21 @@
         // Events ------------------------------------
 
         // toggle modal on all triggers
-        if( settings.autoBind ) {
+        if( settings.bind ) {
             triggers.each( function() {
                 inst.addTrigger( $(this) );
             });
         }
 
         // close modal if users clicks anywhere off of it
-        if( settings.clickOffToClose ) {
+        if( settings.clickoff ) {
             wrapper.click( function(e) {
                 e.preventDefault(); if(e.target == inst.wrapper[0]) inst.close();
             });
         }
 
         // close modal with 'esc' key
-        if( settings.closeOnEscape ) {
+        if( settings.keyboard ) {
             $(_body).keyup( function (e) {
                 if(e.keyCode == 27) inst.close();
             });
@@ -134,7 +174,7 @@
         }
 
         // open modal if set to true
-        if( settings.openOnLoad ) inst.open();
+        if( settings.open ) inst.open();
             
         // --------------------------------
             
@@ -155,10 +195,10 @@
         open: function ( fn ) {
 
             // add classes to open the modal
-            this.wrapper.add(_body).addClass( this.settings.openClass );
+            this.wrapper.add(_body).addClass( this[_settings].visible );
 
             // run the callback(s)
-            _callback( [this.settings.onOpen,fn] );
+            _callback( [this[_settings].onOpen,fn] );
 
             return this;
         },
@@ -171,10 +211,10 @@
         close: function ( fn ) {
 
             // add classes to open the modal
-            this.wrapper.add(_body).removeClass( this.settings.openClass );
+            this.wrapper.add(_body).removeClass( this[_settings].visible );
 
             // run the callback(s)
-            _callback( [this.settings.onClose,fn] );
+            _callback( [this[_settings].onClose,fn] );
 
             return this;
         },
@@ -193,7 +233,7 @@
          * @return {Boolean}
          */
         isOpen: function () {
-            return this.wrapper.hasClass(this.settings.openClass);
+            return this.wrapper.hasClass(this[_settings].visible);
         },
 
         /**
@@ -203,14 +243,14 @@
          */
         addTrigger: function ( ele ) {
 
-            var inst = this, triggers = inst.triggers, key = _contains( triggers, ele ),
+            var inst = this, triggers = inst[_triggers], key = _contains( triggers, ele ),
                 trigger = [ele, function (e) { e.preventDefault(); inst.toggle(); }];
 
             // add or replace the trigger and it's handler
             ( _isInt(key)  ) ? triggers[key] = trigger : triggers.push( trigger );
 
             // if the modal is enabled bind event
-            if( inst.settings.enabled ) trigger[0].bind( _event, trigger[1] ); 
+            if( inst[_settings].enabled ) trigger[0].bind( _event, trigger[1] ); 
 
             return inst;
 
@@ -223,7 +263,7 @@
          */
         removeTrigger: function ( ele ) {
 
-            var inst = this, triggers = inst.triggers, key = _contains( triggers, ele );
+            var inst = this, triggers = inst[_triggers], key = _contains( triggers, ele );
 
             // if the element exists in trigger array
             if( _isInt(key) ) {
@@ -246,12 +286,12 @@
          */
         enable: function()  {
 
-            var inst = this, triggers = inst.triggers, length = triggers.length;
+            var inst = this, triggers = inst[_triggers], length = triggers.length;
 
-            if( !inst.settings.enabled ) {
+            if( !inst[_settings].enabled ) {
 
                 // change settings to true
-                inst.settings.enabled = true;
+                inst[_settings].enabled = true;
 
                 // bind event to each trigger
                 for( var i = 0; i < length; i++ ) triggers[i][0].bind( _event, triggers[i][1] );
@@ -268,12 +308,12 @@
          */
         disable: function() {
 
-            var inst = this, triggers = inst.triggers, length = triggers.length;
+            var inst = this, triggers = inst[_triggers], length = triggers.length;
 
-            if( inst.settings.enabled ) {
+            if( inst[_settings].enabled ) {
 
                 // change settings to false
-                inst.settings.enabled = false;
+                inst[_settings].enabled = false;
 
                 // unbind event to each trigger
                 for( var i = 0; i < length; i++ ) triggers[i][0].unbind( _event, triggers[i][1] );
@@ -300,11 +340,11 @@
          * @return {array}
          */
         init: function ( elements, options ) {
-            var a = {}, Obj = this, i = 0;
+            var a = {}, Obj = this, insts = Obj.instances, i = 0;
             elements.each(function() {
-                var inst = new Obj( this, options );
-    	        Obj.instances[ inst.id ] = a[i] = inst;   
-            });  
+                var id = $(this).attr( 'id' );
+                if( insts[ id ] == undefined ) insts[ id ] = a[i] = new Obj( this, options );  
+            });
             return ( a[1] === undefined ) ? a[0] : a;
         }
         
@@ -317,6 +357,21 @@
     $.fn[ _name ] = function ( options ) {  
         return $[ _name ].init( this, options );
     };
+
+
+    // Auto Init --------------------------------
+
+    /**
+     * initializes any modal with '[data-modality="auto"]' and an 'id'
+     */
+    (function () {
+        var modals = $('[data-modality="auto"]');
+        for(var i = 0; i < modals.length; i++) {
+            var id = $(modals[i]).attr( 'id' );
+            if( id != undefined ) $( '#'+id ).modality();
+        }
+    })();
+
 
 })( jQuery, window, document );
 
