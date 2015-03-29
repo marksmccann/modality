@@ -63,6 +63,7 @@ inner** | `"mm-wrap"` | class name on the inner container of each the modal
 outer** | `"modality-modal"` | class name on the outer-most container of each the modal
 visible** | `"mm-show"` | class that is added to modal to make it visible
 **These settings cannot be set via data attributes*
+
 ***These class names match those in modality.css, if changed here, must also be changed there.*
 
 #### Usage
