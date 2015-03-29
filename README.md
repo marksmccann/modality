@@ -145,14 +145,14 @@ In case you want some help styling your modal, here is a simple example.
 
 Name | Parameters | Returns | Description
 --- | --- | --- | ---
-open() | `function*` | `instance` | opens the modal
-close() | `function*` | `instance` | closes the modal
-toggle() | `function*` | `instance` | opens the modal if closed and vice versa
-isOpen() | `none` | `boolean` | tells you if the modal is open or not
-addTrigger() | `html element` | `instance` | adds toggle event to object
-removeTrigger() | `html element` | `instance` | removes toggle event from object
-enable() | `none` | `instance` | enables all triggers for the modal
-disable() | `none` | `instance` | disables all triggers for the modal
+open( ) | `function*` | `instance` | opens the modal
+close( ) | `function*` | `instance` | closes the modal
+toggle( ) | `function*` | `instance` | opens the modal if closed and vice versa
+isOpen( ) | `none` | `boolean` | tells you if the modal is open or not
+addTrigger( ) | `html element` | `instance` | adds toggle event to object
+removeTrigger( ) | `html element` | `instance` | removes toggle event from object
+enable( ) | `none` | `instance` | enables all triggers for the modal
+disable( ) | `none` | `instance` | disables all triggers for the modal
 **Optional callback function.*
 
 #### Attributes
@@ -169,7 +169,7 @@ modal | `html element` | your modal `<div id="yourModalId">`
 #### Retreiving an Instance
 There are two ways to retrieve an instance. 
 
-1\. The first and easiest way is when initializing the modal. If you are initializing more than one modal at a time, Modality will return an array of the modals initialized.
+1\. The first and easiest way is when initializing the modal. *If you are initializing more than one modal at a time, Modality will return an array of the modals initialized.*
 
 ```javascript
 var inst = $('#yourModalId').modality(); // jQuery
