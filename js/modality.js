@@ -258,9 +258,8 @@
 
         // close modal if users clicks anywhere off of it
         if( settings.clickoff ) {
-            _addEvent( wrapper, 'click', function(e) {
-                _preventDefault(e); if(e.target == wrapper) inst.close();
-            });
+            _addEvent( wrapper, _event, function() { inst.close(); });
+            _addEvent( modal, _event, function(e) { e.stopPropagation(); });
         }
 
         // close modal with 'esc' key

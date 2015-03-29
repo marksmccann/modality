@@ -154,9 +154,8 @@
 
         // close modal if users clicks anywhere off of it
         if( settings.clickoff ) {
-            wrapper.click( function(e) {
-                e.preventDefault(); if(e.target == inst.wrapper[0]) inst.close();
-            });
+            wrapper[_event]( function() { inst.close(); } );
+            modal[_event]( function(e) { e.stopPropagation(); } );
         }
 
         // close modal with 'esc' key
@@ -340,10 +339,10 @@
          * @return {array}
          */
         init: function ( elements, options ) {
-            var a = {}, Obj = this, insts = Obj.instances, i = 0;
+            var a = {}, inst = this, insts = inst.instances, i = 0;
             elements.each(function() {
                 var id = $(this).attr( 'id' );
-                if( insts[ id ] == undefined ) insts[ id ] = a[i] = new Obj( this, options );  
+                if( insts[ id ] == undefined ) insts[ id ] = a[i] = new inst( this, options );  
             });
             return ( a[1] === undefined ) ? a[0] : a;
         }

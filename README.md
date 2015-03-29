@@ -1,194 +1,76 @@
 # Modality
-Modality is a simple, lightweight and extremely versatile jQuery AND JavaScript plugin for modal dialog windows.
+Modality is a simple, lightweight and extremely versatile jQuery AND JavaScript plugin for modal windows.
 
 ## Overview 
-Modality was designed for the web-novice and web-master alike; Simple, lightweight and straight-forward, but at the same time versatile, extendable and infinitely customizable.
-
-Modality includes TWO versions of the same app, one written with jQuery and the other with plain-old JavaScript.
-
-Modality is unique, it uses CSS to position itself horizontally AND vertically. The modal and it's content will automatically resize to best fit any screen &ndash; all without a line of JavaScript.
-
-Beyond what is needed to position your modal, Modality (by default) has no styling. You are in complete control of how your modal window will look.
-
-Built with Javascript's module pattern, Modality can be extended to meet your requirements. You can also grab the instance of any modal and invoke it's methods manually inside of your custom functions.
-
-## Features
 * Free
 * Easy to Use
-* Adapts to Screen Size
+* Mobile Friendly
 * CSS3 Animations
+* No Default Styling
 * Easily Customizable
 * Extendable Framework
 * Multiple Instances
-* Two Versions (jQuery & JavaScript-Only)
-* Modern Browser Compatible
+* Browser Friendly
   * jQuery: IE 6+
-  * JS-Only: IE 8+
+  * JavaScript: IE 8+
 * Lightweight
   * jQuery: 2KB
-  * JS-Only: 3KB
+  * JavaScript: 3KB
 
 ## Getting Started
 1\. Add this to the head.
 ```html
 <link rel="stylesheet" href="path/to/your/modality.min.css">
 ```
-2\. Add this before the closing body tag or in the head.
+2\. Add this before the closing body tag. If you want to use the jQuery, add jQuery to your page and then link to this file instead: `modality.jquery.min.js`.
 ```html
 <script src="path/to/your/modality.min.js"></script>
 ```
-3\. Now create your modal dialog.
+3\. Create your modal window and give it an id.
 ```html
-<div id="yourModalId" class="yourModalClass">
-  <!-- your content here -->
+<div id="yourModalId">
+    <!-- your content here -->
 </div>
 ```
-4\. Create a trigger to open/close the modal (*outside will open it, inside will close it*).
-
+4\. Create triggers for your modal by adding `href="#yourModalId"` to an anchor OR `data-target="#yourModalId"` to a controller element, like a button. (*Outside will open it, Inside will close it*).
 ```html
-<!-- option 1: anchor with 'href' and modal's '#id' -->
 <a href="#yourModalId">Open Modal</a>
-
-<!-- option 2: ANY tag with 'data-target' attribute and modal's '#id' -->
 <button data-target="#yourModalId">Open Modal</button>
 ```
-
-5\. Instantiate the modal(s) in your javascript.
+5\. Initiate your modal(s) via JavaScript OR data attribute. For data-attribute, add `data-modality="auto"` to every modal you want initialized.
 ```javascript
-// jQuery --
-$('#yourModalId').modality();
-
-// JS-Only --
-Modality.init('#yourModalId');
+$('#yourModalId').modality(); // jQuery
+Modality.init('#yourModalId'); // JavaScript
 ```
 [View Template](https://github.com/marksmccann/modality#template)
 
 
-## Styling
-**By default, your modal is not styled.** You are completely free to style the modal however you like. In fact, you do not even need to set a width or height and your modal will still always be perfectly centered &mdash; Modality will seamlessly adapt to whatever content you put inside of it.
-```html
-<div id="yourModalId" class="yourModalClass">
-  <!-- your content here -->
-</div>
-```
-```css
-.yourModalClass {
-    /* your styles here */
-}
-```
-#### A Few Notes
+## Settings
+Options can be passed via data attributes or JavaScript. For data attributes, append the option name to `data-`, as in `data-effect=""`.
 
-1\. **Max-Width**: I would recommend adding at least a `max-width` value to your modal so that it will not be too large on a desktop, but will still resize for a mobile device.
-
-```css
-.yourModalClass {
-    max-width: 500px; 
-}
-```
-
-2\. **The Background Mask**: To style the background mask, add your own class to the outer-most container of your modal via the 'userClass' option in the settings and add your new background styling to that and modality's 'openClass', like this:
-
-```javascript
-// jQuery --
-$('#yourModalId').modality({userClass:"yourNewClass"});
-
-// JS-Only --
-Modality.init('#yourModalId',{userClass:"yourNewClass"});
-```
-
-```css
-.yourNewClass.mm-show {
-    background: rgba( 255, 0, 0, 0.5 ); 
-}
-```
-
-3\. **Percentage Width**: If you want your modal to be a percentage of the window, add a class to the outer-most container of your modal via the 'userClass' option in the settings and apply the percentage to the 'innerClass' setting via a decendant selector like so:
-
-```javascript
-// jQuery --
-$('#yourModalId').modality({userClass:"yourNewClass"});
-
-// JS-Only --
-Modality.init('#yourModalId',{userClass:"yourNewClass"});
-```
-
-```css
-.yourNewClass .mm-wrap {
-    max-width: 75%;
-}
-```
-
-4\. **Hide on Load**: If your modal is visible for a second before Modality can hide it for you, manually hide it with an inline style like so: (*Don't worry, Modality will remove that style after initialization.*)
-
-```html
-<div id="yourModalId" class="yourModalClass" style="display:none;">
-```
-
-
-#### Example
-In case you want some help getting started, here is an example:
-
-```css
-.yourModalClass {
-    background-color: #ffffff;
-    border: 1px solid #cccccc;
-    padding: 1em 1.5em 1em;
-    border-radius: 5px;
-    max-width: 500px;
-    position: relative;
-}
-.yourModalClass a[href="yourModalId"] {
-    position: absolute;
-    top: 5px;
-    right: 8px;
-    text-decoration: none;
-    padding: 3px 8px;
-    color: #333;
-    font-family: sans-serif;
-    font-size: 22px;
-}
-```
-
-## Options
 Name | Default | Description
 --- | --- | ---
-openOnLoad | `false` | set true to open modal on page load
-autoBind | `true` | set false if you want to bind triggers manually
-effect | `""` | CSS3 animation, effects listed below.
-enabled | `true` | Set to false to disable modal.
-clickOffToClose | `true` | set false to prevent closing when clicking off of it
-closeOnEsc | `true` | set false to prevent closing modal when 'Esc' is pressed
-innerClass* | `"mm-wrap"` | the inner container for the modal
-modalClass* | `"modality-modal"` | the outer-most container for the modal
-onOpen | `""` | add callback function when modal is opened
+bind | `true` | set false to bind triggers manually
+class | `""` | a user-defined class added to outer-most container
+clickoff | `true` | set false to prevent closing when clicking off of it
+effect | `""` | CSS3 animation, effects listed below
+enabled | `true` | set false to disable modal
+keyboard | `true` | closes modal when 'Esc' is pressed
+open | `false` | set true to open modal on page load
 onClose | `""` | add callback function when modal is closed
-openClass* | `"mm-show"` | when modal is active/visible
-userClass | `""` | you can add your own class to the container
+onOpen | `""` | add callback function when modal is opened
+inner* | `"mm-wrap"` | class name on the inner container of each the modal
+outer* | `"modality-modal"` | class name on the outer-most container of each the modal
+visible* | `"mm-show"` | class that is added to modal to make it visible
 **These classes match those in modality.css, if changed here, must also be changed there.*
 
 ```javascript
-
-// jQuery --
-$('.modal').modality({
-  effect: "scale-up",
-  onOpen: function () {
-    console.log("Hello World");
-  }
-});
-
-// JS-Only --
-Modality.init('.modal', {
-  effect: "slide-left",
-  onClose: function () {
-    console.log("Goodbye World");
-  }
-});
-
+$('.modal').modality( {effect: "scale-up"} ); // jQuery
+Modality.init( '.modal', {effect: "slide-left"} ); // JavaScript
 ```
 
 #### Effects
-*These animations use CSS3, they will not work for IE7-9.*
-
+These animations use CSS3 and will not work for IE7-9.
 1. `"scale-up"`, `"scale-down"`
 2. `"slide-left"`, `"slide-right"`
 3. `"slide-up"`, `"slide-down"`
@@ -201,21 +83,61 @@ Modality.init('.modal', {
 10. `"front-flip"`, `"back-flip"`
 
 
-## Attributes
-A list of attributes in case you need to use them.
+## Styling
+Modality is unique in that it uses CSS to position itself horizontally AND vertically. The modal and it's content will automatically resize to best fit any screen &ndash; all without a line of JavaScript.
 
-Name | type | Description
---- | --- | ---
-`id` | `string` | the modal's ID
-`settings` | `json` | the modal's current settings
-`defaults` | `json` | the default modal settings
-`wrapper` | `DOM Object` | the outer-most container for the modal
-`triggers` | `array` | all the modal's triggers and their respective event handles
-`modal` | `DOM Object` | your modal with #yourModalId
+*By design, Modality is not styled.* Since all the positioning and sizing is done for you, all you need to worry about is your modal's appearance while keeping a few things in mind:
 
+#### Max-Width
+Modality is only ever as wide as it's content or the user's viewport. But in most cases, it is still a good idea to add a `max-width` value to your modal so that it wont grow too wide on a desktop, but will still resize for a mobile device.
+```css
+.yourModalClass {
+    max-width: 500px; 
+}
+```
+#### The Background 
+Modality's background has a default styling of `rgba(0, 0, 0, 0.5)`. To override or change this, add a class to modality's container via the 'class' option in the settings. Then add your new background styles to that and Modality's 'visible' class, like this:
+```javascript
+$('#yourModalId').modality( {class:"yourNewClass"} ); // jQuery
+Modality.init( '#yourModalId', {class:"yourNewClass"} ); // JavaScript
+```
+```css
+.yourNewClass.mm-show {
+    background: rgba( 255, 0, 0, 0.5 );
+}
+```
+#### Percentage Width
+If you want your modal to be a percentage of the window, first, add a class to Modality's container via the 'class' option in the settings. Then apply the percentage to Modality's 'inner' container via a decendant selector like so:
+```javascript
+$('#yourModalId').modality( {class:"yourNewClass"} ); // jQuery
+Modality.init( '#yourModalId', {class:"yourNewClass"} ); // JavaScript
+```
+```css
+.yourNewClass .mm-wrap {
+    max-width: 75%;
+}
+```
+#### Hide on Load
+If your modal is visible for a second before Modality can hide it for you, manually hide it with an inline style like so: *Modality will remove that style after initialization.*
+```html
+<div id="yourModalId" style="display:none;"></div>
+```
+#### Example
+In case you want some help styling your modal, here is a simple example:
+```css
+.yourModalClass {
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 1em 1.5em 1em;
+    border-radius: 5px;
+    max-width: 500px;
+    position: relative;
+}
+```
 
-## Methods
-Modality allows you to retreive an instance and then invoke it's methods on demand.
+## Advanced Usage
+
+#### Methods
 
 Name | Parameters | Returns | Description
 --- | --- | --- | ---
@@ -223,142 +145,104 @@ Name | Parameters | Returns | Description
 `close()` | callback function (optional) | `instance` | closes the modal
 `toggle()` | callback function (optional) | `instance` | opens the modal if closed and vice versa
 `isOpen()` | none | `boolean` | tells you if the modal is open or not
-`addTrigger()` | DOM Object | `instance` | binds/adds click-toggle event to object
-`removeTrigger()` | DOM Object | `instance` | unbinds/removes click-toggle event from object
-`enable()` | none | `instance` | enables the modal
-`disable()` | none | `instance` | disables the modal
+`addTrigger()` | HTML Element | `instance` | binds/adds click-toggle event to object
+`removeTrigger()` | HTML Element | `instance` | unbinds/removes click-toggle event from object
+`enable()` | none | `instance` | enables all triggers for the modal
+`disable()` | none | `instance` | disables all triggers for the modal
 
 #### Retreiving an Instance
 There are two ways to retrieve an instance: 
 
-1a. The first and easiest way is when initializing the modal:
+1\. The first and easiest way is when initializing the modal. If you are initializing more than one modal at a time, Modality will return an array of the modals initialized.
 
 ```javascript
-
-// jQuery --
-var inst = $('#yourModalId').modality();
+var inst = $('#yourModalId').modality(); // jQuery
 inst.open(); 
 
-// JS-Only --
-var inst = Modality.init('#yourModalId');
-inst.close();
-
-```
-1b. If you are initializing more than one modal, Modality will return an array of the modals initialized:
-
-```javascript
-
-// jQuery --
-var insts = $('.yourModalClass').modality();
-for( key in insts ){
-    if( insts[key].isOpen() ) 
-        // do something ...
-}
-
-// JS-Only --
-var insts = Modality.init('.yourModalClass');
-for( key in insts ){
-    if( insts[key].isOpen() ) 
-        // do something ...
-}
-
+var inst = Modality.init('#yourModalId'); // JavaScript
+inst.open();
 ```
 
-2\. Second, you can retreive any instance with it's id:
-
+2\. Second, you can retreive any instance at anytime with it's id:
 ```javascript
-
-// jQuery --
-var inst = $.modality.instances['yourModalId'];
+var inst = $.modality.instances['yourModalId']; // jQuery
 inst.open(); 
 
-// JS-Only --
-var inst = Modality.instances['yourModalId'];
-inst.close();
-
+var inst = Modality.instances['yourModalId']; // JavaScript
+inst.open();
 ```
 
 #### Chaining
-You can chain most of Modality's methods together:
+You can chain most of Modality's methods together. If you want to replicate this capability with your own methods, make sure to return the instance (`return this;`).
 
 ```javascript
-// jQuery --
-$('#yourModalId').modality().removeTrigger($('#selector')).disable(); 
-
-// JS-Only --
-Modality.init('#yourModalId').removeTrigger(document.getElementById('selector')).disable();
-
+$('#yourModalId').modality().addTrigger($('#someId')).show(); // jQuery
+Modality.init('#yourModalId').addTrigger(document.getElementById('someId')).show(); // JavaScript
 ```
-*Make sure to return 'this' (the current instance) in your custom class methods if you want to maintain this chaining capability. See example under "Extending Modality".*
+
+#### Attributes
+Name | type | Description
+--- | --- | ---
+`id` | `string` | the modal's ID
+`settings` | `json` | the modal's current settings
+`defaults` | `json` | the default modal settings
+`wrapper` | `DOM Object` | the modal's outer-most container `<div class="modality-modal">`
+`triggers` | `array` | all the modal's triggers and their respective event handles
+`modal` | `DOM Object` | your modal `<div id="yourModalId">`
 
 
-## Extending Modality
-You can easily extend Modality and add more functionality. Here is a basic template for how to do that:
+#### Extending Modality
+You can easily extend Modality to add your own methods for additional and custom functionality
 
 ```javascript
+// jQuery
+;(function($) { 
 
-// jQuery --
-;(function($) {
-
-    // how to add class methods/attributes:
     $.extend( $[ "modality" ].prototype, {
-        newClassMethod: function () {
-            // do something ...
-            return this; // for chaining
-        }
+        newClassMethod: function () { ... }
     });
  
-    // how to add static methods/attributes:
     $.extend( $[ "modality" ], {
         newStaticMethod: function () { ... }
     });
 
 })(jQuery);
 
-// JS-Only --
-;(function ( Modality ) {
+// JavaScript
+;(function ( Modality ) { 
 
-    // how to add class methods/attributes:
     Modality.extend( Modality.prototype, {
-        newClassMethod: function () {
-            // do something ...
-            return this; // for chaining
-        }
+        newClassMethod: function () { ... }
     });
     
-    // how to add static methods/attributes:
     Modality.extend( Modality, {
         newStaticMethod: function () { ... }
     });
 
 })( Modality );
-
 ```
 
-## AJAX
-Modality does not have a built-in AJAX function. However, there are multiple ways for you to add this functionality. Here is one example of something you could do:
+#### AJAX
+Even though Modality does NOT have built-in AJAX functionality, you can easily add this ability via extension or callback. Follow the pattern above for extension, below is an example for callback.
 
-#### Example
 ```Javascript
-
-// jQuery --
+// jQuery
 $('.yourModalClass').modality({
     onOpen: function() {
         var inst = this; 
         $.ajax({ 
             url: "http://path/to/your/data.txt",
             success: function ( result ) {
-                inst.$element.html( result );
+                inst.element.html( result );
             }
         });
     }
 });
 
-// JS-Only --
+// JavaScript
 Modality.init('.yourModalClass', {
     onOpen: function () {
-        var inst = this;
-        var xmlhttp = new XMLHttpRequest();
+        var inst = this, xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
             if ( xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
                 inst.element.innerHTML = xmlhttp.responseText;
@@ -401,34 +285,22 @@ Here is a basic template to help you get started:
     <!-- Your Modal, style it however you will! -->
     <div id="yourModalId" class="yourModalClass" style="display:none;">
         <h2>Modality</h2>
-        <p>
-            Simple, lightweight and versatile &ndash; Modality was 
-            designed to be the only modal window you would ever need.
-        </p>
+        <p>Simple, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need.</p>
         <a href="#yourModalId">Close Modal</a>
     </div>
 
     <!-- jQuery -->
     <!-- <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="js/modality.jquery.min.js"></script>
-    <script>
-    var modal1 = $('#yourModalId').modality({
-        effect: 'slide-up'
-    });
-    </script> -->
+    <script>$('#yourModalId').modality( {effect: 'slide-up'} );</script> -->
     
-    <!-- JS-Only -->
+    <!-- JavaScript -->
     <script src="js/modality.min.js"></script>
-    <script>
-    var modal1 = Modality.init('#yourModalId', {
-        effect: 'slide-up'
-    });
-    </script>
+    <script>Modality.init('#yourModalId', {effect: 'slide-up'} );</script>
 
 </body>
 </html>
 ```
-
 
 ## License
 ```
