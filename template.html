@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -5,7 +6,7 @@
     <title>Modality Example</title>
     <link rel="stylesheet" href="css/modality.css">
 
-    <!-- The styles for your modal -->
+    <!-- Sample styles for your modal -->
     <style>
     .yourModalClass {
         background-color: #ffffff;
@@ -19,32 +20,29 @@
 </head>
 <body>
 
-    <!-- The trigger to open the modal -->
+    <!-- This opens your modal -->
     <a href="#yourModalId">Open Modal</a>
 
-    <!-- Your Modal, style it however you will! -->
+    <!-- Your Modal -->
     <div id="yourModalId" class="yourModalClass" style="display:none;">
-        <h2>Modality</h2>
-        <p>Simple, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need.</p>
+
+        <!-- Sample Content -->
+        <h2>Modality Rocks!</h2>
+        <p>Modality was designed to be the only modal plugin you would ever need.</p>
+
+        <!-- This closes your modal -->
         <a href="#yourModalId">Close Modal</a>
+
     </div>
 
-    <!-- jQuery-Only:  -->
+    <!-- jQuery -->
     <!-- <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="js/modality.jquery.min.js"></script>
-    <script>
-    var modal1 = $('#yourModalId').modality({
-        effect: 'slide-up'
-    });
-    </script> -->
+    <script>$('#yourModalId').modality( {effect:'slide-up'} );</script> -->
 
-    <!-- JS-Only:  -->
+    <!-- JavaScript  -->
     <script src="js/modality.min.js"></script>
-    <script>
-    var modal1 = Modality.init('#yourModalId', {
-        effect: 'slide-up'
-    });
-    </script>
+    <script>Modality.init( '#yourModalId', {effect:'slide-up'} );</script>
     
 </body>
 </html>

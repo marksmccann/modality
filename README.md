@@ -272,15 +272,17 @@ Modality.init('.yourModalClass', {
 ```
 
 ## Template
-Here is a basic template to help you get started:
+Here is a basic template to help you get started.
 ```html
 <!doctype html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Modality Example</title>
     <link rel="stylesheet" href="css/modality.css">
 
-    <!-- The styles for your modal -->
+    <!-- Sample styles for your modal -->
     <style>
     .yourModalClass {
         background-color: #ffffff;
@@ -290,27 +292,34 @@ Here is a basic template to help you get started:
         max-width: 500px;
     }
     </style>
-
+    
 </head>
 <body>
 
+    <!-- This opens your modal -->
     <a href="#yourModalId">Open Modal</a>
 
+    <!-- Your Modal -->
     <div id="yourModalId" class="yourModalClass" style="display:none;">
+
+        <!-- Sample Content -->
         <h2>Modality Rocks!</h2>
         <p>Modality was designed to be the only modal plugin you would ever need.</p>
+
+        <!-- This closes your modal -->
         <a href="#yourModalId">Close Modal</a>
+
     </div>
 
     <!-- jQuery -->
     <!-- <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="js/modality.jquery.min.js"></script>
-    <script>$('#yourModalId').modality( {effect: 'slide-up'} );</script> -->
-    
-    <!-- JavaScript -->
-    <script src="js/modality.min.js"></script>
-    <script>Modality.init('#yourModalId', {effect: 'slide-up'} );</script>
+    <script>$('#yourModalId').modality( {effect:'slide-up'} );</script> -->
 
+    <!-- JavaScript  -->
+    <script src="js/modality.min.js"></script>
+    <script>Modality.init( '#yourModalId', {effect:'slide-up'} );</script>
+    
 </body>
 </html>
 ```
