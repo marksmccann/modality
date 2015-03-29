@@ -57,12 +57,13 @@ effect | `""` | CSS3 animation, effects listed below
 enabled | `true` | set false to disable modal
 keyboard | `true` | closes modal when 'Esc' is pressed
 open | `false` | set true to open modal on page load
-onClose | `""` | add callback function when modal is closed
-onOpen | `""` | add callback function when modal is opened
-inner* | `"mm-wrap"` | class name on the inner container of each the modal
-outer* | `"modality-modal"` | class name on the outer-most container of each the modal
-visible* | `"mm-show"` | class that is added to modal to make it visible
-**These classes match those in modality.css, if changed here, must also be changed there.*
+onClose* | `""` | add callback function when modal is closed
+onOpen* | `""` | add callback function when modal is opened
+inner** | `"mm-wrap"` | class name on the inner container of each the modal
+outer** | `"modality-modal"` | class name on the outer-most container of each the modal
+visible** | `"mm-show"` | class that is added to modal to make it visible
+**These settings cannot be set via data attributes*
+***These class names match those in modality.css, if changed here, must also be changed there.*
 
 #### Usage
 
@@ -144,26 +145,26 @@ In case you want some help styling your modal, here is a simple example.
 
 Name | Parameters | Returns | Description
 --- | --- | --- | ---
-`open()` | `function*` | `instance` | opens the modal
-`close()` | `function*` | `instance` | closes the modal
-`toggle()` | `function*` | `instance` | opens the modal if closed and vice versa
-`isOpen()` | `none` | `boolean` | tells you if the modal is open or not
-`addTrigger()` | `html element` | `instance` | adds toggle event to object
-`removeTrigger()` | `html element` | `instance` | removes toggle event from object
-`enable()` | `none` | `instance` | enables all triggers for the modal
-`disable()` | `none` | `instance` | disables all triggers for the modal
+open() | `function*` | `instance` | opens the modal
+close() | `function*` | `instance` | closes the modal
+toggle() | `function*` | `instance` | opens the modal if closed and vice versa
+isOpen() | `none` | `boolean` | tells you if the modal is open or not
+addTrigger() | `html element` | `instance` | adds toggle event to object
+removeTrigger() | `html element` | `instance` | removes toggle event from object
+enable() | `none` | `instance` | enables all triggers for the modal
+disable() | `none` | `instance` | disables all triggers for the modal
 **Optional callback function.*
 
 #### Attributes
 
 Name | type | Description
 --- | --- | ---
-`id` | `string` | the modal's ID
-`settings` | `json` | the modal's current settings
-`defaults` | `json` | the default modal settings
-`wrapper` | `html element` | the modal's outer-most container `<div class="modality-modal">`
-`triggers` | `array` | all the modal's triggers and their respective event handles
-`modal` | `html element` | your modal `<div id="yourModalId">`
+id | `string` | the modal's ID
+settings | `json` | the modal's current settings
+defaults | `json` | the default modal settings
+wrapper | `html element` | the modal's outer-most container `<div class="modality-modal">`
+triggers | `array` | all the modal's triggers and their respective event handles
+modal | `html element` | your modal `<div id="yourModalId">`
 
 #### Retreiving an Instance
 There are two ways to retrieve an instance. 
