@@ -1,7 +1,7 @@
 # Modality
 Modality is a simple, lightweight and extremely versatile jQuery AND JavaScript plugin for modal windows.
 
-## Overview 
+## Features
 * Free
 * Easy to Use
 * Mobile Friendly
@@ -144,15 +144,15 @@ In case you want some help styling your modal, here is a simple example.
 
 Name | Parameters | Returns | Description
 --- | --- | --- | ---
-`open()` | function* | `instance` | opens the modal
-`close()` | function* | `instance` | closes the modal
-`toggle()` | function* | `instance` | opens the modal if closed and vice versa
-`isOpen()` | none | `boolean` | tells you if the modal is open or not
-`addTrigger()` | html element** | `instance` | binds/adds click-toggle event to object
-`removeTrigger()` | html element** | `instance` | unbinds/removes click-toggle event from object
-`enable()` | none | `instance` | enables all triggers for the modal
-`disable()` | none | `instance` | disables all triggers for the modal
-**Optional* ***Required*
+`open()` | `function*` | `instance` | opens the modal
+`close()` | `function*` | `instance` | closes the modal
+`toggle()` | `function*` | `instance` | opens the modal if closed and vice versa
+`isOpen()` | `none` | `boolean` | tells you if the modal is open or not
+`addTrigger()` | `html element` | `instance` | adds toggle event to object
+`removeTrigger()` | `html element` | `instance` | removes toggle event from object
+`enable()` | `none` | `instance` | enables all triggers for the modal
+`disable()` | `none` | `instance` | disables all triggers for the modal
+**Optional callback function.*
 
 #### Attributes
 
@@ -191,8 +191,12 @@ inst.open();
 You can chain most of Modality's methods together. If you want to replicate this capability with your own methods, make sure to return the instance `return this;`.
 
 ```javascript
-$('#yourModalId').modality().addTrigger($('#someId')).show(); // jQuery
-Modality.init('#yourModalId').addTrigger(document.getElementById('someId')).show(); // JavaScript
+// jQuery
+$('#yourModalId').modality().addTrigger( $('#someId') ).show(); 
+
+// JavaScript
+var newTrigger = document.getElementById('someId');
+Modality.init('#yourModalId').addTrigger( newTrigger ).show(); 
 ```
 
 #### Extension
