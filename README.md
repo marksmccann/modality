@@ -294,10 +294,8 @@ Here is a basic template to help you get started:
 </head>
 <body>
 
-    <!-- The trigger to open the modal -->
     <a href="#yourModalId">Open Modal</a>
 
-    <!-- Your Modal, style it however you will! -->
     <div id="yourModalId" class="yourModalClass" style="display:none;">
         <h2>Modality Rocks!</h2>
         <p>Modality was designed to be the only modal plugin you would ever need.</p>
