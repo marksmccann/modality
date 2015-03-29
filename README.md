@@ -92,7 +92,7 @@ Modality is unique in that it uses CSS to position itself horizontally AND verti
 *By design, Modality is not styled.* Since all the positioning and sizing is done for you, all you need to worry about is your modal's appearance while keeping a few things in mind:
 
 #### Max-Width
-Modality is only ever as wide as it's content or the user's viewport. But in most cases, it is still a good idea to add a `max-width` value to your modal so that it wont grow too wide on a desktop, but will still resize for a mobile device.
+Modality is only ever as wide as it's content or the user's viewport (unless you style it otherwise). But in most cases, it is still a good idea to add a `max-width` value to your modal so that it wont grow too wide on a desktop, but will still resize for a mobile device.
 ```css
 .yourModalClass {
     max-width: 500px; 
@@ -121,12 +121,12 @@ Modality.init( '#yourModalId', {class:"yourNewClass"} ); // JavaScript
 }
 ```
 #### Hide on Load
-If your modal is visible for a second before Modality can hide it for you, manually hide it with an inline style like so: *Modality will remove that style after initialization.*
+If your modal is visible for a second before Modality can hide it for you, manually hide it with an inline style. *Modality will remove that style after initialization.*
 ```html
 <div id="yourModalId" style="display:none;"></div>
 ```
 #### Example
-In case you want some help styling your modal, here is a simple example:
+In case you want some help styling your modal, here is a simple example.
 ```css
 .yourModalClass {
     background-color: #ffffff;
@@ -144,17 +144,29 @@ In case you want some help styling your modal, here is a simple example:
 
 Name | Parameters | Returns | Description
 --- | --- | --- | ---
-`open()` | function (optional) | `instance` | opens the modal
-`close()` | function (optional) | `instance` | closes the modal
-`toggle()` | function (optional) | `instance` | opens the modal if closed and vice versa
+`open()` | function* | `instance` | opens the modal
+`close()` | function* | `instance` | closes the modal
+`toggle()` | function* | `instance` | opens the modal if closed and vice versa
 `isOpen()` | none | `boolean` | tells you if the modal is open or not
-`addTrigger()` | html element | `instance` | binds/adds click-toggle event to object
-`removeTrigger()` | html element | `instance` | unbinds/removes click-toggle event from object
+`addTrigger()` | html element** | `instance` | binds/adds click-toggle event to object
+`removeTrigger()` | html element** | `instance` | unbinds/removes click-toggle event from object
 `enable()` | none | `instance` | enables all triggers for the modal
 `disable()` | none | `instance` | disables all triggers for the modal
+**Optional* ***Required*
+
+#### Attributes
+
+Name | type | Description
+--- | --- | ---
+`id` | `string` | the modal's ID
+`settings` | `json` | the modal's current settings
+`defaults` | `json` | the default modal settings
+`wrapper` | `html element` | the modal's outer-most container `<div class="modality-modal">`
+`triggers` | `array` | all the modal's triggers and their respective event handles
+`modal` | `html element` | your modal `<div id="yourModalId">`
 
 #### Retreiving an Instance
-There are two ways to retrieve an instance: 
+There are two ways to retrieve an instance. 
 
 1\. The first and easiest way is when initializing the modal. If you are initializing more than one modal at a time, Modality will return an array of the modals initialized.
 
@@ -183,19 +195,8 @@ $('#yourModalId').modality().addTrigger($('#someId')).show(); // jQuery
 Modality.init('#yourModalId').addTrigger(document.getElementById('someId')).show(); // JavaScript
 ```
 
-#### Attributes
-Name | type | Description
---- | --- | ---
-`id` | `string` | the modal's ID
-`settings` | `json` | the modal's current settings
-`defaults` | `json` | the default modal settings
-`wrapper` | `html element` | the modal's outer-most container `<div class="modality-modal">`
-`triggers` | `array` | all the modal's triggers and their respective event handles
-`modal` | `html element` | your modal `<div id="yourModalId">`
-
-
-#### Extending Modality
-You can easily extend Modality to add your own methods for additional and custom functionality
+#### Extension
+You can easily extend Modality to add your own methods for additional and customized functionality.
 
 ```javascript
 // jQuery
@@ -233,7 +234,9 @@ You can easily extend Modality to add your own methods for additional and custom
 Even though Modality does NOT have built-in AJAX functionality, you can easily add this ability via extension or callback. Follow the pattern above for extension, below is an example for callback.
 
 ```Javascript
-/* In these examples, a callback function is added to the 'onOpen' setting that will insert the response of an AJAX request into the modal as it is opened. */
+// In these examples, a callback function is added to 
+// the 'onOpen' setting that will insert the response  
+// of an AJAX request into the modal as it is opened.
 
 // jQuery
 $('.yourModalClass').modality({
@@ -292,8 +295,8 @@ Here is a basic template to help you get started:
 
     <!-- Your Modal, style it however you will! -->
     <div id="yourModalId" class="yourModalClass" style="display:none;">
-        <h2>Modality</h2>
-        <p>Simple, lightweight and versatile &ndash; Modality was designed to be the only modal window you would ever need.</p>
+        <h2>Modality Rocks!</h2>
+        <p>Modality was designed to be the only modal plugin you would ever need.</p>
         <a href="#yourModalId">Close Modal</a>
     </div>
 
