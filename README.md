@@ -22,11 +22,11 @@ Modality is a simple, lightweight and extremely versatile jQuery AND JavaScript 
 ```html
 <link rel="stylesheet" href="path/to/your/modality.min.css">
 ```
-2\. Add this before the closing body tag. If you want to use the jQuery, add jQuery to your page and then link to this file instead: `modality.jquery.min.js`.
+2\. Add a link to the plugin before the closing body tag. If you want to use the jQuery version of the plugin, add jQuery to your page and then link to this file instead: `modality.jquery.min.js`.
 ```html
 <script src="path/to/your/modality.min.js"></script>
 ```
-3\. Create your modal window and give it an id.
+3\. Create your modal and give it an id.
 ```html
 <div id="yourModalId">
     <!-- your content here -->
@@ -37,7 +37,7 @@ Modality is a simple, lightweight and extremely versatile jQuery AND JavaScript 
 <a href="#yourModalId">Open Modal</a>
 <button data-target="#yourModalId">Open Modal</button>
 ```
-5\. Initiate your modal(s) via JavaScript OR data attribute. For data-attribute, add `data-modality="auto"` to every modal you want initialized.
+5\. Initiate your modal(s) via JavaScript OR data attribute. For data attribute, add `data-modality="auto"` to every modal you want initialized.
 ```javascript
 $('#yourModalId').modality(); // jQuery
 Modality.init('#yourModalId'); // JavaScript
@@ -64,13 +64,16 @@ outer* | `"modality-modal"` | class name on the outer-most container of each the
 visible* | `"mm-show"` | class that is added to modal to make it visible
 **These classes match those in modality.css, if changed here, must also be changed there.*
 
+#### Usage
+
 ```javascript
 $('.modal').modality( {effect: "scale-up"} ); // jQuery
 Modality.init( '.modal', {effect: "slide-left"} ); // JavaScript
 ```
 
 #### Effects
-These animations use CSS3 and will not work for IE7-9.
+These animations use CSS 3 and will not work for IE7-9.
+
 1. `"scale-up"`, `"scale-down"`
 2. `"slide-left"`, `"slide-right"`
 3. `"slide-up"`, `"slide-down"`
@@ -95,8 +98,8 @@ Modality is only ever as wide as it's content or the user's viewport. But in mos
     max-width: 500px; 
 }
 ```
-#### The Background 
-Modality's background has a default styling of `rgba(0, 0, 0, 0.5)`. To override or change this, add a class to modality's container via the 'class' option in the settings. Then add your new background styles to that and Modality's 'visible' class, like this:
+#### Backdrop
+Modality's backdrop/background-mask has a default styling of `rgba(0, 0, 0, 0.5)`. To override or change this, add a class to modality's container via the 'class' option in the settings. Then add your new background styles to that and Modality's 'visible' class, like this:
 ```javascript
 $('#yourModalId').modality( {class:"yourNewClass"} ); // jQuery
 Modality.init( '#yourModalId', {class:"yourNewClass"} ); // JavaScript
@@ -141,12 +144,12 @@ In case you want some help styling your modal, here is a simple example:
 
 Name | Parameters | Returns | Description
 --- | --- | --- | ---
-`open()` | callback function (optional) | `instance` | opens the modal
-`close()` | callback function (optional) | `instance` | closes the modal
-`toggle()` | callback function (optional) | `instance` | opens the modal if closed and vice versa
+`open()` | function (optional) | `instance` | opens the modal
+`close()` | function (optional) | `instance` | closes the modal
+`toggle()` | function (optional) | `instance` | opens the modal if closed and vice versa
 `isOpen()` | none | `boolean` | tells you if the modal is open or not
-`addTrigger()` | HTML Element | `instance` | binds/adds click-toggle event to object
-`removeTrigger()` | HTML Element | `instance` | unbinds/removes click-toggle event from object
+`addTrigger()` | html element | `instance` | binds/adds click-toggle event to object
+`removeTrigger()` | html element | `instance` | unbinds/removes click-toggle event from object
 `enable()` | none | `instance` | enables all triggers for the modal
 `disable()` | none | `instance` | disables all triggers for the modal
 
@@ -173,7 +176,7 @@ inst.open();
 ```
 
 #### Chaining
-You can chain most of Modality's methods together. If you want to replicate this capability with your own methods, make sure to return the instance (`return this;`).
+You can chain most of Modality's methods together. If you want to replicate this capability with your own methods, make sure to return the instance `return this;`.
 
 ```javascript
 $('#yourModalId').modality().addTrigger($('#someId')).show(); // jQuery
@@ -186,9 +189,9 @@ Name | type | Description
 `id` | `string` | the modal's ID
 `settings` | `json` | the modal's current settings
 `defaults` | `json` | the default modal settings
-`wrapper` | `DOM Object` | the modal's outer-most container `<div class="modality-modal">`
+`wrapper` | `html element` | the modal's outer-most container `<div class="modality-modal">`
 `triggers` | `array` | all the modal's triggers and their respective event handles
-`modal` | `DOM Object` | your modal `<div id="yourModalId">`
+`modal` | `html element` | your modal `<div id="yourModalId">`
 
 
 #### Extending Modality
@@ -199,10 +202,12 @@ You can easily extend Modality to add your own methods for additional and custom
 ;(function($) { 
 
     $.extend( $[ "modality" ].prototype, {
+        newClassAttribute: "foo",
         newClassMethod: function () { ... }
     });
  
     $.extend( $[ "modality" ], {
+        newStaticAttribute: "bar",
         newStaticMethod: function () { ... }
     });
 
@@ -212,10 +217,12 @@ You can easily extend Modality to add your own methods for additional and custom
 ;(function ( Modality ) { 
 
     Modality.extend( Modality.prototype, {
+        newClassAttribute: "foo",
         newClassMethod: function () { ... }
     });
     
     Modality.extend( Modality, {
+        newStaticAttribute: "bar",
         newStaticMethod: function () { ... }
     });
 
@@ -226,6 +233,8 @@ You can easily extend Modality to add your own methods for additional and custom
 Even though Modality does NOT have built-in AJAX functionality, you can easily add this ability via extension or callback. Follow the pattern above for extension, below is an example for callback.
 
 ```Javascript
+/* In these examples, a callback function is added to the 'onOpen' setting that will insert the response of an AJAX request into the modal as it is opened. */
+
 // jQuery
 $('.yourModalClass').modality({
     onOpen: function() {
@@ -254,7 +263,6 @@ Modality.init('.yourModalClass', {
 });
 
 ```
-*In the examples above: a callback function is added to the 'onOpen' setting that will insert the response of an AJAX request into the modal as it is opened.*
 
 ## Template
 Here is a basic template to help you get started:
