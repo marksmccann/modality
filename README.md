@@ -51,8 +51,8 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
 Name | Default | Description
 --- | --- | ---
 bind | `true` | set false to bind triggers manually
-class | `""` | a user-defined class added to outer-most container
-clickoff | `true` | set false to prevent closing when clicking off of it
+class | `""` | add a class name to the container
+clickoff | `true` | set false to prevent closing when clicking off of modal
 effect | `""` | CSS3 animation, effects listed below
 enabled | `true` | set false to disable modal
 keyboard | `true` | closes modal when 'Esc' is pressed
