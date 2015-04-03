@@ -1,5 +1,5 @@
 # Modality
-Modality is an un-styled, simple, lightweight and extremely versatile jQuery AND JavaScript plugin for modal windows.
+Modality is an unstyled, simple, lightweight and extremely versatile jQuery AND JavaScript plugin for modal windows.
 
 ## Features
 * Free
