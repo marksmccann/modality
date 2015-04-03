@@ -90,7 +90,7 @@ These animations use CSS 3 and will not work for IE7-9.
 ## Styling
 Modality is unique in that it uses CSS to position itself horizontally AND vertically. The modal and it's content will automatically resize to best fit any screen &ndash; all without a line of JavaScript.
 
-*By design, Modality is not styled.* Since all the positioning and sizing is done for you, all you need to worry about is your modal's appearance while keeping a few things in mind:
+*By design, Modality is not styled.* You are in complete control, and since all the positioning and sizing is done for you, all you need to worry about is your modal's appearance, while keeping a few things in mind:
 
 #### Max-Width
 Modality is only ever as wide as it's content or the user's viewport (unless you style it otherwise). But in most cases, it is still a good idea to add a `max-width` value to your modal so that it wont grow too wide on a desktop, but will still resize for a mobile device.
