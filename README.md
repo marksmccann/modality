@@ -59,12 +59,12 @@ class | `""` | add a class name to the container
 clickoff | `true` | set false to prevent closing when clicking off of modal
 effect | `""` | CSS3 animation, effects listed below
 enabled | `true` | set false to disable modal
-inner** | `"modality-inner"` | class name on the inner container of each the modal
+inner** | `"modality-inner"` | class name on the inner container of each modal
 keyboard | `true` | closes modal when 'Esc' is pressed
 open | `false` | set true to open modal on page load
 onClose* | `""` | add callback function when modal is closed
 onOpen* | `""` | add callback function when modal is opened
-outer** | `"modality-outer"` | class name on the outer-most container of each the modal
+outer** | `"modality-outer"` | class name on the outer-most container of each modal
 **These settings cannot be set via data attributes*<br />
 ***These class names match those in modality.css, if changed here, must also be changed there.*
 
