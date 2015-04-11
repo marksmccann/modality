@@ -6,26 +6,32 @@
 /**
  * Modality JavaScript Plugin
  */
-;(function () {
+;(function ( window, document ) {
 
     // Private ---------------------------------------
 
     var _name = 'Modality', // the plugin name
-        _document = document,
-        _body = _document.querySelector('body'), // get the body only once
 
         // local vars to shorten app
-        _event = 'click',
-        _class = 'className',
-        _triggers = 'triggers',
+        _body = document.querySelector('body'),
+        _accessible = 'accessible',
+        _aria = 'aria-hidden',
+        _click = 'click',
+        _index = 'tabindex',
+        _length = 'length',
+        _overflow = 'overflow',
         _settings = 'settings',
+        _style = 'style',
+        _triggers = 'triggers',
+        _wrapper = 'wrapper',
 
         // default settings for plugin
         _defaults = {
 
             // settings
+            accessible: true, // set false to remove accesibility features
             bind: true, // automatically bind triggers to modal
-            class: '', // user can add a class to container
+            'class': '', // user can add a class to container
             clickoff: true, // click anywhere off of modal to close it
             effect: '', // animation style
             enabled: true, // set false to disable modal
@@ -37,28 +43,10 @@
             onOpen: '', // function to run when modal opens
 
             // classes
-            inner: 'mm-wrap', // inner wrapper
-            visible: 'mm-show', // when modal is visible
-            outer: 'modality-modal', // outer-most container 
+            inner: 'modality-inner', // inner wrapper
+            outer: 'modality-outer' // outer-most container 
 
         }, 
-
-
-    /**
-     * combines objects into one
-     * @param {object} - collects values
-     * @param {object} - objects to add values from
-     * @return {object}
-     */
-    _extend = function () {
-        var a = arguments;
-        for( var i = 1; i < a.length; i++ )
-            for( var key in a[i] )
-                if(a[i].hasOwnProperty(key))
-                    a[0][key] = a[i][key];
-        return a[0];
-    },
-
 
     /**
      * add an event to a given node
@@ -77,6 +65,93 @@
     },
 
     /**
+     * make sure callback is function and then execute
+     * @param {function/array} fn - the function you are testing
+     */
+    _callback = function ( fn ) {
+        if( typeof fn == 'function' ) fn();
+    },
+
+    /**
+     * return space and classname if classname exists
+     * @param {object} settings - the modal's settings
+     * @param {string} setting - the setting name
+     * @return {string}
+     */
+    _concat = function ( settings, setting ) {
+        return ( settings[setting] != '' ) ? ' ' + settings[setting] : '';  
+    },
+
+    /**
+     * searches for a value in an array and returns key if found
+     * @param {array} haystack - the array being searched 
+     * @param {object} needle - the element being looked for
+     * @return {int}
+     */
+    _contains = function ( haystack, needle ) {
+        var i = haystack[_length];
+        while (i--) {
+            if (haystack[i][0] === needle) return i;
+        }
+        return false;
+    },
+
+    /**
+     * updates settings with values from data-attributes
+     * @param {object} dataset - data-attribute settings
+     * @param {object} settings - modal settings
+     * @return {object}
+     */
+    _data = function ( dataset, settings ) {
+        for( var key in dataset ) {
+            settings[key] = ( typeof settings[key] == 'boolean' ) ? _stringToBool(dataset[key]) : dataset[key];
+        }
+        return settings;
+    },
+
+    /**
+     * combines objects into one
+     * @param {object} - collects values
+     * @param {object} - objects to add values from
+     * @return {object}
+     */
+    _extend = function () {
+        var key, i = 1, a = arguments;
+        for( i; i < a[_length]; i++ )
+            for( key in a[i] )
+                if(a[i].hasOwnProperty(key))
+                    a[0][key] = a[i][key];
+        return a[0];
+    },
+
+    /**
+     * shorthand version of getAttribute to shorten app
+     * @param {object} element
+     * @param {object} attr
+     * @return {object}
+     */
+    _getAttr = function ( element, attr ) {
+        return element.getAttribute( attr );
+    },
+
+    /**
+     * tests if var is an integer or not
+     * @param {array} a - the array being tested
+     * @return {int}
+     */
+    _isInt = function ( a ) {
+        return a === parseInt(a, 10);
+    },
+
+    /**
+     * prevent event default
+     * @param {event} e - the event
+     */
+    _preventDefault = function ( e ) {
+        (e.preventDefault) ? e.preventDefault() : e.returnValue = false;
+    },
+
+    /**
      * remove an event from a given node
      * @param {object} target - the node you are removing the event from
      * @param {string} event - the event kind
@@ -92,69 +167,13 @@
     },
 
     /**
-     * make sure callback is function and then execute
-     * @param {function/array} fn - the function you are testing
+     * shorthand version of setAttribute to shorten app
+     * @param {object} element
+     * @param {object} attr
+     * @return {object}
      */
-    _callback = function ( fn ) {
-        for( var i = 0; i < fn.length; i++ )
-            if( typeof fn[i] == 'function' ) fn[i]();
-    },
-
-
-    /**
-     * prevent event default
-     * @param {event} e - the event
-     */
-    _preventDefault = function ( e ) {
-        (e.preventDefault) ? e.preventDefault() : e.returnValue = false;
-    },
-    
-
-    /**
-     * class manipulation
-     * @param {object} target - the node with the class
-     * @param {string} className - the class you are checking for
-     */
-    _hasClass = function( target, className ) {
-        return target[_class].match(new RegExp('(\\s|^)'+className+'(\\s|$)'));
-    },
-    _addClass = function( target, className ) {
-        for( var i = 0; i < target.length; i++ )
-            if( ! _hasClass( target[i], className ) )
-                target[i][_class] += target[i][_class].length == 0 ? className : ' ' + className;
-    },
-    _removeClass = function( target, className ) {
-        for( var i = 0; i < target.length; i++ ) {
-            if( _hasClass( target[i], className ) ) {
-                var re = new RegExp('(\\s|^)' + className + '(\\s|$)', 'g');
-                target[i][_class] = target[i][_class].replace(re , '');
-            }
-        }
-    },
-
-
-    /**
-     * searches for a value in an array and returns key if found
-     * @param {array} haystack - the array being searched 
-     * @param {object} needle - the element being looked for
-     * @return {int}
-     */
-    _contains = function (haystack, needle) {
-        var i = haystack.length;
-        while (i--) {
-            if (haystack[i][0] === needle) return i;
-        }
-        return false;
-    },
-
-
-    /**
-     * tests if var is an integer or not
-     * @param {array} a - the array being tested
-     * @return {int}
-     */
-    _isInt = function ( a ) {
-        return a === parseInt(a, 10);
+    _setAttr = function ( element, attr, value ) {
+        element.setAttribute( attr, value );
     },
 
     /**
@@ -169,18 +188,6 @@
         }
     },
 
-
-    /**
-     * return space and classname if classname exists
-     * @param {object} settings - the modal's settings
-     * @param {string} setting - the setting name
-     * @return {string}
-     */
-    _concat = function ( settings, setting ) {
-        return ( settings[setting] != '' ) ? ' ' + settings[setting] : '';  
-    },
-
-
     /**
      * wraps the users modal element in modality's frame:
      * 
@@ -194,35 +201,21 @@
      */
     _wrap = function ( element, settings ) {
 
-        // create the container and insert markup
-        var container = _document.createElement('div');
-        container.setAttribute( 'class',
-            settings['outer'] + _concat(settings, 'effect') + _concat(settings, 'class')
-        );
-        container.innerHTML = '<div class="'+settings.inner+'">' + element.outerHTML + '</div>';
+        // create the container
+        var wrapper = document.createElement('div');
 
-        // replace the old modal with the new
-        element.parentNode.replaceChild( container, element );
+        // set the attributes
+        _setAttr( wrapper, 'class', settings['outer'] + _concat(settings, 'effect') + _concat(settings, 'class') );
+        _setAttr( wrapper, _aria, 'true');
 
-        return container;
+        // insert the contents
+        wrapper.innerHTML = '<div class="'+settings.inner+'">' + element.outerHTML + '</div>';
+
+        // replace the old with the new
+        element.parentNode.replaceChild( wrapper, element );
+
+        return wrapper;
         
-    },
-
-    
-    /**
-     * updates settings with values from data-attributes
-     * @param {object} dataset - data-attribute settings
-     * @param {object} settings - modal settings
-     * @return {object}
-     */
-    _data = function ( dataset, settings ) {
-
-        for( var key in dataset ) {
-            settings[key] = ( typeof settings[key] == 'boolean' ) ? _stringToBool(dataset[key]) : dataset[key];
-        }
-
-        return settings;
-
     },
 
 
@@ -238,41 +231,59 @@
                 
         // Local Vars --------------------------------
 
-        var inst     = this,
-            id       = element.getAttribute( 'id' ),
+        var i = 0,
+            inst     = this,
+            id       = _getAttr( element, 'id' ),
             settings = _data( element.dataset, _extend( {}, _defaults, options ) ),
             wrapper  = _wrap( element, settings ),
-            triggers = _document.querySelectorAll( 'a[href="#'+id+'"], [data-target="#'+id+'"]' ), 
-            modal    = _document.getElementById( id );
+            triggers = document.querySelectorAll( 'a[href="#'+id+'"],[data-target="#'+id+'"]' ), 
+            modal    = document.getElementById( id );
 
         // Class Attributes --------------------------
 
-        _extend( inst, { defaults: _defaults, id: id, settings: settings, wrapper: wrapper, triggers: [], modal: modal });
+        _extend( inst, {
+            id: id,  
+            settings: settings, 
+            wrapper: wrapper, 
+            triggers: [], 
+            modal: modal,
+            triggered: {}
+        });
 
         // Events ------------------------------------
 
-        // toggle modal on all triggers
+        // bind each trigger to the modal
         if( settings.bind ) {
-            for( var i = 0; i < triggers.length; i++ ) inst.addTrigger( triggers[i] );
+            for( i; i < triggers[_length]; i++ ) inst.addTrigger( triggers[i] );
         }
 
         // close modal if users clicks anywhere off of it
         if( settings.clickoff ) {
-            _addEvent( wrapper, _event, function() { inst.close(); });
-            _addEvent( modal, _event, function(e) { e.stopPropagation(); });
+            _addEvent( wrapper, _click, function( e ) {
+                if ( e.target == wrapper ) inst.close();
+            });
         }
 
         // close modal with 'esc' key
         if( settings.keyboard ) {
             _addEvent( _body, 'keyup', function (e) {
-                if(e.keyCode == 27) inst.close();
+                if(!e.keyCode || e.keyCode === 27) inst.close();
+            });
+        }
+
+        // keep user locked in modal until closed
+        if( settings[_accessible] ) {
+            _addEvent( _body, 'keyup', function (e) {
+                if( inst.isOpen() && !modal.contains( document.activeElement ) ) {
+                    e.stopPropagation(); modal.focus();
+                }
             });
         }
 
         // Final Touches ------------------------------
 
         // make sure modal is not hidden
-        if( modal.style.display == 'none' ) modal.style.display = '';
+        if( modal[_style].display == 'none' ) modal[_style].display = '';
 
         // open modal if set to true
         if( settings.open ) inst.open();
@@ -295,13 +306,25 @@
          */
         open: function ( fn ) {
 
-            // add classes to open the modal
-            _addClass( [this.wrapper, _body], this[_settings].visible );
+            var inst = this;
+
+            // prevent body from scrolling on mobile devices
+            _body[_style][_overflow] = 'hidden';
+
+            // show the modal
+            _setAttr( inst[_wrapper], _aria, 'false' );
+
+            // if accessible, add tab-index and set focus on modal
+            if( inst[_settings][_accessible] ) {
+                _setAttr( inst.modal, _index, '0' );
+                setTimeout( function(){ inst.modal.focus(); }, 25 );
+            }
 
             // run the callback(s)
-            _callback( [this[_settings].onOpen, fn] );
+            _callback( inst[_settings].onOpen );
+            _callback( fn );
 
-            return this;
+            return inst;
 
         },
 
@@ -312,13 +335,25 @@
          */
         close: function ( fn ) {
 
-            // remove classes to close the modal
-            _removeClass( [this.wrapper, _body], this[_settings].visible );
+            var inst = this;
+
+            // remove style
+            _body[_style][_overflow] = '';
+
+            // set accessiblity attributes
+            _setAttr( inst[_wrapper], _aria, 'true' );
+
+            // if accessible, change tab-index and return focus to trigger
+            if( inst[_settings][_accessible] ) {
+                _setAttr( inst.modal, _index, '-1' );
+                inst.triggered.focus();
+            }
 
             // run the callback(s)
-            _callback( [this[_settings].onClose, fn] );
+            _callback( inst[_settings].onClose );
+            _callback( fn );
 
-            return this;
+            return inst;
 
         },
 
@@ -336,7 +371,7 @@
          * @return {Boolean}
          */
         isOpen: function () {
-            return _hasClass( this.wrapper, this[_settings].visible );
+            return ( _getAttr( this[_wrapper], _aria ) == "true" ) ? false : true;
         },
 
         /**
@@ -347,13 +382,13 @@
         addTrigger: function ( ele ) {
 
             var inst = this, triggers = inst[_triggers], key = _contains( triggers, ele ),
-                trigger = [ele, function (e) { _preventDefault(e); inst.toggle(); }];
-
+                trigger = [ele, function (e) { _preventDefault(e); inst.toggle().triggered = ele; }];
+ 
             // add or replace the trigger and it's handler
             ( _isInt(key)  ) ? triggers[key] = trigger : triggers.push( trigger );
 
             // if the modal is enabled bind event
-            if( inst[_settings].enabled ) _addEvent( trigger[0], _event, trigger[1] );
+            if( inst[_settings].enabled ) _addEvent( trigger[0], _click, trigger[1] );
 
             return inst;
 
@@ -371,8 +406,8 @@
             // if the element exists in trigger array
             if( _isInt(key) ) {
 
-                // unbind event from trigger
-                _removeEvent( triggers[key][0], _event, triggers[key][1] );
+                // unbind events from trigger
+                _removeEvent( triggers[key][0], _click, triggers[key][1] );
 
                 // remove the trigger and handler from array
                 triggers.splice(key, 1);
@@ -389,15 +424,15 @@
          */
         enable: function()  {
 
-            var inst = this, triggers = inst[_triggers], length = triggers.length;
+            var i = 0, inst = this, triggers = inst[_triggers], length = triggers[_length];
 
             if( !inst[_settings].enabled ) {
 
                 // change setting to true
                 inst[_settings].enabled = true;
 
-                // bind event to each trigger
-                for( var i = 0; i < length; i++ ) _addEvent( triggers[i][0], _event, triggers[i][1] );
+                // bind events to each trigger
+                for( i; i < length; i++ ) _addEvent( triggers[i][0], _click, triggers[i][1] );
 
             }
 
@@ -411,15 +446,15 @@
          */
         disable: function() {
 
-            var inst = this, triggers = inst[_triggers], length = triggers.length;
+            var i = 0, inst = this, triggers = inst[_triggers], length = triggers[_length];
 
             if( inst[_settings].enabled ) {
 
                 // change setting to false
                 inst[_settings].enabled = false;
 
-                // unbind event to each trigger
-                for( var i = 0; i < length; i++ ) _removeEvent( triggers[i][0], _event, triggers[i][1] );
+                // unbinds event from each trigger
+                for( i; i < length; i++ ) _removeEvent( triggers[i][0], _click, triggers[i][1] );
 
             }
 
@@ -440,16 +475,22 @@
         /**
          * creates new instance for element(s), stores/returns it(them)
          * @param  {string} query - css query selector
-    	 * @param  {object} options - user settings
-    	 * @return {array}
+         * @param  {object} options - user settings
+         * @return {array}
          */
         init: function ( query, options ) {
-            var inst = this, insts = inst.instances, a = {}, e = _document.querySelectorAll(query);
-    	    for( var i = 0; i < e.length; i++ ) {
-                var id = e[i].getAttribute( 'id' );
-                if( insts[ id ] == undefined ) insts[ id ] = a[i] = new inst( e[i], options );
-    	    }
-    	    return ( a[1] === undefined ) ? a[0] : a;
+
+            // local vars
+            var id, i = 0, a = {}, inst = this, insts = inst.instances, 
+                elements = document.querySelectorAll(query);
+
+            // loop through query results and instantiatie
+            for( i; i < elements[_length]; i++ ) {
+                id = _getAttr( elements[i], 'id' );
+                if( !(id in insts) ) insts[ id ] = a[i] = new inst( elements[i], options );
+            }
+
+            return ( a[1] === undefined ) ? a[0] : a;
         }
 
     });
@@ -461,9 +502,9 @@
      * initializes any modal with '[data-modality="auto"]' and an 'id'
      */
     (function () {
-        var modals = _document.querySelectorAll('[data-modality="auto"]');
-        for(var i = 0; i < modals.length; i++) {
-            var id = modals[i].getAttribute( 'id' );
+        var id, i = 0, modals = document.querySelectorAll('[data-modality="auto"]');
+        for( i; i < modals[_length]; i++ ) {
+            id = _getAttr( modals[i], 'id' );
             if( id != undefined ) Modality.init( '#'+id );
         }
     })();
@@ -474,6 +515,6 @@
     window[ _name ] = Modality;
 
 
-})();
+})( window, document );
 
 // -----------------------------------------------------------------

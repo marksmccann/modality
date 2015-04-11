@@ -11,18 +11,25 @@
     // Private ---------------------------------------
 
     var _name = "modality", // the plugin name
-        _body = $('body')[0], // get the body only once
 
         // local vars to shorten app
-        _event = 'click',
-        _class = 'className',
-        _triggers = 'triggers',
+        _accessible = 'accessible',
+        _aria = 'aria-hidden',
+        _body = $('body')[0],
+        _click = 'click',
+        _index = 'tabindex',
+        _length = 'length',
+        _overflow = 'overflow',
         _settings = 'settings',
+        _style = 'style',
+        _triggers = 'triggers',
+        _wrapper = 'wrapper',
 
         // default settings for plugin
         _defaults = {
 
             // settings
+            accessible: true, // set false to remove accesibility features
             bind: true, // automatically bind triggers to modal
             class: '', // user can add a class to container
             clickoff: true, // click anywhere off of modal to close it
@@ -36,22 +43,18 @@
             onOpen: '', // function to run when modal opens
 
             // classes
-            inner: 'mm-wrap', // inner wrapper
-            visible: 'mm-show', // when modal is visible
-            outer: 'modality-modal', // outer-most container 
+            inner: _name + '-inner', // inner wrapper
+            outer: _name + '-outer', // outer-most container 
 
         }, 
-
 
     /**
      * make sure callback is function and then execute
      * @param {function/array} fn - the function you are testing
      */
     _callback = function ( fn ) {
-        for( var i = 0; i < fn.length; i++ )
-            if( typeof fn[i] == 'function' ) fn[i]();
+        if( typeof fn == 'function' ) fn();
     },
-
 
     /**
      * return space and classname if classname exists
@@ -62,7 +65,6 @@
     _concat = function ( settings, setting ) {
         return ( settings[setting] != "" ) ? ' ' + settings[setting] : "";  
     },
-
 
     /**
      * searches for a value in an array and returns key if found
@@ -79,28 +81,25 @@
     },
 
     /**
-     * tests if var is an integer or not
-     * @param {array} a - the array being tested
-     * @return {int}
-     */
-    _isInt = function ( a ) {
-        return a === parseInt(a, 10);
-    },
-
-    /**
      * updates settings with values from data-attributes
      * @param {object} dataset - data-attribute settings
      * @param {object} settings - modal settings
      * @return {object}
      */
     _data = function ( dataset, settings ) {
-
         for( var key in dataset ) {
             settings[key] = ( typeof settings[key] == 'boolean' ) ? _strToBool(dataset[key]) : dataset[key];
         }
-
         return settings;
+    },
 
+    /**
+     * tests if var is an integer or not
+     * @param {array} a - the array being tested
+     * @return {int}
+     */
+    _isInt = function ( a ) {
+        return a === parseInt(a, 10);
     },
 
     /**
@@ -130,7 +129,7 @@
             id        = $(element).attr( 'id' ),
             settings  = _data( element.dataset, $.extend( {}, _defaults, options ) ),
             modal     = $(element).wrap(
-                '<div class="'+ settings.outer + _concat(settings,'effect') + _concat(settings,'class') +'">'+
+                '<div class="'+ settings.outer + _concat(settings,'effect') + _concat(settings,'class') +'" '+ _aria+'="true">'+
                     '<div class="'+ settings.inner + '">'+
                         // user's #modal goes here
                     '</div>'+
@@ -141,7 +140,14 @@
 
         // Class Attributes --------------------------
 
-        $.extend( inst, { defaults: _defaults, id: id, settings: settings, wrapper: wrapper, triggers: [], modal: modal });
+        $.extend( inst, {
+            id: id, 
+            settings: settings, 
+            wrapper: wrapper, 
+            triggers: [], 
+            modal: modal,
+            triggered: {}
+        });
 
         // Events ------------------------------------
 
@@ -154,8 +160,9 @@
 
         // close modal if users clicks anywhere off of it
         if( settings.clickoff ) {
-            wrapper[_event]( function() { inst.close(); } );
-            modal[_event]( function(e) { e.stopPropagation(); } );
+            wrapper[_click]( function(e) {
+                if ( e.target == wrapper[0] ) inst.close(); 
+            });
         }
 
         // close modal with 'esc' key
@@ -165,11 +172,20 @@
             });
         }
 
+        // keep user locked in modal until closed
+        if( settings[_accessible] ) {
+            $(_body).keyup( function(e) {
+                if( inst.isOpen() && !modal[0].contains( document.activeElement ) ) {
+                    e.stopPropagation(); modal[0].focus();
+                }
+            });
+        }
+
         // Final Touches ------------------------------
             
         // add node for IE 7 compatibility
         if (navigator.appVersion.indexOf("MSIE 7.") != -1) {
-            wrapper.prepend('<div class="mm-ghost"></div>');
+            wrapper.prepend('<div class="'+_name+'-ghost"></div>');
         }
 
         // open modal if set to true
@@ -193,13 +209,26 @@
          */
         open: function ( fn ) {
 
-            // add classes to open the modal
-            this.wrapper.add(_body).addClass( this[_settings].visible );
+            var inst = this;
+
+            // prevent body from scrolling on mobile devices
+            $(_body).css( _overflow, 'hidden' );
+
+            // show the modal
+            inst[_wrapper].attr( _aria,'false' );
+
+            // if accessible, add tab-index and set focus on modal
+            if( inst[_settings][_accessible] ) {
+                inst.modal.attr( _index, '0' );
+                setTimeout( function(){ inst.modal[0].focus(); }, 50 );
+            }
 
             // run the callback(s)
-            _callback( [this[_settings].onOpen,fn] );
+            _callback( inst[_settings].onOpen );
+            _callback( fn );
 
-            return this;
+            return inst;
+
         },
 
         /**
@@ -209,13 +238,26 @@
          */
         close: function ( fn ) {
 
-            // add classes to open the modal
-            this.wrapper.add(_body).removeClass( this[_settings].visible );
+            var inst = this;
+
+            // remove style
+            $(_body).css( _overflow, '' );
+
+            // set accessiblity attributes
+            inst[_wrapper].attr( _aria, 'true' );
+
+            // if accessible, change tab-index and return focus to trigger
+            if( inst[_settings][_accessible] ) {
+                inst.modal.attr( _index, '-1' );
+                inst.triggered.focus();
+            }
 
             // run the callback(s)
-            _callback( [this[_settings].onClose,fn] );
+            _callback( inst[_settings].onClose );
+            _callback( fn );
 
-            return this;
+            return inst;
+
         },
 
         /**
@@ -232,7 +274,7 @@
          * @return {Boolean}
          */
         isOpen: function () {
-            return this.wrapper.hasClass(this[_settings].visible);
+            return ( this[_wrapper].attr( _aria ) == "true" ) ? false : true;
         },
 
         /**
@@ -243,13 +285,13 @@
         addTrigger: function ( ele ) {
 
             var inst = this, triggers = inst[_triggers], key = _contains( triggers, ele ),
-                trigger = [ele, function (e) { e.preventDefault(); inst.toggle(); }];
+                trigger = [ele, function (e) { e.preventDefault(); inst.toggle().triggered = ele; }];
 
             // add or replace the trigger and it's handler
             ( _isInt(key)  ) ? triggers[key] = trigger : triggers.push( trigger );
 
             // if the modal is enabled bind event
-            if( inst[_settings].enabled ) trigger[0].bind( _event, trigger[1] ); 
+            if( inst[_settings].enabled ) trigger[0].bind( _click, trigger[1] );
 
             return inst;
 
@@ -268,7 +310,7 @@
             if( _isInt(key) ) {
 
                 // unbind event from trigger
-                triggers[key][0].unbind( _event, triggers[key][1] );
+                triggers[key][0].unbind( _click, triggers[key][1] );
 
                 // remove the trigger and handler from array
                 triggers.splice(key, 1);
@@ -285,7 +327,7 @@
          */
         enable: function()  {
 
-            var inst = this, triggers = inst[_triggers], length = triggers.length;
+            var i = 0, inst = this, triggers = inst[_triggers], length = triggers.length;
 
             if( !inst[_settings].enabled ) {
 
@@ -293,7 +335,7 @@
                 inst[_settings].enabled = true;
 
                 // bind event to each trigger
-                for( var i = 0; i < length; i++ ) triggers[i][0].bind( _event, triggers[i][1] );
+                for( i; i < length; i++ ) triggers[i][0].bind( _click, triggers[i][1] );
 
             }
 
@@ -307,7 +349,7 @@
          */
         disable: function() {
 
-            var inst = this, triggers = inst[_triggers], length = triggers.length;
+            var i = 0, inst = this, triggers = inst[_triggers], length = triggers.length;
 
             if( inst[_settings].enabled ) {
 
@@ -315,7 +357,7 @@
                 inst[_settings].enabled = false;
 
                 // unbind event to each trigger
-                for( var i = 0; i < length; i++ ) triggers[i][0].unbind( _event, triggers[i][1] );
+                for( i; i < length; i++ ) triggers[i][0].unbind( _click, triggers[i][1] );
 
             }
 
@@ -339,10 +381,10 @@
          * @return {array}
          */
         init: function ( elements, options ) {
-            var a = {}, inst = this, insts = inst.instances, i = 0;
+            var id, i = 0, a = {}, inst = this, insts = inst.instances;
             elements.each(function() {
-                var id = $(this).attr( 'id' );
-                if( insts[ id ] == undefined ) insts[ id ] = a[i] = new inst( this, options );  
+                id = $(this).attr( 'id' );
+                if( !(id in insts) ) insts[ id ] = a[i] = new inst( this, options );  
             });
             return ( a[1] === undefined ) ? a[0] : a;
         }

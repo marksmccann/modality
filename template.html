@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Modality Example</title>
-    <link rel="stylesheet" href="css/modality.css">
+    <link rel="stylesheet" href="css/modality.min.css">
 
     <!-- Sample styles for your modal -->
     <style>
@@ -20,21 +20,21 @@
 </head>
 <body>
 
-    <!-- This opens your modal -->
-    <a href="#yourModalId">Open Modal</a>
-
     <!-- Your Modal -->
-    <div id="yourModalId" class="yourModalClass" style="display:none;">
+    <div id="yourModalId" class="yourModalClass" role="dialog" aria-labelledby="yourModalHeading" style="display:none;">
 
         <!-- Sample Content -->
-        <h2>Modality Rocks!</h2>
+        <h2 id="yourModalHeading">Modality Rocks!</h2>
         <p>Modality was designed to be the only modal plugin you would ever need.</p>
 
         <!-- This closes your modal -->
-        <a href="#yourModalId">Close Modal</a>
+        <a href="#yourModalId" aria-label="close">Close Modal</a>
 
     </div>
 
+    <!-- This opens your modal -->
+    <a href="#yourModalId" aria-label="open">Open Modal</a>
+    
     <!-- jQuery -->
     <!-- <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="js/modality.jquery.min.js"></script>

@@ -3,7 +3,7 @@
 // @license: None, Public Domain
 // --------------------------------------------------------------- */
 
-.modality-modal {
+.modality-outer {
     background: rgba(0, 0, 0, 0);
     bottom: 0;
     left: 0;
@@ -14,15 +14,15 @@
     text-align: center;
     top: 0;
     visibility: hidden; 
-    *zoom: 1;    
+    *zoom: 1;
     -moz-transition: all 0.25s;
     -webkit-transition: all 0.25s;
-    transition: all 0.25s; 
+    transition: all 0.25s;
     -webkit-perspective: 1000px; 
     -moz-perspective: 1000px; 
-    perspective: 1000px; 
+    perspective: 1000px;
 }
-.mm-wrap {
+.modality-inner {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -42,7 +42,7 @@
     -moz-transform-style: preserve-3d;
     transform-style: preserve-3d;
 }
-.modality-modal:before, .mm-ghost {
+.modality-outer:before, .modality-ghost {
     content: '';
     display: inline-block;
     *display: inline;
@@ -51,34 +51,33 @@
     vertical-align: middle;
     *zoom: 1;
 }
-.modality-modal.mm-show {
+.modality-outer[aria-hidden="false"] {
     background: rgba(0, 0, 0, 0.5);
     opacity: 1;
     visibility: visible;
     z-index: 10000;
 }
-.modality-modal.mm-show .mm-wrap {
+.modality-outer[aria-hidden="false"] .modality-inner {
     opacity: 1;
 }
-body.mm-show { overflow: hidden; }
 
 /* --------------------------------------------------- */
 
 /* Effect 1 & 2: scale up and down */
-.scale-up .mm-wrap {
+.scale-up .modality-inner {
     -webkit-transform: scale(0.7);
     -moz-transform: scale(0.7);
     -ms-transform: scale(0.7);
     transform: scale(0.7);
 }
-.scale-down .mm-wrap {
+.scale-down .modality-inner {
     -webkit-transform: scale(2);
     -moz-transform: scale(2);
     -ms-transform: scale(2);
     transform: scale(2);
 }
-.mm-show.scale-up .mm-wrap,
-.mm-show.scale-down .mm-wrap {
+[aria-hidden="false"].scale-up .modality-inner,
+[aria-hidden="false"].scale-down .modality-inner {
     -webkit-transform: scale(1);
     -moz-transform: scale(1);
     -ms-transform: scale(1);
@@ -88,26 +87,26 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 3 & 4: slide left and right */
-.slide-left .mm-wrap {
+.slide-left .modality-inner {
     -webkit-transform: translateX(20%);
     -moz-transform: translateX(20%);
     -ms-transform: translateX(20%);
     transform: translateX(20%);
 }
-.slide-right .mm-wrap {
+.slide-right .modality-inner {
     -webkit-transform: translateX(-20%);
     -moz-transform: translateX(-20%);
     -ms-transform: translateX(-20%);
     transform: translateX(-20%);
 }
-.slide-left .mm-wrap,
-.slide-right .mm-wrap {
+.slide-left .modality-inner,
+.slide-right .modality-inner {
     -webkit-transition: all 0.3s cubic-bezier(0.25, 0.5, 0.5, 0.9);
     -moz-transition: all 0.3s cubic-bezier(0.25, 0.5, 0.5, 0.9);
     transition: all 0.3s cubic-bezier(0.25, 0.5, 0.5, 0.9);
 }
-.mm-show.slide-left .mm-wrap,
-.mm-show.slide-right .mm-wrap {
+[aria-hidden="false"].slide-left .modality-inner,
+[aria-hidden="false"].slide-right .modality-inner {
     -webkit-transform: translateX(0);
     -moz-transform: translateX(0);
     -ms-transform: translateX(0);
@@ -118,20 +117,20 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 5 & 6: slide up and down */
-.slide-up .mm-wrap {
+.slide-up .modality-inner {
     -webkit-transform: translateY(20%);
     -moz-transform: translateY(20%);
     -ms-transform: translateY(20%);
     transform: translateY(20%);
 }
-.slide-down .mm-wrap {
+.slide-down .modality-inner {
     -webkit-transform: translateY(-20%);
     -moz-transform: translateY(-20%);
     -ms-transform: translateY(-20%);
     transform: translateY(-20%);
 }
-.mm-show.slide-up .mm-wrap,
-.mm-show.slide-down .mm-wrap {
+[aria-hidden="false"].slide-up .modality-inner,
+[aria-hidden="false"].slide-down .modality-inner {
     -webkit-transform: translateY(0);
     -moz-transform: translateY(0);
     -ms-transform: translateY(0);
@@ -141,7 +140,7 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 7 & 8: slide and stick to top or bottom */
-.sticky-top .mm-wrap {
+.sticky-top .modality-inner {
     margin-top: 0px;
     -webkit-transform: translateY(-200%);
     -moz-transform: translateY(-200%);
@@ -149,7 +148,7 @@ body.mm-show { overflow: hidden; }
     transform: translateY(-200%);
     vertical-align: top;
 }
-.sticky-bottom .mm-wrap {
+.sticky-bottom .modality-inner {
     margin-bottom: 0px;
     -webkit-transform: translateY(200%);
     -moz-transform: translateY(200%);
@@ -157,8 +156,8 @@ body.mm-show { overflow: hidden; }
     transform: translateY(200%);
     vertical-align: bottom;
 }
-.mm-show.sticky-top .mm-wrap,
-.mm-show.sticky-bottom .mm-wrap {
+[aria-hidden="false"].sticky-top .modality-inner,
+[aria-hidden="false"].sticky-bottom .modality-inner {
     -webkit-transform: translateY(0%);
     -moz-transform: translateY(0%);
     -ms-transform: translateY(0%);
@@ -168,26 +167,26 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 9 & 10: horizontal and vertical flip */
-.horizontal-flip .mm-wrap,
-.vertical-flip .mm-wrap {
+.horizontal-flip .modality-inner,
+.vertical-flip .modality-inner {
     -webkit-transform-style: preserve-3d;
     -moz-transform-style: preserve-3d;
     transform-style: preserve-3d;
 }
-.vertical-flip .mm-wrap {
+.vertical-flip .modality-inner {
     -webkit-transform: rotateY(-75deg);
     -moz-transform: rotateY(-75deg);
     -ms-transform: rotateY(-75deg);
     transform: rotateY(-75deg);
 }
-.horizontal-flip .mm-wrap {
+.horizontal-flip .modality-inner {
     -webkit-transform: rotateX(-75deg);
     -moz-transform: rotateX(-75deg);
     -ms-transform: rotateX(-75deg);
     transform: rotateX(-75deg);
 }
-.mm-show.vertical-flip .mm-wrap,
-.mm-show.horizontal-flip .mm-wrap {
+[aria-hidden="false"].vertical-flip .modality-inner,
+[aria-hidden="false"].horizontal-flip .modality-inner {
     -webkit-transform: rotateY(0deg);
     -moz-transform: rotateY(0deg);
     -ms-transform: rotateY(0deg);
@@ -197,20 +196,20 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 11 & 12: spin up and down */
-.spin-up .mm-wrap {
+.spin-up .modality-inner {
     -webkit-transform: scale(0) rotate(540deg);
     -moz-transform: scale(0) rotate(540deg);
     -ms-transform: scale(0) rotate(540deg);
     transform: scale(0) rotate(540deg);
 }
-.spin-down .mm-wrap {
+.spin-down .modality-inner {
     -webkit-transform: scale(2) rotate(-540deg);
     -moz-transform: scale(2) rotate(-540deg);
     -ms-transform: scale(2) rotate(-540deg);
     transform: scale(2) rotate(-540deg);
 }
-.mm-show.spin-up .mm-wrap,
-.mm-show.spin-down .mm-wrap {
+[aria-hidden="false"].spin-up .modality-inner,
+[aria-hidden="false"].spin-down .modality-inner {
     -webkit-transform: scale(1) rotate(0deg);
     -moz-transform: scale(1) rotate(0deg);
     -ms-transform: scale(1) rotate(0deg);
@@ -220,20 +219,20 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 13 & 14: fall left and fall right */
-.fall-left .mm-wrap {
+.fall-left .modality-inner {
     -webkit-transform: translate(30%) translateZ(600px) rotate(10deg);
     -moz-transform: translate(30%) translateZ(600px) rotate(10deg);
     -ms-transform: translate(30%) translateZ(600px) rotate(10deg);
     transform: translate(30%) translateZ(600px) rotate(10deg);
 }
-.fall-right .mm-wrap {
+.fall-right .modality-inner {
     -webkit-transform: translate(-30%) translateZ(600px) rotate(-10deg);
     -moz-transform: translate(-30%) translateZ(600px) rotate(-10deg);
     -ms-transform: translate(-30%) translateZ(600px) rotate(-10deg);
     transform: translate(-30%) translateZ(600px) rotate(-10deg);
 }
-.mm-show.fall-left .mm-wrap,
-.mm-show.fall-right .mm-wrap {
+[aria-hidden="false"].fall-left .modality-inner,
+[aria-hidden="false"].fall-right .modality-inner {
     -webkit-transform: translate(0%) translateZ(0) rotate(0deg);
     -moz-transform: translate(0%) translateZ(0) rotate(0deg);
     -ms-transform: translate(0%) translateZ(0) rotate(0deg);
@@ -243,7 +242,7 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 15 & 16: spin up and down */
-.swing-down .mm-wrap {
+.swing-down .modality-inner {
     -webkit-transform: rotateX(-60deg);
     -moz-transform: rotateX(-60deg);
     -ms-transform: rotateX(-60deg);
@@ -252,7 +251,7 @@ body.mm-show { overflow: hidden; }
     -moz-transform-origin: top;
     transform-origin: top;
 }
-.swing-up .mm-wrap {
+.swing-up .modality-inner {
     -webkit-transform: rotateX(60deg);
     -moz-transform: rotateX(60deg);
     -ms-transform: rotateX(60deg);
@@ -261,10 +260,10 @@ body.mm-show { overflow: hidden; }
     -moz-transform-origin: bottom;
     transform-origin: bottom;
 }
-.mm-show.swing-down .mm-wrap,
-.mm-show.swing-up .mm-wrap,
-.mm-show.front-flip .mm-wrap,
-.mm-show.back-flip .mm-wrap {
+[aria-hidden="false"].swing-down .modality-inner,
+[aria-hidden="false"].swing-up .modality-inner,
+[aria-hidden="false"].front-flip .modality-inner,
+[aria-hidden="false"].back-flip .modality-inner {
     -webkit-transform: rotateX(0deg);
     -moz-transform: rotateX(0deg);
     -ms-transform: rotateX(0deg);
@@ -274,13 +273,13 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 17 & 18: front flip and back */
-.front-flip .mm-wrap {
+.front-flip .modality-inner {
     -webkit-transform: rotateX(360deg);
     -moz-transform: rotateX(360deg);
     -ms-transform: rotateX(360deg);
     transform: rotateX(360deg);
 }
-.back-flip .mm-wrap {
+.back-flip .modality-inner {
     -webkit-transform: rotateX(-360deg);
     -moz-transform: rotateX(-360deg);
     -ms-transform: rotateX(-360deg);
@@ -291,7 +290,7 @@ body.mm-show { overflow: hidden; }
 /* --------------------------------------------------- */
 
 /* Effects 19 & 20: swing left and right */
-.swing-left .mm-wrap {
+.swing-left .modality-inner {
     -webkit-transform: translateZ(100px) translateX(30%) rotateY(-90deg);
     -moz-transform: translateZ(100px) translateX(30%) rotateY(-90deg);
     -ms-transform: translateZ(100px) translateX(30%) rotateY(-90deg);
@@ -300,7 +299,7 @@ body.mm-show { overflow: hidden; }
     -moz-transform-origin: right;
     transform-origin: right;
 }
-.swing-right .mm-wrap {
+.swing-right .modality-inner {
    -webkit-transform: translateZ(100px) translateX(-30%) rotateY(90deg);
     -moz-transform: translateZ(100px) translateX(-30%) rotateY(90deg);
     -ms-transform: translateZ(100px) translateX(-30%) rotateY(90deg);
@@ -309,8 +308,8 @@ body.mm-show { overflow: hidden; }
     -moz-transform-origin: left;
     transform-origin: left;
 }
-.mm-show.swing-left .mm-wrap,
-.mm-show.swing-right .mm-wrap {
+[aria-hidden="false"].swing-left .modality-inner,
+[aria-hidden="false"].swing-right .modality-inner {
     -webkit-transform: translateZ(0px) translateX(0%) rotateY(0deg);
     -moz-transform: translateZ(0px) translateX(0%) rotateY(0deg);
     -ms-transform: translateZ(0px) translateX(0%) rotateY(0deg);
