@@ -11,12 +11,10 @@ Modality is an unstyled, simple, lightweight and extremely versatile jQuery AND 
 * Easily Customizable
 * Extendable Framework
 * Multiple Instances
+* Lightweight (3kb)
 * Browser Friendly
   * jQuery: IE 6+
   * JavaScript: IE 8+
-* Lightweight
-  * jQuery: 2KB
-  * JavaScript: 3KB
 
 ## Getting Started
 1\. Add this to the head.
