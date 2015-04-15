@@ -6,6 +6,7 @@ Modality is an unstyled, simple, lightweight and extremely versatile jQuery AND 
 * Easy to Use
 * No Default Styling
 * Accessible
+* Two Versions (JS & jQuery)
 * Mobile Friendly
 * CSS3 Animations
 * Easily Customizable
@@ -223,7 +224,7 @@ modal | `html element` | your modal `<div id="yourModalId">`
 settings | `json` | the modal's current settings
 triggers | `array` | all the modal's triggers and their respective event handles
 triggered | `html element` | the most recent trigger used to open or close the modal
-wrapper | `html element` | the modal's outer-most container `<div class="modality-modal">`
+wrapper | `html element` | the modal's outer-most container `<div class="modality-outer">`
 
 #### Retreiving an Instance
 There are two ways to retrieve an instance. 
