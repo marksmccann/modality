@@ -21,7 +21,7 @@ Modality is an unstyled, simple, lightweight and extremely versatile jQuery AND 
 ```html
 <link rel="stylesheet" href="path/to/your/modality.min.css">
 ```
-2\. Add a link to the plugin before the closing body tag. If you want to use the jQuery version of the plugin, add jQuery to your page and then link to this file instead: `modality.jquery.min.js`.
+2\. Add this before the closing body tag. If you want to use the jQuery version of the plugin, add jQuery and `modality.jquery.min.js` to your page instead.
 ```html
 <script src="path/to/your/modality.min.js"></script>
 ```
@@ -95,19 +95,19 @@ These animations use CSS 3 and will not work for IE7-9.
 
 
 ## Styling
-Modality is unique in that it uses CSS to position itself horizontally AND vertically. The modal and it's content will automatically resize to best fit any screen &ndash; all without a line of JavaScript.
+Modality is unique, it uses CSS to position itself horizontally AND vertically. The modal will automatically resize to best fit its content and the screen-size &ndash; all without a line of JavaScript.
 
-*By design, Modality is not styled.* You are in complete control, and since all the positioning and sizing is done for you, all you need to worry about is your modal's appearance, while keeping a few things in mind &mdash;
+*By design, Modality is not styled* in order to give you complete creative control. And since all the positioning and sizing is done for you, all you need to worry about is your modal's appearance, while keeping a few things in mind &mdash;
 
 #### Max-Width
-Modality is only ever as wide as it's content or the user's viewport (unless you style it otherwise). But in most cases, it is still a good idea to add a `max-width` value to your modal so that it wont grow too wide on a desktop, but will still resize for a mobile device.
+Modality is only ever as wide as it's content or the user's viewport (unless you style it otherwise). But in most cases, it is a good idea to give your modal a `max-width` so that it wont grow too wide on a desktop, but will resize for a mobile device.
 ```css
 .yourModalClass {
     max-width: 500px; 
 }
 ```
 #### Backdrop
-Modality's backdrop/background-mask has a default styling of `rgba(0, 0, 0, 0.5)`. To override or change this, add a class to modality's container via the 'class' option in the settings. Then add your new background styles to that, like this:
+Modality's backdrop/background-mask has a default styling of `rgba(0, 0, 0, 0.5)`. To override or change this, add a custom class to modality's container via the 'class' option in the settings, then add your new background styles to that, like this:
 ```javascript
 $('#yourModalId').modality( {class:"yourNewClass"} ); // jQuery
 Modality.init( '#yourModalId', {class:"yourNewClass"} ); // JavaScript
@@ -118,7 +118,7 @@ Modality.init( '#yourModalId', {class:"yourNewClass"} ); // JavaScript
 }
 ```
 #### Percentage Width
-If you want your modal to be a percentage of the window, first, add a class to Modality's container via the 'class' option in the settings. Then apply the percentage to Modality's 'inner' container via a decendant selector like so:
+If you want your modal to be a percentage of the window, first, add a class to Modality's container via the 'class' option in the settings, then apply the percentage to Modality's 'inner' container via a decendant selector like so:
 ```javascript
 $('#yourModalId').modality( {class:"yourNewClass"} ); // jQuery
 Modality.init( '#yourModalId', {class:"yourNewClass"} ); // JavaScript
@@ -129,19 +129,17 @@ Modality.init( '#yourModalId', {class:"yourNewClass"} ); // JavaScript
 }
 ```
 #### Hide on Load
-If your modal is visible for a second before Modality can hide it for you, manually hide it with an inline style. *Modality will remove that style after initialization.*
+If your modal is visible for a second before Modality can hide it for you, manually hide it with an inline style. *Modality will remove that style when initialized.*
 ```html
 <div id="yourModalId" style="display:none;"></div>
 ```
-
 #### Focus Event
-For accessiblity reasons, the `tabindex` attribute is added to your modal dynamically to make it focusable. Modality does not add any styles for this, but if you want to, here is how you would do it.
+For accessiblity reasons, the `tabindex` attribute is added to your modal dynamically to make it focusable. Modality does not add any styles for the focus event, but if you want to, here is how you would do it.
 ```css
 .yourNewClass:focus {
     outline: -webkit-focus-ring-color auto 5px;
 }
 ```
-
 #### Example
 In case you want some help styling your modal, here is a simple example.
 ```css
@@ -159,7 +157,6 @@ In case you want some help styling your modal, here is a simple example.
 
 #### Setup
 By design, when a user reaches the end of the modal's content their focus will automatically return to the top of the modal until the modal is dismissed. However, there is one problem with this method: if the keyboard-only user wants to leave the webpage entirely while a modal is open, they cannot. The solution: place your modals at the top of your webpage &ndash; this will allow users to navigate up and out of the html page and back to their browser.
-
 ```html
 <body>
 
@@ -170,7 +167,6 @@ By design, when a user reaches the end of the modal's content their focus will a
 
 </body>
 ```
-
 #### Role
 Add `role="dialog"` to your modal. This tells assistive technologies that the content requires the user’s response or confirmation. If the modal is more of an error or alert message that requires the user to input something before proceeding, then use `role="alertdialog"` instead.
 ```html
@@ -178,7 +174,6 @@ Add `role="dialog"` to your modal. This tells assistive technologies that the co
     <!-- your content here -->
 </div>
 ```
-
 #### Modal's Label
 If your modal has a heading, use the `aria-labelledby` attribute. Set your heading’s ID as it's value. If your modal doesn’t have a heading (not recommended), then at least use the `aria-label` attribute to provide a concise label about the element that screen readers can use.
 ```html
@@ -186,14 +181,12 @@ If your modal has a heading, use the `aria-labelledby` attribute. Set your headi
     <h1 id="yourHeadingId">...</h1>
 </div>
 ```
-
 #### Trigger's Label
 Add `aria-label="open"` or `aria-label="close"` to your trigger elements to let screen readers know what their purpose is. 
 ```html
 <a href="#yourModalId" aria-label="open">Open Modal</a>
 <button data-target="#yourModalId" aria-label="close">Close Modal</button>
 ```
-
 #### Disable
 To prevent averting the users focus to the modal when it is opened and back to the trigger when it is closed, you can easily disable these accessible features.
 ```javascript
